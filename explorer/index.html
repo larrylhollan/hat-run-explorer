@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HAT Run Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="topbar-brand">
+        <div class="logo-mark">H</div>
+        <div>
+          <h1>HAT Run Explorer</h1>
+          <p id="run-meta" class="run-meta">Loading run data&hellip;</p>
+        </div>
+      </div>
+      <div id="topbar-run-actions" class="topbar-actions hidden">
+        <button id="back-to-runs" class="topbar-back-btn" type="button">&larr; All runs</button>
+        <input id="search" type="search" placeholder="Search samples, issues, errors&hellip;" />
+        <select id="outcome-filter">
+          <option value="all">All outcomes</option>
+          <option value="pass">Pass</option>
+          <option value="partial">Partial</option>
+          <option value="fail">Fail</option>
+        </select>
+      </div>
+    </header>
+
+    <section id="landing" class="landing">
+      <div class="landing-inner">
+        <div class="landing-header">
+          <div class="landing-logo">H</div>
+          <h2>HAT Run Explorer</h2>
+          <p>Select a run to explore its scorecard, sample outcomes, and executive themes.</p>
+        </div>
+        <div id="run-list" class="run-list">
+          <p class="subtle">Loading available runs&hellip;</p>
+        </div>
+      </div>
+    </section>
+
+    <main id="run-page" class="page hidden">
+      <section class="hero-panel">
+        <div class="hero-summary" id="summary-cards"></div>
+      </section>
+
+      <nav class="tabs">
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="themes">Executive Summary</button>
+      </nav>
+
+      <section id="overview-tab" class="tab-panel active">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Run Scorecard</h2>
+              <p class="subtle">Hover for the quick summary. Click any cell to drill down below.</p>
+            </div>
+          </div>
+          <div class="scorecard-wrap">
+            <table id="scorecard-table" class="scorecard-table"></table>
+          </div>
+        </section>
+
+        <div id="overview-secondary" class="overview-grid compact-top">
+          <section class="panel">
+            <h2>Sample Outcomes</h2>
+            <div id="sample-list" class="sample-list"></div>
+          </section>
+          <section class="panel">
+            <h2>Top Areas of Pain</h2>
+            <div id="executive-themes-preview" class="theme-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="themes-tab" class="tab-panel">
+        <section class="panel">
+          <h2>Executive Summary</h2>
+          <p class="subtle" style="margin-bottom: 1rem;">Top pain areas across the full run, with impacted samples and root-cause patterns.</p>
+          <div id="executive-themes" class="theme-list"></div>
+        </section>
+      </section>
+
+      <section id="detail-panel" class="panel detail-panel">
+        <div id="detail-empty" class="detail-empty">
+          <h2>Pick a sample or scorecard cell</h2>
+          <p>The detail pane shows what each step was trying to accomplish, the key commands and failure output, and the workaround if one was needed.</p>
+        </div>
+
+        <div id="detail-view" class="hidden">
+          <div class="detail-toolbar">
+            <div class="detail-toolbar-nav">
+              <button id="detail-prev" class="secondary-button hidden" type="button">← Previous step</button>
+              <button id="detail-next" class="secondary-button hidden" type="button">Next step →</button>
+            </div>
+            <button id="detail-back" class="secondary-button hidden" type="button">Back to scorecard</button>
+          </div>
+          <div class="detail-head">
+            <div>
+              <p id="detail-kicker" class="kicker"></p>
+              <h2 id="detail-title"></h2>
+              <p id="detail-summary" class="lead"></p>
+            </div>
+            <span id="detail-badge" class="badge"></span>
+          </div>
+
+          <div class="detail-meta-grid">
+            <div class="meta-card">
+              <h3>What this step was trying to do</h3>
+              <p id="detail-objective"></p>
+            </div>
+            <div class="meta-card">
+              <h3>What went wrong first</h3>
+              <p id="detail-first-failure"></p>
+            </div>
+          </div>
+
+          <div id="detail-tags" class="tag-row"></div>
+          <div id="detail-attention" class="attention-strip hidden"></div>
+
+          <div id="detail-insights" class="detail-insights"></div>
+
+          <section class="timeline-section">
+            <h3>Command &amp; Output Flow</h3>
+            <div id="timeline" class="timeline"></div>
+          </section>
+
+          <details class="full-journal">
+            <summary>Open full rendered journal entry</summary>
+            <div id="detail-journal" class="journal-rendered"></div>
+          </details>
+        </div>
+      </section>
+    </main>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

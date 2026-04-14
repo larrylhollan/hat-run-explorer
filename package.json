@@ -1,0 +1,16 @@
+{
+  "name": "hat-run-explorer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HAT Run Explorer — interactive scorecard for Azure template test runs",
+  "dependencies": {
+    "serve": "^14.2.4"
+  },
+  "scripts": {
+    "start": "serve explorer -l ${PORT:-3000} --no-clipboard --single",
+    "dev": "serve explorer -l 3000 --no-clipboard"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

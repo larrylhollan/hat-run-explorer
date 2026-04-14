@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# OS / editor
+.DS_Store
+
+# Python
+*.pyc
+__pycache__/
+.env
+.venv/
+
+# Workspace-private / generated state
+.openclaw/
+memory/
+notes/
+reports/
+state/
+tmp/
+paperclip-claimed-api-key.json
+
+# Local docs/persona files not needed in app repo
+AGENTS.md
+HEARTBEAT.md
+IDENTITY.md
+MEMORY.md
+SOUL.md
+TOOLS.md
+USER.md
+
+# Coverage / misc
+coverage/

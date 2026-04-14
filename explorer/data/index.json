@@ -1,0 +1,117 @@
+{
+  "runs": [
+    {
+      "slug": "2026-04-14-hol-3224",
+      "runId": "HOL-3224",
+      "runDate": "2026-04-14",
+      "title": "HAT Run HOL-3224",
+      "summary": {
+        "pass": 1,
+        "partial": 2,
+        "fail": 9,
+        "bucketCounts": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 6
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 5
+          },
+          {
+            "key": "harness-noise",
+            "label": "Harness or environment noise",
+            "count": 4
+          },
+          {
+            "key": "broken-template-contract",
+            "label": "Broken template or deploy contract",
+            "count": 4
+          },
+          {
+            "key": "sample-runtime-bug",
+            "label": "Sample or runtime bug",
+            "count": 2
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 1
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 6,
+            "paragraph": "Even where the underlying sample was healthy enough to run, the tool experience often was not. The run repeatedly needed manual intervention for prompts, token audience, agent-name selection, hidden assistant output, hardcoded ports, or direct process launch. That means the product may be healthier than the raw fail count suggests, but the engineer experience is still too rough.",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 5,
+            "paragraph": "A second major bucket got through deploy and looked healthy enough to inspect, but still broke on first real remote use. The recurring pattern was that image build, push, and agent registration succeeded, while the postdeploy identity or RBAC setup did not. That is especially painful because it looks like a success until the first invoke.",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Multi-Turn Chat (Python, /invocations)"
+            ]
+          },
+          {
+            "key": "harness-noise",
+            "label": "Harness or environment noise",
+            "count": 4,
+            "paragraph": "A few failures were not fair product attempts at all. Some phases ran before their upstream deploys had really completed, two scaffolds were temporarily blocked by SSH credential issues, and one late-stage sample lost its resource group unexpectedly. These do not remove the product bugs, but they do distort the run unless they are clearly separated out.",
+            "examples": [
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (Python, /responses)",
+              "LangGraph Calculator (Python, /responses)",
+              "Multi-Turn Chat (.NET, /responses)"
+            ]
+          },
+          {
+            "key": "broken-template-contract",
+            "label": "Broken template or deploy contract",
+            "count": 4,
+            "paragraph": "Several samples did not fail because the hosted-agent platform crashed. They failed because the scaffolded project shape, Azure resources, and deploy target disagreed with each other. In practice that means engineers would follow the documented flow, get through scaffold or provision, and only discover at deploy time that the target resource does not actually exist in the expected form.",
+            "examples": [
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /invocations)",
+              "Echo Streaming (Python, /responses)",
+              "LangGraph Calculator (Python, /responses)"
+            ]
+          },
+          {
+            "key": "sample-runtime-bug",
+            "label": "Sample or runtime bug",
+            "count": 2,
+            "paragraph": "A smaller but important bucket appears to be true sample or runtime behavior, not just tooling friction. The Python multi-turn invocations sample loses the request body before the handler reads it, and the .NET multi-turn invocations sample never becomes ready after deploy. Those look like defects in the sample path itself.",
+            "examples": [
+              "Multi-Turn Chat (.NET, /invocations)",
+              "Multi-Turn Chat (Python, /invocations)"
+            ]
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 1,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /responses)"
+            ]
+          }
+        ]
+      },
+      "file": "./data/runs/2026-04-14-hol-3224.json"
+    }
+  ]
+}
