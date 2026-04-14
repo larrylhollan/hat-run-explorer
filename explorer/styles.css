@@ -737,10 +737,78 @@ body.detail-focus .detail-panel { box-shadow: var(--shadow-lg); }
 /* ─── Utility ─── */
 .hidden { display: none !important; }
 
+/* ─── Coverage audit ─── */
+.coverage-summary-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.coverage-summary-row .summary-card.cascade-card .summary-num {
+  color: #8b93a8;
+}
+.coverage-phase-header {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+  color: var(--text) !important;
+  background: #e8ebf2 !important;
+  border-bottom: 2px solid var(--border) !important;
+  padding: 0.55rem 0.4rem !important;
+  white-space: nowrap;
+}
+.coverage-cmd-header {
+  font-size: 0.68rem !important;
+  font-weight: 600 !important;
+  color: var(--muted) !important;
+  padding: 0.45rem 0.35rem !important;
+  white-space: nowrap;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.coverage-table .score-cell {
+  min-height: 42px;
+  font-size: 0.92rem;
+}
+.cov-pass { background: var(--pass-bg); color: var(--pass); }
+.cov-workaround { background: var(--partial-bg); color: var(--partial); }
+.cov-fail { background: var(--fail-bg); color: var(--fail); }
+.cov-missing { background: #f3e8ff; color: #7c3aed; }
+.cov-cascade { background: var(--panel-alt); color: #8b93a8; }
+.cov-unknown { background: var(--panel-alt); color: var(--muted); }
+
+.cov-pass-text { color: var(--pass); }
+.cov-workaround-text { color: var(--partial); }
+.cov-fail-text { color: var(--fail); }
+.cov-missing-text { color: #7c3aed; }
+
+.gap-item {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+.gap-item .gap-status {
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+.gap-detail {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
 /* ─── Responsive ─── */
 @media (max-width: 1100px) {
   .overview-grid, .detail-meta-grid, .detail-insights {
     grid-template-columns: 1fr;
+  }
+  .coverage-summary-row {
+    grid-template-columns: repeat(2, 1fr);
   }
   .page { padding: 1.25rem 1rem 2rem; }
 }

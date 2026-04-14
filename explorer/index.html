@@ -50,6 +50,7 @@
 
       <nav class="tabs">
         <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="coverage">Coverage Audit</button>
         <button class="tab" data-tab="themes">Executive Summary</button>
       </nav>
 
@@ -74,6 +75,34 @@
           <section class="panel">
             <h2>Top Areas of Pain</h2>
             <div id="executive-themes-preview" class="theme-list"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="coverage-tab" class="tab-panel">
+        <section class="panel">
+          <div class="section-head">
+            <div>
+              <h2>Command Coverage Audit</h2>
+              <p class="subtle">Did each phase actually exercise the intended customer command? Green = canonical passed, yellow = workaround used, red = failed/missing, gray = cascade/skipped.</p>
+            </div>
+          </div>
+          <div id="coverage-summary-row" class="coverage-summary-row"></div>
+          <div class="scorecard-wrap">
+            <table id="coverage-table" class="scorecard-table coverage-table"></table>
+          </div>
+        </section>
+
+        <div class="overview-grid compact-top">
+          <section class="panel">
+            <h2>Missing &amp; Workaround Details</h2>
+            <p class="subtle" style="margin-bottom:0.75rem">Commands that were never attempted or required a workaround, grouped by phase.</p>
+            <div id="coverage-gaps-list" class="theme-list"></div>
+          </section>
+          <section class="panel">
+            <h2>Bug Attribution</h2>
+            <p class="subtle" style="margin-bottom:0.75rem">Why commands failed or needed workarounds — platform bug, tooling bug, harness noise, or cascade block.</p>
+            <div id="coverage-attribution" class="theme-list"></div>
           </section>
         </div>
       </section>

@@ -1,3 +1,72 @@
+const CANONICAL_COMMANDS = {
+  'Create/Scaffold': [
+    { cmd: 'azd extension install', short: 'ext install' },
+    { cmd: 'azd ai agent init', short: 'agent init' },
+  ],
+  'Provision': [
+    { cmd: 'azd provision', short: 'provision' },
+  ],
+  'Local Run': [
+    { cmd: 'azd ai agent run', short: 'agent run' },
+    { cmd: 'azd ai agent invoke --local', short: 'invoke --local' },
+  ],
+  'Deploy': [
+    { cmd: 'azd deploy', short: 'deploy' },
+  ],
+  'Remote Invoke': [
+    { cmd: 'azd ai agent invoke', short: 'invoke' },
+  ],
+  'Monitor': [
+    { cmd: 'azd ai agent monitor', short: 'monitor' },
+  ],
+  'Update & Redeploy': [
+    { cmd: 'azd deploy', short: 'redeploy' },
+    { cmd: 'azd ai agent invoke', short: 're-invoke' },
+  ],
+  'Cleanup': [
+    { cmd: 'azd down', short: 'down' },
+  ],
+};
+
+function classifyCommand(step, canonicalCmd) {
+  if (!step) return 'cascade';
+  const status = step.displayStatus || step.status;
+  if (status === 'skip' || status === 'cancelled') return 'cascade';
+
+  const cmdLower = canonicalCmd.cmd.toLowerCase();
+  const timelineTexts = (step.timeline || []).filter(t => t.type === 'command').map(t => t.text.toLowerCase());
+  const snippetTexts = (step.commandSnippets || []).map(t => t.toLowerCase());
+  const allCmds = [...timelineTexts, ...snippetTexts];
+  const htmlLower = (step.html || '').toLowerCase();
+
+  const found = allCmds.some(t => t.includes(cmdLower)) || htmlLower.includes(cmdLower);
+
+  const gapsLower = (step.coverageGaps || []).map(g => g.toLowerCase());
+  const cmdKeywords = cmdLower.replace('azd ', '').replace('--local', '').trim().split(/\s+/);
+  const isMissing = gapsLower.some(g => cmdKeywords.every(kw => g.includes(kw)) && (g.includes('missing') || g.includes('not captured')));
+
+  if (isMissing) {
+    return (step.workarounds && step.workarounds.length) ? 'workaround' : 'missing';
+  }
+
+  if (found) {
+    if (status === 'pass' && !(step.workarounds && step.workarounds.length)) return 'pass';
+    if (step.workarounds && step.workarounds.length) return 'workaround';
+    if (status === 'fail') return 'fail';
+    if (status === 'partial' || (step.displayStatus === 'partial')) return 'workaround';
+    return 'pass';
+  }
+
+  if (status === 'pass') {
+    if (step.workarounds && step.workarounds.length) return 'workaround';
+    return 'pass';
+  }
+  if (status === 'fail') return 'fail';
+  if (status === 'partial' || step.displayStatus === 'partial') return 'workaround';
+
+  return 'unknown';
+}
+
 const state = {
   runs: [],
   activeRunFile: null,
@@ -29,8 +98,13 @@ const els = {
   tabs: [...document.querySelectorAll('.tab')],
   tabPanels: {
     overview: document.getElementById('overview-tab'),
+    coverage: document.getElementById('coverage-tab'),
     themes: document.getElementById('themes-tab'),
   },
+  coverageSummaryRow: document.getElementById('coverage-summary-row'),
+  coverageTable: document.getElementById('coverage-table'),
+  coverageGapsList: document.getElementById('coverage-gaps-list'),
+  coverageAttribution: document.getElementById('coverage-attribution'),
   detailPanel: document.getElementById('detail-panel'),
   detailEmpty: document.getElementById('detail-empty'),
   detailView: document.getElementById('detail-view'),
@@ -373,6 +447,138 @@ function renderDetail() {
   els.detailJournal.innerHTML = step.html;
 }
 
+function renderCoverageAudit() {
+  if (!els.coverageTable) return;
+  const samples = visibleSamples();
+  const phases = Object.keys(CANONICAL_COMMANDS);
+
+  // Build flat column list: phase + command pairs
+  const columns = [];
+  phases.forEach(phase => {
+    CANONICAL_COMMANDS[phase].forEach(cc => {
+      columns.push({ phase, ...cc });
+    });
+  });
+
+  // Compute all cell classifications
+  let totalCells = 0, passCount = 0, workaroundCount = 0, failCount = 0, missingCount = 0, cascadeCount = 0;
+  const cellData = [];
+  samples.forEach(sample => {
+    const row = [];
+    columns.forEach(col => {
+      const step = findStep(sample, col.phase);
+      const cls = classifyCommand(step, col);
+      row.push(cls);
+      totalCells++;
+      if (cls === 'pass') passCount++;
+      else if (cls === 'workaround') workaroundCount++;
+      else if (cls === 'fail') failCount++;
+      else if (cls === 'missing') missingCount++;
+      else if (cls === 'cascade') cascadeCount++;
+    });
+    cellData.push(row);
+  });
+
+  // Summary cards
+  const customerClean = samples.filter((_, si) => cellData[si].every(c => c === 'pass')).length;
+  els.coverageSummaryRow.innerHTML = [
+    ['pass', passCount, 'Canonical pass', 'pass-card'],
+    ['partial', workaroundCount, 'Workaround used', 'partial-card'],
+    ['fail', failCount + missingCount, 'Failed / missing', 'fail-card'],
+    ['cascade', cascadeCount, 'Cascade / skipped', 'cascade-card'],
+  ].map(([, value, label, cls]) => `<div class="summary-card ${cls}"><div class="summary-num">${value}</div><div class="summary-label">${label}</div></div>`).join('');
+
+  // Phase header spans
+  let phaseHeader = '<th class="sample-col sticky-left"></th>';
+  phases.forEach(phase => {
+    const span = CANONICAL_COMMANDS[phase].length;
+    phaseHeader += `<th colspan="${span}" class="coverage-phase-header">${escapeHtml(phase)}</th>`;
+  });
+
+  let cmdHeader = '<th class="sample-col sticky-left">Sample</th>';
+  columns.forEach(col => {
+    cmdHeader += `<th class="coverage-cmd-header" title="${escapeHtml(col.cmd)}">${escapeHtml(col.short)}</th>`;
+  });
+
+  const rows = samples.map((sample, si) => {
+    const cells = cellData[si].map((cls, ci) => {
+      const col = columns[ci];
+      const symbols = { pass: '✓', workaround: '△', fail: '✕', missing: '○', cascade: '—', unknown: '?' };
+      const step = findStep(sample, col.phase);
+      const tip = `${sample.name} • ${col.cmd} • ${cls}`;
+      return `<td><button class="score-cell cov-${cls}" title="${escapeHtml(tip)}" data-sample="${sample.slug}" data-phase="${escapeHtml(col.phase)}"><span class="score-symbol">${symbols[cls] || '?'}</span></button></td>`;
+    }).join('');
+    return `<tr><th class="sample-col sticky-left">${escapeHtml(sample.name)}</th>${cells}</tr>`;
+  }).join('');
+
+  els.coverageTable.innerHTML = `<thead><tr>${phaseHeader}</tr><tr>${cmdHeader}</tr></thead><tbody>${rows}</tbody>`;
+
+  // Click handler: jump to detail
+  els.coverageTable.querySelectorAll('.score-cell').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.selectedSampleSlug = btn.dataset.sample;
+      state.selectedPhase = btn.dataset.phase;
+      state.tab = 'overview';
+      state.focusDetail = true;
+      render();
+      scrollToDetail();
+    });
+  });
+
+  // Gaps list
+  const gapsByPhase = {};
+  samples.forEach((sample, si) => {
+    columns.forEach((col, ci) => {
+      const cls = cellData[si][ci];
+      if (cls === 'missing' || cls === 'workaround' || cls === 'fail') {
+        const key = col.phase;
+        if (!gapsByPhase[key]) gapsByPhase[key] = [];
+        const step = findStep(sample, col.phase);
+        gapsByPhase[key].push({
+          sample: sample.name,
+          cmd: col.cmd,
+          status: cls,
+          workarounds: step?.workarounds || [],
+          coverageGaps: step?.coverageGaps || [],
+        });
+      }
+    });
+  });
+
+  els.coverageGapsList.innerHTML = '';
+  if (Object.keys(gapsByPhase).length === 0) {
+    els.coverageGapsList.innerHTML = '<p class="subtle">All canonical commands captured — no gaps.</p>';
+  } else {
+    Object.entries(gapsByPhase).forEach(([phase, items]) => {
+      const card = make('article', 'theme-card');
+      const statusIcons = { missing: '○ Missing', workaround: '△ Workaround', fail: '✕ Failed' };
+      const itemsHtml = items.map(item => {
+        const detail = item.workarounds.length ? `<br/><span class="gap-detail">${escapeHtml(item.workarounds[0].substring(0, 120))}${item.workarounds[0].length > 120 ? '…' : ''}</span>` : '';
+        return `<div class="gap-item"><span class="gap-status cov-${item.status}-text">${statusIcons[item.status]}</span> <strong>${escapeHtml(item.cmd)}</strong> — ${escapeHtml(item.sample)}${detail}</div>`;
+      }).join('');
+      card.innerHTML = `<div class="theme-top"><div><h3>${escapeHtml(phase)}</h3><p class="theme-count">${items.length} issue${items.length === 1 ? '' : 's'}</p></div></div>${itemsHtml}`;
+      els.coverageGapsList.appendChild(card);
+    });
+  }
+
+  // Attribution
+  const attrCounts = { platform: 0, tooling: 0, harness: 0, cascade: 0 };
+  samples.forEach(sample => {
+    const buckets = sample.buckets || [];
+    if (buckets.includes('broken-template-contract') || buckets.includes('postdeploy-auth') || buckets.includes('sample-runtime-bug')) attrCounts.platform++;
+    if (buckets.includes('azd-papercuts')) attrCounts.tooling++;
+    if (buckets.includes('harness-noise')) attrCounts.harness++;
+  });
+  attrCounts.cascade = cascadeCount;
+
+  els.coverageAttribution.innerHTML = [
+    ['Platform / sample bug', attrCounts.platform, 'Broken template, auth failure, or runtime bug in the sample itself'],
+    ['azd / tooling bug', attrCounts.tooling, 'CLI or operator-experience issue — the canonical command didn\'t work as documented'],
+    ['Harness noise', attrCounts.harness, 'Environment or test harness artifact — not a real product issue'],
+    ['Cascade blocks', attrCounts.cascade, 'Commands skipped because an earlier phase failed'],
+  ].map(([label, count, desc]) => `<article class="theme-card"><div class="theme-top"><div><h3>${escapeHtml(label)}</h3><p class="theme-count">${count} occurrence${count === 1 ? '' : 's'}</p></div></div><p>${escapeHtml(desc)}</p></article>`).join('');
+}
+
 function render() {
   ensureSelection();
   document.body.classList.toggle('detail-focus', state.focusDetail);
@@ -382,6 +588,7 @@ function render() {
   renderExecutiveThemes();
   renderSampleList();
   renderScorecard();
+  renderCoverageAudit();
   renderDetail();
 }
 
