@@ -3,7 +3,7 @@ set -euo pipefail
 
 APP_NAME="${APP_NAME:-}"
 RESOURCE_GROUP="${RESOURCE_GROUP:-hat-run-explorer-rg}"
-LOCATION="${LOCATION:-eastus2}"
+LOCATION="${LOCATION:-northcentralus}"
 RUNTIME="${RUNTIME:-NODE:20-lts}"
 SKU="${SKU:-B1}"
 
