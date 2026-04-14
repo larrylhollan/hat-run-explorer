@@ -31,3 +31,30 @@ npm start
 ```
 
 The site serves the contents of `explorer/`.
+
+## Publishing a future run
+The app now supports multiple run/day records.
+
+### Current live deployment
+- site: `https://hatrunexplorerjeff0414.azurewebsites.net`
+- app service: `hatrunexplorerjeff0414`
+- resource group: `hat-run-explorer-rg`
+- region: `northcentralus`
+
+### Future publish flow
+1. generate a new run dataset in `explorer/data/runs/`
+2. update `explorer/data/runs.json`
+3. redeploy the existing App Service
+
+Current deploy command:
+
+```bash
+APP_NAME=hatrunexplorerjeff0414 RESOURCE_GROUP=hat-run-explorer-rg LOCATION=northcentralus bash scripts/deploy_app_service.sh
+```
+
+### Important note
+The web app is ready for multiple runs, but `scripts/build_hat_explorer.py` is still partially hardcoded to the current HOL-3224 export set. Future work should parameterize the builder so each completed daily report can automatically create a new run record and publish it.
+
+See also:
+- `docs/hat-explorer-cell-data-contract.md`
+- `docs/hat-explorer-publishing-runbook.md`
