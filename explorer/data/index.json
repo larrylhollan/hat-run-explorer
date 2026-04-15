@@ -112,6 +112,56 @@
         ]
       },
       "file": "./data/runs/2026-04-14-hol-3224.json"
+    },
+    {
+      "slug": "2026-04-14-hol-3457",
+      "runId": "HOL-3457",
+      "runDate": "2026-04-14",
+      "title": "HAT Run HOL-3457",
+      "summary": {
+        "pass": 0,
+        "partial": 8,
+        "fail": 4,
+        "bucketCounts": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 10
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 10
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 10,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /responses)"
+            ]
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 10,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)"
+            ]
+          }
+        ]
+      },
+      "file": "./data/runs/2026-04-14-hol-3457.json"
     }
   ]
 }

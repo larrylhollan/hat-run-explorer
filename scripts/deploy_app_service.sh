@@ -6,6 +6,7 @@ RESOURCE_GROUP="${RESOURCE_GROUP:-hat-run-explorer-rg}"
 LOCATION="${LOCATION:-northcentralus}"
 RUNTIME="${RUNTIME:-NODE:20-lts}"
 SKU="${SKU:-B1}"
+SKIP_BUILD_DATA="${SKIP_BUILD_DATA:-0}"
 
 if [[ -z "$APP_NAME" ]]; then
   echo "APP_NAME is required"
@@ -17,8 +18,12 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 cd "$REPO_ROOT"
 
-echo "==> Building explorer data"
-python3 scripts/build_hat_explorer.py
+if [[ "$SKIP_BUILD_DATA" == "1" ]]; then
+  echo "==> Skipping explorer data build (SKIP_BUILD_DATA=1)"
+else
+  echo "==> Building explorer data"
+  python3 scripts/build_hat_explorer.py
+fi
 
 echo "==> Installing Node dependencies"
 npm install
