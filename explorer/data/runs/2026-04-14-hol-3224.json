@@ -24,24 +24,19 @@
     "Cleanup": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure."
   },
   "summary": {
-    "pass": 1,
-    "partial": 11,
+    "pass": 3,
+    "partial": 9,
     "fail": 0,
     "bucketCounts": [
       {
         "key": "azd-papercuts",
         "label": "azd or operator-experience papercut",
-        "count": 8
+        "count": 10
       },
       {
         "key": "postdeploy-auth",
         "label": "Postdeploy RBAC or identity failure",
-        "count": 5
-      },
-      {
-        "key": "invoke-failure",
-        "label": "Remote invoke failure",
-        "count": 4
+        "count": 6
       },
       {
         "key": "broken-template-contract",
@@ -49,9 +44,9 @@
         "count": 3
       },
       {
-        "key": "baseline-pass",
-        "label": "Clean pass",
-        "count": 1
+        "key": "invoke-failure",
+        "label": "Remote invoke failure",
+        "count": 3
       },
       {
         "key": "sample-runtime-bug",
@@ -63,37 +58,25 @@
       {
         "key": "azd-papercuts",
         "label": "azd or operator-experience papercut",
-        "count": 8,
+        "count": 10,
         "paragraph": "",
         "examples": [
+          "Echo Non-Streaming (.NET, /invocations)",
+          "Echo Non-Streaming (.NET, /responses)",
           "Echo Non-Streaming (Python, /invocations)",
-          "Echo Streaming (.NET, /invocations)",
-          "Echo Streaming (.NET, /responses)",
-          "Echo Streaming (Python, /invocations)"
+          "Echo Streaming (.NET, /invocations)"
         ]
       },
       {
         "key": "postdeploy-auth",
         "label": "Postdeploy RBAC or identity failure",
-        "count": 5,
+        "count": 6,
         "paragraph": "",
         "examples": [
           "Echo Non-Streaming (.NET, /invocations)",
+          "Echo Non-Streaming (Python, /invocations)",
           "Echo Streaming (.NET, /invocations)",
-          "Echo Streaming (Python, /responses)",
-          "Multi-Turn Chat (Python, /invocations)"
-        ]
-      },
-      {
-        "key": "invoke-failure",
-        "label": "Remote invoke failure",
-        "count": 4,
-        "paragraph": "",
-        "examples": [
-          "Echo Streaming (.NET, /invocations)",
-          "Echo Streaming (.NET, /responses)",
-          "Echo Streaming (Python, /responses)",
-          "Multi-Turn Chat (Python, /responses)"
+          "Echo Streaming (Python, /responses)"
         ]
       },
       {
@@ -108,12 +91,14 @@
         ]
       },
       {
-        "key": "baseline-pass",
-        "label": "Clean pass",
-        "count": 1,
+        "key": "invoke-failure",
+        "label": "Remote invoke failure",
+        "count": 3,
         "paragraph": "",
         "examples": [
-          "Echo Non-Streaming (.NET, /responses)"
+          "Echo Streaming (.NET, /responses)",
+          "Echo Streaming (Python, /responses)",
+          "LangGraph Calculator (Python, /responses)"
         ]
       },
       {
@@ -132,9 +117,10 @@
       "name": "Echo Non-Streaming (.NET, /invocations)",
       "slug": "echo-non-streaming-net-invocations",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 6 phases passed, 1 failed (Remote Invoke).",
+      "plainSummary": "Mixed results: 4 phases passed, 1 failed (Remote Invoke).",
       "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
+        "azd-papercuts",
         "postdeploy-auth"
       ],
       "steps": [
@@ -178,8 +164,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision completed successfully. Azure resources provisioned in ~88s: resource group rg-echo-nonstreaming-dotnet-invocations, AI Foundry account ai-account-4xgvjm7xqhjqk, project ai-project-echo-nonstreaming-dotnet-invocations, gpt-4o model deployment, ACR cr4xgvjm7xqhjqk, App Insights, Log Analytics. Workaround: created stub dirs for 3 missing services referenced in shared azure.yaml (echo-agent-invocations-streaming, multiturn-chat-invocations-dotnet, multiturn-chat-responses-dotnet). No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Workaround was needed",
@@ -222,8 +208,8 @@
           "phase": "Local Run",
           "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
           "summary": "P03 Local Run PASS. .NET echo agent built, started on port 8088, and returned correct echo response via direct curl. azd ai agent run/invoke both have known bugs (Python startupCommand in shared azure.yaml, invoke hang on /invocations). Workaround: ran dotnet directly and invoked via curl. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Manual intervention or retry was mentioned"
@@ -413,7 +399,7 @@
       "plainSummary": "Echo Non-Streaming (.NET, /responses) passed all phases cleanly.",
       "firstFailure": "No major failure detected.",
       "buckets": [
-        "baseline-pass"
+        "azd-papercuts"
       ],
       "steps": [
         {
@@ -490,8 +476,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy completed successfully. Agent echo-agent-responses-nonstreaming v12 deployed to ai-project-echo-nonstreaming-dotnet-responses in northcentralus. Workaround: had to manually populate azd env vars (AZURE_AI_PROJECT_ID, AZURE_RESOURCE_GROUP, etc.) that provision did not persist to the .env file. No follow-up work identified \u2014 the missing env vars workaround is a known pattern for this template set.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Workaround was needed",
@@ -669,9 +655,10 @@
       "name": "Echo Non-Streaming (Python, /invocations)",
       "slug": "echo-non-streaming-python-invocations",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 6 phases passed, 2 failed (Monitor, Update & Redeploy).",
-      "firstFailure": "Failed at Monitor.",
+      "plainSummary": "Mixed results: 6 phases passed, 2 failed (Remote Invoke, Monitor).",
+      "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
+        "postdeploy-auth",
         "azd-papercuts"
       ],
       "steps": [
@@ -807,8 +794,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 executed with substantive remote work. Agent invoke attempted via azd CLI (404 \u2014 agent not found, request_id: 2db1d7600dc8309cb42e815dab7c3b53) and curl -v (403, apim-request-id: 8cc676be-72e5-4a56-b4f6-02a4ce3422ab). Both confirm agent echo-agent-invocations-nonstreaming is not deployed. Root cause: P04 (deploy) has not run yet. Log written to P05-remote-invoke.log. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -897,8 +884,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "## P07 Summary: FAIL",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -974,12 +961,11 @@
     {
       "name": "Echo Streaming (.NET, /invocations)",
       "slug": "echo-streaming-net-invocations",
-      "outcome": "partial",
-      "plainSummary": "Mixed results: 5 phases passed, 0 failed ().",
+      "outcome": "pass",
+      "plainSummary": "Echo Streaming (.NET, /invocations) passed all phases cleanly.",
       "firstFailure": "No major failure detected.",
       "buckets": [
         "postdeploy-auth",
-        "invoke-failure",
         "azd-papercuts"
       ],
       "steps": [
@@ -1126,8 +1112,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "## P06 Monitor Complete",
-          "status": "partial",
-          "displayStatus": "partial",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured"
@@ -1163,8 +1149,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 Update & Redeploy completed with PARTIAL result. Redeploy succeeded (v1\u2192v2, 60s), new session invokes work (HTTP 200), reused session does not 500. Updated behavior not visible in deploy due to missing azure.yaml in run-specific dir causing azd to use cached/alternative source path. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Manual intervention or retry was mentioned"
@@ -1182,8 +1168,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. Ran `azd down --force --purge --no-prompt` for echo-streaming-dotnet-invocations. Resource group `rg-echo-streaming-dotnet-invocations` confirmed deleted (`az group exists` returned `false`). Log Analytics Workspace purged. Output recorded to P08-cleanup.log. No follow-up work identified.",
-          "status": "partial",
-          "displayStatus": "partial",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": false,
           "attentionReasons": [],
           "html": "<h2>Step 1: <code>azd down --force --purge</code> \u2014 In Progress</h2>\n<p><strong>Command:</strong></p>\n<pre><code class=\"language-bash\">cd /home/jeffhollan/hal-workspace/runs/2026-04-14/echo-streaming-dotnet-invocations/src\nazd env select echo-streaming-dotnet-invocations\nazd down --force --purge --no-prompt\n</code></pre>\n<p><strong>Environment values captured before teardown:</strong>\n- <code>AZURE_RESOURCE_GROUP</code>: <code>rg-csb-vnext6-dev</code> (azd env) / <code>rg-echo-streaming-dotnet-invocations</code> (actual RG being deleted)\n- <code>AZURE_SUBSCRIPTION_ID</code>: <code>d3e20af1-0127-4c6b-a16b-8a33953b0c09</code>\n- <code>AZURE_LOCATION</code>: <code>northcentralus</code>\n- <code>AZURE_AI_ACCOUNT_NAME</code>: <code>ai-account-3h7uqsiadx2ac</code>\n- <code>AZURE_AI_PROJECT_NAME</code>: <code>ai-project-csb-vnext6-dev</code></p>\n<p><strong>Output (partial \u2014 script timed out at 60s while RG deletion was in progress):</strong></p>\n<pre><code>Deleting all resources and deployed code on Azure (azd down)\nLocal application code is not deleted when running azd down.\n\nDiscovering resources to delete...\nDeleting your resources can take some time.\n\nPurging Log Analytics Workspace: logs-azjrx7v4sfols\n  (\u2713) Done: Purging Log Analytics Workspace: logs-azjrx7v4sfols\nDeleting resource group rg-echo-streaming-dotnet-invocations\n  [still in progress...]\n</code></pre>\n<p><strong>Exit code:</strong> 124 (timeout \u2014 <code>azd down</code> still running server-side)\n<strong>Resource group state:</strong> <code>Deleting</code> (confirmed via <code>az group show</code>)</p>\n<p>Waiting for deletion to complete before final verification.</p>\n<hr />\n<h2>Step 2: Verify Resource Group Deletion \u2014 \u2705 Passed</h2>\n<p><strong>Command:</strong></p>\n<pre><code class=\"language-bash\">az group exists --name rg-echo-streaming-dotnet-invocations --subscription d3e20af1-0127-4c6b-a16b-8a33953b0c09\n</code></pre>\n<p><strong>Output:</strong> <code>false</code></p>\n<p>\u2705 Resource group <code>rg-echo-streaming-dotnet-invocations</code> confirmed deleted.</p>\n<h2>Step 3: Log File \u2014 \u2705 Written</h2>\n<p>Log file written to:</p>\n<pre><code>/home/jeffhollan/hal-workspace/runs/2026-04-14/echo-streaming-dotnet-invocations/logs/P08-cleanup.log\n</code></pre>\n<h2>P08 Summary</h2>\n<table>\n<thead>\n<tr>\n<th>Step</th>\n<th>Command</th>\n<th>Status</th>\n<th>Duration</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td>Select env</td>\n<td><code>azd env select echo-streaming-dotnet-invocations</code></td>\n<td>\u2705 Pass</td>\n<td>&lt;1s</td>\n</tr>\n<tr>\n<td>Teardown</td>\n<td><code>azd down --force --purge --no-prompt</code></td>\n<td>\u2705 Pass</td>\n<td>~2min (script timed out at 60s but Azure-side deletion completed)</td>\n</tr>\n<tr>\n<td>Verify RG deleted</td>\n<td><code>az group exists</code></td>\n<td>\u2705 Pass</td>\n<td>&lt;5s</td>\n</tr>\n<tr>\n<td>Log file</td>\n<td>Written to P08-cleanup.log</td>\n<td>\u2705 Complete</td>\n<td>\u2014</td>\n</tr>\n</tbody>\n</table>\n<p><strong>Resources deleted:</strong>\n- Resource group: <code>rg-echo-streaming-dotnet-invocations</code>\n- Log Analytics Workspace: <code>logs-azjrx7v4sfols</code> (purged)\n- AI Account: <code>ai-account-3h7uqsiadx2ac</code>\n- AI Project: <code>ai-project-csb-vnext6-dev</code>\n- Container Registry: <code>cr3h7uqsiadx2ac.azurecr.io</code>\n- Subscription: <code>d3e20af1-0127-4c6b-a16b-8a33953b0c09</code>\n- Region: <code>northcentralus</code></p>\n<p><strong>Overall: P08 Cleanup PASSED</strong> \u2705</p>\n<hr />\n<p>P08 Cleanup complete. Ran <code>azd down --force --purge --no-prompt</code> for echo-streaming-dotnet-invocations. Resource group <code>rg-echo-streaming-dotnet-invocations</code> confirmed deleted (<code>az group exists</code> returned <code>false</code>). Log Analytics Workspace purged. Output recorded to P08-cleanup.log. No follow-up work identified.</p>",
@@ -1207,8 +1193,8 @@
       "name": "Echo Streaming (.NET, /responses)",
       "slug": "echo-streaming-net-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 4 phases passed, 3 failed (Remote Invoke, Monitor, Update & Redeploy).",
-      "firstFailure": "Failed at Remote Invoke.",
+      "plainSummary": "Mixed results: 4 phases passed, 4 failed (Deploy, Remote Invoke, Monitor).",
+      "firstFailure": "Failed at Deploy.",
       "buckets": [
         "broken-template-contract",
         "invoke-failure",
@@ -1291,8 +1277,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy completed with partial success. The .NET echo streaming responses agent could not be deployed because no matching service entry exists in the shared azure.yaml. Five other services deployed successfully. Classified as template issue / azure.yaml structure gap \u2014 the scaffolded .NET source at src/src/echo-agent-responses-streaming/ has no corresponding service mapping. Additionally, all agents deployed to the multiturn-dotnet-responses project (not echo-streaming-dotnet-responses), indicating a project routing mismatch in `azd deploy --all`. No follow-up work identified \u2014 this is a known template gap tracked at the HAT harness level.",
-          "status": "partial",
-          "displayStatus": "partial",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out"
@@ -1475,8 +1461,8 @@
       "name": "Echo Streaming (Python, /invocations)",
       "slug": "echo-streaming-python-invocations",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 4 phases passed, 4 failed (Create/Scaffold, Deploy, Remote Invoke).",
-      "firstFailure": "Failed at Create/Scaffold.",
+      "plainSummary": "Mixed results: 3 phases passed, 4 failed (Deploy, Remote Invoke, Monitor).",
+      "firstFailure": "Failed at Deploy.",
       "buckets": [
         "azd-papercuts",
         "broken-template-contract"
@@ -1487,8 +1473,8 @@
           "phase": "Create/Scaffold",
           "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
           "summary": "P01 Create/Scaffold complete. All 7 template files downloaded from agent manifest, project structure verified, azd environment initialized with correct subscription/location/VNext flag. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Manual intervention or retry was mentioned"
@@ -1513,8 +1499,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision complete. Azure infrastructure provisioned successfully: resource group rg-echo-streaming-py-invocations, AI account ai-account-cemvmpn4e7mou, AI project ai-project-echo-streaming-py-invocations, Log Analytics and App Insights. Three issues addressed during execution: (1) missing infra/ directory from P01 scaffold restructure \u2014 restored from prior run, (2) Docker not running \u2014 enabled remoteBuild in azure.yaml, (3) soft-deleted Cognitive Services accounts blocking deployment \u2014 purged both. All resources verified via azd env get-values. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Manual intervention or retry was mentioned"
@@ -1662,8 +1648,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "P06 Monitor completed. Result: FAILED (cascade from P04 Deploy template structural bug). Container app was never provisioned \u2014 azd deploy target missing. azd ai agent show/monitor also fail due to service type mismatch (containerapp vs ai.agent). All infrastructure resources (AI account, project, ACR) are healthy; the gap is the missing Container App resource in Bicep. No follow-up work identified \u2014 this is part of the known template structural bug family already documented in P04.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured"
@@ -1770,8 +1756,8 @@
       "name": "Echo Streaming (Python, /responses)",
       "slug": "echo-streaming-python-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 4 phases passed, 4 failed (Deploy, Remote Invoke, Monitor).",
-      "firstFailure": "Failed at Deploy.",
+      "plainSummary": "Mixed results: 3 phases passed, 5 failed (Provision, Deploy, Remote Invoke).",
+      "firstFailure": "Failed at Provision.",
       "buckets": [
         "azd-papercuts",
         "postdeploy-auth",
@@ -1824,8 +1810,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision completed successfully. Azure infrastructure provisioned: resource group rg-echo-streaming-py-responses, AI Foundry account ai-account-jgv3cegpklevs, project ai-project-echo-streaming-py-responses in northcentralus. Scaffold structure fix and manual azure.yaml creation were needed as workarounds (known scaffold issues). No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Manual intervention or retry was mentioned"
@@ -2028,11 +2014,12 @@
       "name": "LangGraph Calculator (Python, /responses)",
       "slug": "langgraph-calculator-python-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 4 phases passed, 4 failed (Provision, Local Run, Monitor).",
-      "firstFailure": "Failed at Provision.",
+      "plainSummary": "Mixed results: 2 phases passed, 6 failed (Create/Scaffold, Provision, Local Run).",
+      "firstFailure": "Failed at Create/Scaffold.",
       "buckets": [
         "azd-papercuts",
-        "broken-template-contract"
+        "broken-template-contract",
+        "invoke-failure"
       ],
       "steps": [
         {
@@ -2040,8 +2027,8 @@
           "phase": "Create/Scaffold",
           "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
           "summary": "P01 Scaffold complete. All 5 steps passed:",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": false,
           "attentionReasons": [],
           "html": "<p>\ud83d\udce8 Sent to Jeff via Telegram:</p>\n<blockquote>\n<p>HOL-3265 P01 scaffold blocked. SSH to pc.int failed with Permission denied on all attempts. jit connect requested a fresh credential but the key was rejected. Need fresh JIT SSH credential or SSH auth check on pc.int. Cannot proceed without working SSH access.</p>\n</blockquote>\n<hr />\n<h2>P01 Pre-flight: SSH Access Blocked</h2>\n<p><strong>Step:</strong> Pre-flight \u2014 connect to pc.int via jit_connect.py\n<strong>Command:</strong> <code>jit_connect.py --issue-id ... --target pc.int --script /tmp/hat-p01-preflight.sh</code>\n<strong>Exit code:</strong> 255\n<strong>Status:</strong> FAILED \u2014 SSH access denied</p>\n<p><strong>Error output:</strong></p>\n<pre><code>Permission denied, please try again.\nPermission denied, please try again.\njeffhollan@pc.int.hollan.dev: Permission denied (publickey,password).\n</code></pre>\n<p><strong>Classification:</strong> Auth / access issue (perishable JIT SSH credential)</p>\n<p><strong>What happened:</strong> jit_connect.py auto-requested a fresh SSH credential from the Paperclip API, but the resulting key was rejected by pc.int sshd on all attempts.</p>\n<p><strong>What is needed:</strong> Fresh working JIT SSH credential or SSH auth check on pc.int. Cannot proceed with any HAT P01 scaffold steps without SSH access.</p>\n<p>Asked Jeff via Telegram. Blocking until fresh access is provided.</p>\n<hr />\n<p>SSH to pc.int Permission denied. JIT credential was auto-requested but rejected. Asked Jeff via Telegram for fresh access. Blocking until resolved.</p>\n<hr />\n<h2>Step 1: Pre-flight \u2014 Version Stamping + Repo Pull</h2>\n<p><strong>Commands:</strong> git pull on hosted-agents-vnext-private-preview and foundry-samples, then capture versions.json\n<strong>Exit code:</strong> 0\n<strong>Duration:</strong> ~10s\n<strong>Status:</strong> PASSED</p>\n<p><strong>Output:</strong></p>\n<pre><code>hosted-agents-vnext-private-preview: Already up to date.\nfoundry-samples: Already up to date.\n</code></pre>\n<p><strong>versions.json:</strong></p>\n<pre><code class=\"language-json\">{\n  &quot;repo_commit&quot;: &quot;6c3ebc7246d8db0ff43c932203b409de8d58102a&quot;,\n  &quot;foundry_samples_commit&quot;: &quot;ac7b9a3dc6a0bc8d3344960fc544a384dbd71af1&quot;,\n  &quot;azd_version&quot;: &quot;azd version 1.23.15 (commit cfdc182517044a83073742cb0a7675ce9b02255a) (stable)&quot;,\n  &quot;ext_version&quot;: &quot;azure.ai.agents 0.1.22-preview&quot;,\n  &quot;captured_at&quot;: &quot;2026-04-14T07:30:03Z&quot;\n}\n</code></pre>\n<p>No Azure correlation IDs (local git/azd version operations only).</p>\n<hr />\n<h2>Step 2: azd Extension Install + Work Dirs</h2>\n<p><strong>Command:</strong> <code>azd extension install azure.ai.agents --version latest</code>\n<strong>Exit code:</strong> 0\n<strong>Duration:</strong> ~5s\n<strong>Status:</strong> PASSED</p>\n<p><strong>Output:</strong></p>\n<pre><code>Installing azure.ai.agents extension\n  (-) Skipped: Installing azure.ai.agents extension (version 0.1.22-preview already installed)\nSUCCESS: Extension(s) installed successfully\n</code></pre>\n<p>Work directories created at:\n- <code>/home/jeffhollan/hal-workspace/runs/2026-04-14/langgraph-calculator-py-responses/src/</code>\n- <code>/home/jeffhollan/hal-workspace/runs/2026-04-14/langgraph-calculator-py-responses/logs/</code></p>\n<p>No Azure correlation IDs (local CLI operations only).</p>\n<hr />\n<h2>Steps 3-5: azd init + env config + project verification</h2>\n<p><strong>Step 3 \u2014 azd init:</strong>\n<strong>Command:</strong></p>\n<pre><code>cd /home/jeffhollan/hal-workspace/runs/2026-04-14/langgraph-calculator-py-responses/src\nazd init --template /home/jeffhollan/hal-workspace/foundry-samples/samples/python/hosted-agents/langgraph/calculator-agent --environment langgraph-calculator-py-responses --no-prompt\n</code></pre>\n<p><strong>Exit code:</strong> 0\n<strong>Duration:</strong> ~8s\n<strong>Status:</strong> PASSED</p>\n<p><strong>Output:</strong></p>\n<pre><code>Copying template code from local path to: .../src\n  (\u2713) Done: Created a new azure.yaml file\n  (\u2713) Done: Copying template code from local path\nSUCCESS: New project initialized!\n</code></pre>\n<p><strong>Step 4 \u2014 Environment variables set:</strong></p>\n<pre><code>AZURE_ENV_NAME=&quot;langgraph-calculator-py-responses&quot;\nAZURE_LOCATION=&quot;northcentralus&quot;\nAZURE_SUBSCRIPTION_ID=&quot;d3e20af1-0127-4c6b-a16b-8a33953b0c09&quot;\nenableHostedAgentVNext=&quot;true&quot;\n</code></pre>\n<p><strong>Step 5 \u2014 Project structure verified:</strong></p>\n<pre><code>src/.azure/config.json\nsrc/.azure/langgraph-calculator-py-responses/.env\nsrc/.azure/langgraph-calculator-py-responses/config.json\nsrc/.gitignore\nsrc/Dockerfile\nsrc/README.md\nsrc/agent.yaml\nsrc/azure.yaml\nsrc/main.py\nsrc/requirements.txt\n</code></pre>\n<p>All expected files present. Log written to <code>/home/jeffhollan/hal-workspace/runs/2026-04-14/langgraph-calculator-py-responses/logs/P01-scaffold.log</code>.</p>\n<p>No Azure correlation IDs (local init + env set operations only).</p>\n<hr />\n<p>P01 Scaffold complete. All 5 steps passed:\n1. Pre-flight: repos pulled, versions.json captured (azd 1.23.15, azure.ai.agents 0.1.22-preview)\n2. azd extension verified (0.1.22-preview already installed)\n3. azd init from local template \u2014 SUCCESS, project initialized in src/\n4. Environment configured: AZURE_SUBSCRIPTION_ID, AZURE_LOCATION=northcentralus, enableHostedAgentVNext=true, env name=langgraph-calculator-py-responses\n5. Project structure verified: azure.yaml, agent.yaml, main.py, Dockerfile, requirements.txt all present</p>\n<p>Log: /home/jeffhollan/hal-workspace/runs/2026-04-14/langgraph-calculator-py-responses/logs/P01-scaffold.log</p>\n<p>No follow-up work identified.</p>",
@@ -2169,8 +2156,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 Remote Invoke completed as FAIL \u2014 cascade from P02 provision failure. The LangGraph Calculator template is missing infra/main.bicep, so no Azure resources were provisioned and no invoke was possible. This is a known template structural bug. Evidence and logs captured. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -2227,8 +2214,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "FAIL (cascade from P02 provision failure). No Azure resources exist for this template \u2014 provision never completed. Code change was applied but deploy/invoke are no-ops without infra. No follow-up work identified \u2014 this is a downstream symptom of the P02 failure.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out"
@@ -2248,8 +2235,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. azd down fails expectedly (no infra/main.bicep \u2014 hosted agent template). Verified no Azure resource groups exist for this template in subscription d3e20af1-0127-4c6b-a16b-8a33953b0c09. Cleanup is a no-op. Log written to P08-cleanup.log. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured"
@@ -2280,9 +2267,9 @@
     {
       "name": "Multi-Turn Chat (.NET, /invocations)",
       "slug": "multi-turn-chat-net-invocations",
-      "outcome": "partial",
-      "plainSummary": "Mixed results: 6 phases passed, 2 failed (Remote Invoke, Update & Redeploy).",
-      "firstFailure": "Failed at Remote Invoke.",
+      "outcome": "pass",
+      "plainSummary": "Multi-Turn Chat (.NET, /invocations) passed all phases cleanly.",
+      "firstFailure": "No major failure detected.",
       "buckets": [
         "azd-papercuts"
       ],
@@ -2322,8 +2309,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision complete. Infrastructure already existed from P01 azd ai agent init. Verified all Azure resources: AI account ai-account-3h7uqsiadx2ac, project ai-project-csb-vnext6-dev, resource group rg-csb-vnext6-dev, model deployment gpt-4o, region northcentralus. Initial azd provision hit known agent.yaml validation bug with shared azure.yaml \u2014 resolved with AGENT_DEFINITION_PATH workaround. Log written to P02-provision.log. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2365,8 +2352,8 @@
           "phase": "Local Run",
           "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
           "summary": "P03 Local Run completed with FAIL result. Multi-turn state persistence does not work via direct /invocations HTTP calls \u2014 the InvocationsServer framework generates a new SessionId per invocation with no client-side session stickiness mechanism. The azd CLI invoke path is blocked by interactive service selection prompts in multi-service projects. Classification: template/framework issue. No follow-up work identified (this is an upstream SDK/sample issue).",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": false,
           "attentionReasons": [],
           "html": "<h2>P03: Local Run \u2014 Multi-Turn Chat (.NET, /invocations)</h2>\n<p><strong>Template:</strong> multiturn-dotnet-invocations\n<strong>Phase:</strong> P03 (Local Run)\n<strong>Dependency:</strong> HOL-3290 (P02: Provision) \u2705 done\n<strong>Port:</strong> 8088 (server hard-coded via Kestrel config, ignores <code>--port</code>/<code>--urls</code> flags)</p>\n<hr />\n<h3>Step 1: Build and Start Local Server</h3>\n<p><strong>Command:</strong></p>\n<pre><code class=\"language-bash\">cd .../src/src/multiturn-chat-invocations-dotnet\n/home/jeffhollan/.dotnet/dotnet build --verbosity minimal\n/home/jeffhollan/.dotnet/dotnet run --no-build\n</code></pre>\n<p><strong>Exit code:</strong> 0 | <strong>Duration:</strong> ~12s startup\n<strong>Status:</strong> \u2705 Server started on port 8088</p>\n<p><strong>Env vars:</strong>\n- <code>AZURE_OPENAI_ENDPOINT=https://ai-account-3h7uqsiadx2ac.openai.azure.com/</code>\n- <code>AZURE_AI_MODEL_DEPLOYMENT_NAME=gpt-4o</code></p>\n<p><strong>Note:</strong> <code>azd ai agent run multiturn-chat-invocations-dotnet --port 8096</code> failed \u2014 the shared <code>azure.yaml</code> uses <code>language: docker</code>, causing project type detection to fail. Built and ran directly with <code>dotnet run</code>.</p>\n<hr />\n<h3>Step 2: First Invoke (Introduce Name and Color)</h3>\n<p><strong>Command:</strong> <code>curl -X POST http://localhost:8088/invocations -H \"Content-Type: application/json\" -d '{\"Message\":\"My name is Alice and my favorite color is blue.\"}'</code>\n<strong>Exit code:</strong> 0 | <strong>Duration:</strong> 3s\n<strong>Status:</strong> \u2705 Response received</p>\n<p><strong>Response:</strong></p>\n<blockquote>\n<p>Nice to meet you, Alice! Blue is such a calming and beautiful color \u2014 a great choice. \ud83d\ude0a</p>\n</blockquote>\n<p><strong>Session ID returned:</strong> <code>c0c8386f-372f-4add-8d5d-a37d6a9afd7f</code></p>\n<hr />\n<h3>Step 3: Second Invoke (Recall Test \u2014 Attempted Same Session)</h3>\n<p><strong>Command:</strong> Same as above with <code>agent-session-id</code> and <code>x-agent-session-id</code> headers set to the session from invoke 1\n<strong>Exit code:</strong> 0 | <strong>Duration:</strong> 2s\n<strong>Status:</strong> \u274c Failed to recall</p>\n<p><strong>Response:</strong></p>\n<blockquote>\n<p>I don't know your name or favorite color since you haven't shared that information with me. Let me know if you'd like to tell me!</p>\n</blockquote>\n<p><strong>Session ID returned:</strong> <code>7cf4398d-bf8e-4f70-a8e7-5c2d4f4c6e4f</code> (<strong>different</strong> from first invoke)</p>\n<hr />\n<h3>Step 4: Server Stopped \u2705</h3>\n<hr />\n<h2>Root Cause Analysis</h2>\n<p><strong>FAIL \u2014 multi-turn state persistence does not work via direct HTTP invocations.</strong></p>\n<p>The <code>InvocationsServer</code> framework in <code>Azure.AI.AgentServer.Invocations</code> generates a <strong>new <code>SessionId</code></strong> for each invocation. There is no documented mechanism to pass a session ID via HTTP headers for session stickiness. The framework stores conversation history keyed by <code>context.SessionId</code> in a <code>ConcurrentDictionary</code>, but since each invocation gets a fresh session ID, the history is never reused across calls.</p>\n<p><strong>azd CLI issue:</strong> <code>azd ai agent invoke --local</code> prompts for service selection interactively when <code>azure.yaml</code> has multiple services. The <code>--local</code> flag is mutually exclusive with a named service argument. This makes non-interactive testing impossible in multi-service projects.</p>\n<p><strong>Classification:</strong> Template/framework issue \u2014 the <code>/invocations</code> protocol sample does not expose session stickiness through standard HTTP headers.</p>\n<hr />\n<h2>Result: <strong>FAIL</strong></h2>\n<p>Second response does NOT recall name (Alice) or color (blue) from the first turn due to session ID regeneration per invocation.</p>\n<p>All output logged to: <code>/home/jeffhollan/hal-workspace/runs/2026-04-14/multiturn-dotnet-invocations/logs/P03-local-run.log</code></p>\n<hr />\n<p>P03 Local Run completed with FAIL result. Multi-turn state persistence does not work via direct /invocations HTTP calls \u2014 the InvocationsServer framework generates a new SessionId per invocation with no client-side session stickiness mechanism. The azd CLI invoke path is blocked by interactive service selection prompts in multi-service projects. Classification: template/framework issue. No follow-up work identified (this is an upstream SDK/sample issue).</p>",
@@ -2422,8 +2409,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "## P05 Result: FAIL",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "unknown",
+          "displayStatus": "unknown",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -2510,8 +2497,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "## P07 Result: FAIL",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -2860,11 +2847,11 @@
       "name": "Multi-Turn Chat (Python, /invocations)",
       "slug": "multi-turn-chat-python-invocations",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 6 phases passed, 2 failed (Remote Invoke, Monitor).",
-      "firstFailure": "Failed at Remote Invoke.",
+      "plainSummary": "Mixed results: 5 phases passed, 3 failed (Local Run, Remote Invoke, Update & Redeploy).",
+      "firstFailure": "Failed at Local Run.",
       "buckets": [
-        "postdeploy-auth",
-        "sample-runtime-bug"
+        "sample-runtime-bug",
+        "postdeploy-auth"
       ],
       "steps": [
         {
@@ -2913,8 +2900,8 @@
           "phase": "Local Run",
           "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
           "summary": "P03 FAIL \u2014 known Python /invocations request-body consumption bug. Server started on port 8090 successfully. Both invoke attempts returned HTTP 500 because the SDK framework consumes the request body before the sample handler calls request.json(). Classified as sample/template bug (not execution or infra). Verbatim responses and full server traceback posted in execution journal comment. No follow-up work identified \u2014 this is a known recurring failure family.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -3008,8 +2995,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "P06 Monitor complete. Container is healthy (readiness 200 OK, server running on 8088). Agent metadata verified (multiturn-chat-invocations v11, invocations protocol). Session logs captured \u2014 invocation failures are the known Python /invocations request-body consumption bug (JSONDecodeError on empty body). Classification: sample bug. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out"
@@ -3041,8 +3028,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07: Update & Redeploy \u2014 FAIL. Code change applied (UPDATED prefix on system prompt), redeploy succeeded (agent v14 registered), but all invokes failed with RBAC 401/424 due to cascade from P04 postdeploy hook failure. Reused P05 session returned 424 (not 500). Direct curl confirmed agent IS reachable at v14 but managed identity lacks OpenAI User role. Auth issue classification. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -3081,11 +3068,10 @@
       "name": "Multi-Turn Chat (Python, /responses)",
       "slug": "multi-turn-chat-python-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 5 phases passed, 2 failed (Local Run, Remote Invoke).",
-      "firstFailure": "Failed at Local Run.",
+      "plainSummary": "Mixed results: 4 phases passed, 1 failed (Remote Invoke).",
+      "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
-        "postdeploy-auth",
-        "invoke-failure"
+        "postdeploy-auth"
       ],
       "steps": [
         {
@@ -3150,8 +3136,8 @@
           "phase": "Local Run",
           "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
           "summary": "P03 Local Run completed with FAIL status. Server started successfully on port 8092 using Responses protocol (SSE streaming, response IDs, session IDs all working). However, Azure OpenAI call fails with Connection error due to DefaultAzureCredential not having valid auth context for the agent user on pc.int. Same recurring auth issue as 2026-04-13 run (HOL-2853). Multi-turn state persistence could not be tested. Also identified that azd ai agent invoke hangs when multiple services in azure.yaml (workaround: direct curl). No follow-up work identified \u2014 this is a known recurring infrastructure auth issue.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -3172,8 +3158,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy completed. Core deploy succeeded (container built, pushed, agent created as multiturn-chat-responses v1, env vars registered). Postdeploy RBAC hook failed with known AzureDeveloperCLICredential error \u2014 this is a known azd CLI auth bug that does not affect the deploy itself. Worked around shared azure.yaml multi-service agent.yaml-not-found error by writing temporary single-service azure.yaml. Endpoint discrepancy noted in journal \u2014 azd output references wrong project name, likely shared workspace state confusion. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3246,8 +3232,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "## P06 Monitor \u2014 Complete",
-          "status": "partial",
-          "displayStatus": "partial",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured"
@@ -3288,8 +3274,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 complete. Deploy succeeded (v1\u2192v15 with UPDATED system prompt), but invoke failed due to same RBAC postdeploy auth issue cascading from P04. All evidence logged. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3338,7 +3324,6 @@
     }
   ],
   "bucketLabels": {
-    "baseline-pass": "Clean pass",
     "broken-template-contract": "Broken template or deploy contract",
     "postdeploy-auth": "Postdeploy RBAC or identity failure",
     "sample-runtime-bug": "Sample or runtime bug",

@@ -6,8 +6,8 @@
     "file": "runs/2026-04-14-hol-3224.json",
     "sampleCount": 12,
     "summary": {
-      "pass": 1,
-      "partial": 11,
+      "pass": 3,
+      "partial": 9,
       "fail": 0
     }
   },
@@ -18,9 +18,9 @@
     "file": "runs/2026-04-14-hol-3457.json",
     "sampleCount": 12,
     "summary": {
-      "pass": 7,
-      "partial": 4,
-      "fail": 1
+      "pass": 3,
+      "partial": 9,
+      "fail": 0
     }
   }
 ]
