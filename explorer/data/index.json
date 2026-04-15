@@ -1,18 +1,6 @@
 {
   "runs": [
     {
-      "slug": "2026-04-15-hol-3761",
-      "runId": "HOL-3761",
-      "runDate": "2026-04-15",
-      "title": "HAT Run HOL-3761",
-      "summary": {
-        "pass": 0,
-        "partial": 0,
-        "fail": 12
-      },
-      "file": "./data/runs/2026-04-15-hol-3761.json"
-    },
-    {
       "slug": "2026-04-14-hol-3224",
       "runId": "HOL-3224",
       "runDate": "2026-04-14",
@@ -20,7 +8,105 @@
       "summary": {
         "pass": 2,
         "partial": 10,
-        "fail": 0
+        "fail": 0,
+        "bucketCounts": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 9
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 6
+          },
+          {
+            "key": "broken-template-contract",
+            "label": "Broken template or deploy contract",
+            "count": 3
+          },
+          {
+            "key": "invoke-failure",
+            "label": "Remote invoke failure",
+            "count": 3
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 1
+          },
+          {
+            "key": "sample-runtime-bug",
+            "label": "Sample or runtime bug",
+            "count": 1
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 9,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /responses)"
+            ]
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 6,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "broken-template-contract",
+            "label": "Broken template or deploy contract",
+            "count": 3,
+            "paragraph": "",
+            "examples": [
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /invocations)",
+              "LangGraph Calculator (Python, /responses)"
+            ]
+          },
+          {
+            "key": "invoke-failure",
+            "label": "Remote invoke failure",
+            "count": 3,
+            "paragraph": "",
+            "examples": [
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /responses)",
+              "LangGraph Calculator (Python, /responses)"
+            ]
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 1,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /responses)"
+            ]
+          },
+          {
+            "key": "sample-runtime-bug",
+            "label": "Sample or runtime bug",
+            "count": 1,
+            "paragraph": "",
+            "examples": [
+              "Multi-Turn Chat (Python, /invocations)"
+            ]
+          }
+        ]
       },
       "file": "./data/runs/2026-04-14-hol-3224.json"
     },
@@ -32,9 +118,224 @@
       "summary": {
         "pass": 8,
         "partial": 4,
-        "fail": 0
+        "fail": 0,
+        "bucketCounts": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 7
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 4
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 4
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 7,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (Python, /responses)",
+              "LangGraph Calculator (Python, /responses)"
+            ]
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 4,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /invocations)"
+            ]
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 4,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /responses)",
+              "Multi-Turn Chat (.NET, /responses)",
+              "Multi-Turn Chat (Python, /invocations)",
+              "Multi-Turn Chat (Python, /responses)"
+            ]
+          }
+        ]
       },
       "file": "./data/runs/2026-04-14-hol-3457.json"
+    },
+    {
+      "slug": "2026-04-15-hol-3761",
+      "runId": "HOL-3761",
+      "runDate": "2026-04-15",
+      "title": "HAT Run HOL-3761",
+      "summary": {
+        "pass": 0,
+        "partial": 0,
+        "fail": 12,
+        "bucketCounts": [
+          {
+            "key": "infra-integrity",
+            "label": "Run integrity or infrastructure deletion",
+            "count": 4
+          },
+          {
+            "key": "platform-data-plane",
+            "label": "Foundry data-plane inconsistency",
+            "count": 4
+          },
+          {
+            "key": "needs-review",
+            "label": "Needs review",
+            "count": 2
+          },
+          {
+            "key": "postdeploy-rbac",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 1
+          },
+          {
+            "key": "template-contract",
+            "label": "Template or azd contract mismatch",
+            "count": 1
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "infra-integrity",
+            "label": "Run integrity or infrastructure deletion",
+            "count": 4,
+            "paragraph": "These failures are run-integrity problems. The underlying resource group or endpoint disappeared between phases, which makes downstream deploy, invoke, and monitor results unreliable as product signals.",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Multi-Turn Chat (.NET, /invocations)",
+              "Multi-Turn Chat (.NET, /responses)"
+            ]
+          },
+          {
+            "key": "platform-data-plane",
+            "label": "Foundry data-plane inconsistency",
+            "count": 4,
+            "paragraph": "These failures did not look like simple sample bugs. Provision or deploy created enough Azure-side state to continue, but the Foundry data plane still returned Project not found or Subdomain does not map to a resource on real remote use.",
+            "examples": [
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /invocations)"
+            ]
+          },
+          {
+            "key": "needs-review",
+            "label": "Needs review",
+            "count": 2,
+            "paragraph": "These samples need manual review before treating the explorer summary as final.",
+            "examples": [
+              "Multi-Turn Chat (Python, /invocations)",
+              "Multi-Turn Chat (Python, /responses)"
+            ]
+          },
+          {
+            "key": "postdeploy-rbac",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 1,
+            "paragraph": "These samples got through the core deploy path, but the postdeploy identity or RBAC steps did not finish, so the agent could not create sessions or complete remote work.",
+            "examples": [
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "template-contract",
+            "label": "Template or azd contract mismatch",
+            "count": 1,
+            "paragraph": "These samples failed because the scaffolded project shape and the azd contract do not agree. Missing infra files, missing azure.ai.agent service entries, or no-op deploy shapes forced manual repair or immediate failure.",
+            "examples": [
+              "LangGraph Calculator (Python, /responses)"
+            ]
+          }
+        ]
+      },
+      "file": "./data/runs/2026-04-15-hol-3761.json"
+    },
+    {
+      "slug": "2026-04-15-hol-3865",
+      "runId": "HOL-3865",
+      "runDate": "2026-04-15",
+      "title": "HAT Run HOL-3865",
+      "summary": {
+        "pass": 4,
+        "partial": 8,
+        "fail": 0,
+        "bucketCounts": [
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 5
+          },
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 5
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 4
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 5,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /responses)",
+              "Multi-Turn Chat (.NET, /invocations)"
+            ]
+          },
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 5,
+            "paragraph": "",
+            "examples": [
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 4,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Multi-Turn Chat (Python, /invocations)",
+              "Multi-Turn Chat (Python, /responses)"
+            ]
+          }
+        ]
+      },
+      "file": "./data/runs/2026-04-15-hol-3865.json"
     }
   ]
 }

@@ -1,17 +1,5 @@
 [
   {
-    "runId": "HOL-3761",
-    "runDate": "2026-04-15",
-    "label": "HOL-3761 \u00b7 2026-04-15",
-    "file": "runs/2026-04-15-hol-3761.json",
-    "sampleCount": 12,
-    "summary": {
-      "pass": 0,
-      "partial": 0,
-      "fail": 12
-    }
-  },
-  {
     "runId": "HOL-3224",
     "runDate": "2026-04-14",
     "label": "HOL-3224 \u00b7 2026-04-14",
@@ -32,6 +20,30 @@
     "summary": {
       "pass": 8,
       "partial": 4,
+      "fail": 0
+    }
+  },
+  {
+    "runId": "HOL-3761",
+    "runDate": "2026-04-15",
+    "label": "HOL-3761 \u00b7 2026-04-15",
+    "file": "runs/2026-04-15-hol-3761.json",
+    "sampleCount": 12,
+    "summary": {
+      "pass": 0,
+      "partial": 0,
+      "fail": 12
+    }
+  },
+  {
+    "runId": "HOL-3865",
+    "runDate": "2026-04-15",
+    "label": "HOL-3865 \u00b7 2026-04-15",
+    "file": "runs/2026-04-15-hol-3865.json",
+    "sampleCount": 12,
+    "summary": {
+      "pass": 4,
+      "partial": 8,
       "fail": 0
     }
   }
