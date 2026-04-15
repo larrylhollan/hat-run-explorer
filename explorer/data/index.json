@@ -1,6 +1,18 @@
 {
   "runs": [
     {
+      "slug": "2026-04-15-hol-3761",
+      "runId": "HOL-3761",
+      "runDate": "2026-04-15",
+      "title": "HAT Run HOL-3761",
+      "summary": {
+        "pass": 0,
+        "partial": 0,
+        "fail": 12
+      },
+      "file": "./data/runs/2026-04-15-hol-3761.json"
+    },
+    {
       "slug": "2026-04-14-hol-3224",
       "runId": "HOL-3224",
       "runDate": "2026-04-14",
