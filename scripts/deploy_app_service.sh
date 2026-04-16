@@ -79,14 +79,22 @@ fi
 if [[ "$SKIP_BUILD_DATA" == "1" ]]; then
   echo "==> Skipping explorer data build (SKIP_BUILD_DATA=1)"
 else
+  # Use a local venv for Python deps (required on PEP 668 / externally-managed envs)
+  VENV_DIR="$REPO_ROOT/.venv"
+  if [[ ! -d "$VENV_DIR" ]]; then
+    echo "==> Creating Python venv at $VENV_DIR"
+    python3 -m venv "$VENV_DIR"
+  fi
+  VENV_PYTHON="$VENV_DIR/bin/python3"
+
   echo "==> Checking Python dependencies for data build"
-  if ! python3 -c "import markdown" 2>/dev/null; then
-    echo "    Installing 'markdown' package"
-    python3 -m pip install --quiet markdown 2>/dev/null || pip3 install --quiet markdown
+  if ! "$VENV_PYTHON" -c "import markdown" 2>/dev/null; then
+    echo "    Installing 'markdown' package into venv"
+    "$VENV_PYTHON" -m pip install --quiet markdown
   fi
 
   echo "==> Building explorer data"
-  python3 scripts/build_hat_explorer.py
+  "$VENV_PYTHON" scripts/build_hat_explorer.py
 fi
 
 # ---------------------------------------------------------------------------
