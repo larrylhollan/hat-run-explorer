@@ -40,10 +40,34 @@
     "runDate": "2026-04-15",
     "label": "HOL-3865 \u00b7 2026-04-15",
     "file": "runs/2026-04-15-hol-3865.json",
+    "sampleCount": 15,
+    "summary": {
+      "pass": 7,
+      "partial": 7,
+      "fail": 1
+    }
+  },
+  {
+    "runId": "HOL-3994",
+    "runDate": "2026-04-16",
+    "label": "HOL-3994 \u00b7 2026-04-16",
+    "file": "runs/2026-04-16-hol-3994.json",
     "sampleCount": 12,
     "summary": {
-      "pass": 4,
-      "partial": 8,
+      "pass": 6,
+      "partial": 6,
+      "fail": 0
+    }
+  },
+  {
+    "runId": "HOL-4107",
+    "runDate": "2026-04-16",
+    "label": "HOL-4107 \u00b7 2026-04-16",
+    "file": "runs/2026-04-16-hol-4107.json",
+    "sampleCount": 12,
+    "summary": {
+      "pass": 0,
+      "partial": 12,
       "fail": 0
     }
   }

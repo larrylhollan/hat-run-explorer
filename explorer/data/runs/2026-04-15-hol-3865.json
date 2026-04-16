@@ -24,49 +24,54 @@
     "Cleanup": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure."
   },
   "summary": {
-    "pass": 4,
-    "partial": 8,
-    "fail": 0,
+    "pass": 7,
+    "partial": 7,
+    "fail": 1,
     "bucketCounts": [
-      {
-        "key": "postdeploy-auth",
-        "label": "Postdeploy RBAC or identity failure",
-        "count": 5
-      },
       {
         "key": "azd-papercuts",
         "label": "azd or operator-experience papercut",
-        "count": 5
+        "count": 8
+      },
+      {
+        "key": "postdeploy-auth",
+        "label": "Postdeploy RBAC or identity failure",
+        "count": 7
       },
       {
         "key": "baseline-pass",
         "label": "Clean pass",
         "count": 4
+      },
+      {
+        "key": "unknown",
+        "label": "Unclassified failure",
+        "count": 1
       }
     ],
     "executiveThemes": [
       {
+        "key": "azd-papercuts",
+        "label": "azd or operator-experience papercut",
+        "count": 8,
+        "paragraph": "",
+        "examples": [
+          "Echo Non-Streaming (.NET, /invocations)",
+          "Echo Streaming (.NET, /invocations)",
+          "Echo Streaming (.NET, /responses)",
+          "Echo Streaming (Python, /invocations)"
+        ]
+      },
+      {
         "key": "postdeploy-auth",
         "label": "Postdeploy RBAC or identity failure",
-        "count": 5,
+        "count": 7,
         "paragraph": "",
         "examples": [
           "Echo Non-Streaming (.NET, /responses)",
           "Echo Streaming (.NET, /invocations)",
           "Echo Streaming (.NET, /responses)",
-          "Multi-Turn Chat (.NET, /invocations)"
-        ]
-      },
-      {
-        "key": "azd-papercuts",
-        "label": "azd or operator-experience papercut",
-        "count": 5,
-        "paragraph": "",
-        "examples": [
-          "Echo Streaming (.NET, /invocations)",
-          "Echo Streaming (.NET, /responses)",
-          "Echo Streaming (Python, /invocations)",
-          "Echo Streaming (Python, /responses)"
+          "LangGraph Calculator (Python, /responses)"
         ]
       },
       {
@@ -75,10 +80,19 @@
         "count": 4,
         "paragraph": "",
         "examples": [
-          "Echo Non-Streaming (.NET, /invocations)",
           "Echo Non-Streaming (Python, /invocations)",
-          "Multi-Turn Chat (Python, /invocations)",
-          "Multi-Turn Chat (Python, /responses)"
+          "Multi-Turn Chat (.NET, /responses)",
+          "[HAT 2026-04-15] P00: Pre-Run Foundry Cleanup",
+          "[HAT 2026-04-15] P09: Report Shepherd"
+        ]
+      },
+      {
+        "key": "unknown",
+        "label": "Unclassified failure",
+        "count": 1,
+        "paragraph": "",
+        "examples": [
+          "[HAT 2026-04-15] P10: Parent Finalization"
         ]
       }
     ]
@@ -91,7 +105,7 @@
       "plainSummary": "Echo Non-Streaming (.NET, /invocations) passed all phases cleanly.",
       "firstFailure": "No major failure detected.",
       "buckets": [
-        "baseline-pass"
+        "azd-papercuts"
       ],
       "steps": [
         {
@@ -126,8 +140,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision completed successfully. azd provision --no-prompt succeeded in 123s (slow but passed). All Azure resources provisioned: rg-echo-nonstreaming-dotnet-invocations, ai-account-4xgvjm7xqhjqk, cr4xgvjm7xqhjqk. AZURE_OPENAI_DEPLOYMENT was missing after provision \u2014 created gpt-4o-mini model deployment manually and set env var. Template does not reference AZURE_AI_MODEL_DEPLOYMENT_NAME so no inconsistency. Log written to P02-provision.log. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -363,8 +377,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. azd down --force --purge returned exit 1 (ResourceGroupNotFound 404) \u2014 resource group rg-echo-nonstreaming-dotnet-invocations was already deleted. Verified via az group exists = false. Cleanup objective met. Log written to P08-cleanup.log. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -401,9 +415,9 @@
     {
       "name": "Echo Non-Streaming (.NET, /responses)",
       "slug": "echo-non-streaming-net-responses",
-      "outcome": "partial",
-      "plainSummary": "Mixed results: 6 phases passed, 2 failed (Deploy, Remote Invoke).",
-      "firstFailure": "Failed at Deploy.",
+      "outcome": "pass",
+      "plainSummary": "Echo Non-Streaming (.NET, /responses) passed all phases cleanly.",
+      "firstFailure": "No major failure detected.",
       "buckets": [
         "postdeploy-auth"
       ],
@@ -529,8 +543,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy completed. Agent echo-agent-responses-nonstreaming v18 deployed successfully to Azure AI Foundry. Endpoint is reachable (HTTP 401 = auth-gated). Postdeploy RBAC hook failed with AzureDeveloperCLICredential error \u2014 known azd CLI bug, does not affect the actual deployment. Log saved to P04-deploy.log. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -572,8 +586,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 Remote Invoke FAILED. azd ai agent invoke returned HTTP 404 ResourceNotFound \u2014 subdomain does not map to a resource. This is a platform/infra issue (not RBAC). All evidence logged, structured artifact posted. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -648,8 +662,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 Update & Redeploy completed. Code change applied (Echo \u2192 Echo UPDATED). Deploy succeeded (agent v19), but postdeploy RBAC hook failed (known CLI bug). Both new-session and reused-session invoke attempts failed with HTTP 404 ResourceNotFound \u2014 same platform/infra issue as P05 where subdomain does not map to a resource. Overall status: FAIL. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -989,8 +1003,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. azd down returned 404 (ResourceGroupNotFound) \u2014 resource group rg-echo-nonstreaming-py-invocations was already deleted. Verified with az group exists \u2192 false. Cleanup objective achieved. Log written to P08-cleanup.log. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1027,12 +1041,12 @@
     {
       "name": "Echo Streaming (.NET, /invocations)",
       "slug": "echo-streaming-net-invocations",
-      "outcome": "partial",
-      "plainSummary": "Mixed results: 5 phases passed, 2 failed (Remote Invoke, Monitor).",
-      "firstFailure": "Failed at Remote Invoke.",
+      "outcome": "pass",
+      "plainSummary": "Echo Streaming (.NET, /invocations) passed all phases cleanly.",
+      "firstFailure": "No major failure detected.",
       "buckets": [
-        "postdeploy-auth",
-        "azd-papercuts"
+        "azd-papercuts",
+        "postdeploy-auth"
       ],
       "steps": [
         {
@@ -1078,8 +1092,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision complete. Azure resources provisioned in 87s (SLOW flag). Re-scaffolded src/ after prior P08 cleanup destroyed artifacts. Model gpt-4o-mini deployed manually. All env vars verified. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1202,8 +1216,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 Remote Invoke completed with FAIL status. All 3 azd ai agent invoke attempts returned HTTP 500 session_creation_failed from Azure AI Agent Service (northcentralus). Agent was resolved and session assigned, but server-side response processing failed. Platform/infrastructure issue \u2014 not auth, not template bug. Same pattern as HOL-3951. Structured artifact and evidence log posted. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1246,8 +1260,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "P06 Monitor completed. Both canonical commands (azd ai agent show, azd ai agent monitor) failed with exit code 1: \"no azure.ai.agent service found in azure.yaml\". Root cause: template azure.yaml (ai-foundry-starter-basic) does not declare a services block with azure.ai.agent host type. Classification: template structural issue. Log written to P06-monitor.log. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1290,8 +1304,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 Update & Redeploy completed. Code change applied (Echo \u2192 Echo UPDATED). azd deploy succeeded (exit 0). All 4 post-deploy invoke attempts (3 new-session + 1 reused-session) failed with HTTP 500 session_creation_failed \u2014 same platform issue as P05 (HOL-3927). Overall status: FAIL (deploy passed, invoke blocked by platform). No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1375,7 +1389,7 @@
       "name": "Echo Streaming (.NET, /responses)",
       "slug": "echo-streaming-net-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 5 phases passed, 2 failed (Remote Invoke, Monitor).",
+      "plainSummary": "Mixed results: 5 phases passed, 3 failed (Remote Invoke, Monitor, Update & Redeploy).",
       "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
         "postdeploy-auth",
@@ -1638,8 +1652,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 complete \u2014 FAIL. Code change applied (echo prefix \u2192 UPDATED), azd deploy succeeded, but all remote invoke attempts (new-session and reused-session) failed with HTTP 500 session_creation_failed. Same persistent Azure AI Agent Service platform issue as P05. Evidence logged to P07-update-redeploy.log with structured artifact. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1683,8 +1697,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. azd down --force --purge exited 0 \u2014 resource group rg-echo-streaming-dotnet-responses did not exist (404 ResourceGroupNotFound), confirming cleanup target state. Verified via az group show. Log written to P08-cleanup.log. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1723,8 +1737,8 @@
       "name": "Echo Streaming (Python, /invocations)",
       "slug": "echo-streaming-python-invocations",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 3 phases passed, 5 failed (Provision, Remote Invoke, Monitor).",
-      "firstFailure": "Failed at Provision.",
+      "plainSummary": "Mixed results: 4 phases passed, 3 failed (Remote Invoke, Update & Redeploy, Cleanup).",
+      "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
         "azd-papercuts"
       ],
@@ -1772,8 +1786,8 @@
           "phase": "Provision",
           "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
           "summary": "P02 Provision FAILED. Azure CognitiveServices/accounts resource (ai-account-cemvmpn4e7mou) stuck in non-terminal Creating state for 45+ minutes after a concurrent deployment was cancelled. All recovery attempts exhausted: cancel deployment, retry provision, wait for terminal state, delete RG, delete resource directly \u2014 all blocked by the stuck resource. This is an Azure platform issue in northcentralus. No follow-up work identified \u2014 transient platform failure.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -1930,8 +1944,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "P06 Monitor complete. Both azd ai agent show and azd ai agent monitor failed (exit 1) due to template structural issue: azure.yaml lacks a services block with type azure.ai.agent. This is the same root cause seen across invocations-protocol templates. Classified as template issue, not CLI or infra. Log at P06-monitor.log. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2028,8 +2042,8 @@
       "name": "Echo Streaming (Python, /responses)",
       "slug": "echo-streaming-python-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 4 phases passed, 2 failed (Local Run, Monitor).",
-      "firstFailure": "Failed at Local Run.",
+      "plainSummary": "Mixed results: 5 phases passed, 3 failed (Deploy, Remote Invoke, Monitor).",
+      "firstFailure": "Failed at Deploy.",
       "buckets": [
         "azd-papercuts"
       ],
@@ -2109,8 +2123,8 @@
           "phase": "Local Run",
           "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
           "summary": "P03 Local Run failed: `azd ai agent run` crashed immediately with `ModuleNotFoundError: No module named 'cgi'` \u2014 the sample's aiohttp dependency is incompatible with Python 3.13.5 (cgi module removed in PEP 594). PORT=8091 env var was also ignored (server defaulted to 8088). Invoke and curl fallback substeps cascade-skipped. Structured artifact posted. No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2147,8 +2161,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy FAIL. azd deploy --no-prompt failed 3 times with 404 ResourceNotFound (\"Subdomain does not map to a resource\") on POST to services.ai.azure.com agent creation API. Container packaging/publishing succeeded. ARM account status is Succeeded, DNS resolves, TLS works, but the services.ai.azure.com data plane never propagated subdomain routing for account ai-account-jgv3cegpklevs (~53 min after creation). Classification: infra issue \u2014 Azure AI data-plane propagation failure. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2186,8 +2200,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 Remote Invoke: FAIL. azd ai agent invoke returned HTTP 404 ResourceNotFound \u2014 cascade from P04 deploy failure. Azure AI Foundry data-plane never propagated subdomain routing for account ai-account-jgv3cegpklevs. Agent was never deployed. Classification: infra issue. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2311,8 +2325,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. azd down returned exit 1 (ResourceGroupNotFound \u2014 RG already deleted). Verified with az group exists = false. No Azure resources remain. Log written to P08-cleanup.log. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2351,10 +2365,11 @@
       "name": "LangGraph Calculator (Python, /responses)",
       "slug": "langgraph-calculator-python-responses",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 5 phases passed, 1 failed (Monitor).",
-      "firstFailure": "Failed at Monitor.",
+      "plainSummary": "Mixed results: 5 phases passed, 3 failed (Deploy, Remote Invoke, Monitor).",
+      "firstFailure": "Failed at Deploy.",
       "buckets": [
-        "azd-papercuts"
+        "azd-papercuts",
+        "postdeploy-auth"
       ],
       "steps": [
         {
@@ -2481,8 +2496,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy FAIL \u2014 `azd deploy --no-prompt` failed with `archive/tar: write too long` (known LangGraph template bug, missing .dockerignore). Not a transient ACR error \u2014 no retry per ACR retry rule. Prerequisites HOL-3908 and HOL-3909 both passed. Structured artifact posted. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2519,8 +2534,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 Remote Invoke FAIL \u2014 cascade from P04 deploy failure (archive/tar: write too long, known LangGraph missing .dockerignore bug). Agent CalculatorAgent was never deployed; invoke returned HTTP 404. Root cause is template structural bug, not an execution or auth issue. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2600,8 +2615,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 Update & Redeploy complete. Status: FAIL.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -2684,7 +2699,7 @@
       "name": "Multi-Turn Chat (.NET, /invocations)",
       "slug": "multi-turn-chat-net-invocations",
       "outcome": "partial",
-      "plainSummary": "Mixed results: 7 phases passed, 1 failed (Remote Invoke).",
+      "plainSummary": "Mixed results: 6 phases passed, 2 failed (Remote Invoke, Update & Redeploy).",
       "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
         "postdeploy-auth"
@@ -2927,8 +2942,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 complete. Code change applied (UPDATED prefix in system prompt). azd deploy succeeded at container level (version 13) but postdeploy RBAC hook failed (same azd auth-context issue from P04). All invoke attempts returned HTTP 424 Failed Dependency due to missing RBAC role assignments on agent managed identity. Overall status: FAIL \u2014 cascade from P04 RBAC failure. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3010,11 +3025,11 @@
     {
       "name": "Multi-Turn Chat (.NET, /responses)",
       "slug": "multi-turn-chat-net-responses",
-      "outcome": "partial",
-      "plainSummary": "Mixed results: 7 phases passed, 1 failed (Deploy).",
-      "firstFailure": "Failed at Deploy.",
+      "outcome": "pass",
+      "plainSummary": "Multi-Turn Chat (.NET, /responses) passed all phases cleanly.",
+      "firstFailure": "No major failure detected.",
       "buckets": [
-        "postdeploy-auth"
+        "baseline-pass"
       ],
       "steps": [
         {
@@ -3143,8 +3158,8 @@
           "phase": "Deploy",
           "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
           "summary": "P04 Deploy completed. azd deploy --no-prompt ran successfully \u2014 agent multiturn-chat-responses-dotnet packaged, published, and deployed to Azure AI Foundry (version 22). Endpoint reachable at https://ai-account-lheapdkmtn32c.services.ai.azure.com/api/projects/ai-project-multiturn-dotnet-responses/agents/multiturn-chat-responses-dotnet/versions/22. Postdeploy RBAC hook failed with known azd auth credential issue (does not affect deployment). No follow-up work identified.",
-          "status": "fail",
-          "displayStatus": "fail",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3350,11 +3365,12 @@
     {
       "name": "Multi-Turn Chat (Python, /invocations)",
       "slug": "multi-turn-chat-python-invocations",
-      "outcome": "pass",
-      "plainSummary": "Multi-Turn Chat (Python, /invocations) passed all phases cleanly.",
-      "firstFailure": "No major failure detected.",
+      "outcome": "partial",
+      "plainSummary": "Mixed results: 5 phases passed, 2 failed (Remote Invoke, Monitor).",
+      "firstFailure": "Failed at Remote Invoke.",
       "buckets": [
-        "baseline-pass"
+        "postdeploy-auth",
+        "azd-papercuts"
       ],
       "steps": [
         {
@@ -3504,8 +3520,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 FAIL. Both azd ai agent invoke attempts returned HTTP 404 ResourceNotFound (Subdomain does not map to a resource) despite agent v18 being deployed and AI account existing. Applied 5-min RBAC retry \u2014 same failure. Platform routing defect. Multi-turn state persistence NOT tested. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3537,8 +3553,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "P06 Monitor completed. azd ai agent show PASSED \u2014 agent metadata verified (name=multiturn-chat-invocations, version=18, protocol=invocations/1.0.0, kind=hosted). azd ai agent monitor FAILED \u2014 VNext agents require a session ID for log streaming, and session creation via invoke failed with HTTP 404 ResourceNotFound (subdomain does not map to a resource). The agent runtime endpoint is unreachable despite metadata being present. This is a CLI limitation for VNext agents combined with a resource lifecycle/timing issue. Log written to P06-monitor.log. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3581,8 +3597,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 complete. Deploy succeeded (agent v20 created from updated code with UPDATED: prefix in system prompt). Both invoke attempts (new-session and reused-session) failed with HTTP 404 ResourceNotFound platform routing defect \u2014 same root cause as P05 (HOL-3887). Code change and redeploy verified working; invoke path blocked at platform level. No follow-up work identified (platform defect already tracked from P05).",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3614,8 +3630,8 @@
           "phase": "Cleanup",
           "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
           "summary": "P08 Cleanup complete. azd down returned exit 1 (ResourceGroupNotFound \u2014 RG rg-multiturn-py-invocations already absent). Verified via az group exists = false. Cleanup objective met. Log written to P08-cleanup.log. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "pass",
+          "displayStatus": "pass",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3652,11 +3668,12 @@
     {
       "name": "Multi-Turn Chat (Python, /responses)",
       "slug": "multi-turn-chat-python-responses",
-      "outcome": "pass",
-      "plainSummary": "Multi-Turn Chat (Python, /responses) passed all phases cleanly.",
-      "firstFailure": "No major failure detected.",
+      "outcome": "partial",
+      "plainSummary": "Mixed results: 4 phases passed, 2 failed (Local Run, Monitor).",
+      "firstFailure": "Failed at Local Run.",
       "buckets": [
-        "baseline-pass"
+        "postdeploy-auth",
+        "azd-papercuts"
       ],
       "steps": [
         {
@@ -3741,8 +3758,8 @@
           "phase": "Local Run",
           "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
           "summary": "P03 Local Run completed \u2014 FAIL. Two issues found: (1) Pre-release Azure SDK dev feed packages incompatible with Python 3.13.5 (workaround: downgrade to stable PyPI versions). (2) Foundry Storage API HTTP 403 \u2014 the /responses protocol FoundryStorageProvider requires data-plane RBAC on the AI Foundry project that azd provision does not auto-grant for local dev. Both azd invoke and curl fallback fail with server_error. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Issue or bug was called out",
@@ -3826,8 +3843,8 @@
           "phase": "Remote Invoke",
           "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
           "summary": "P05 Remote Invoke FAIL. Both azd ai agent invoke attempts returned HTTP 404 ResourceNotFound (Subdomain does not map to a resource) for account ai-account-nvtjqilzfsqwm. Agent v20 is deployed and active per control plane, but data-plane invoke endpoint returns 404. Applied RBAC retry rule (5-min wait) \u2014 same failure. Multi-turn state persistence NOT tested. Platform routing defect \u2014 same pattern seen across multiple templates in today's run. No follow-up work identified.",
-          "status": "unknown",
-          "displayStatus": "unknown",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3864,8 +3881,8 @@
           "phase": "Monitor",
           "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
           "summary": "P06 Monitor complete. azd ai agent show passed (agent metadata verified: multiturn-chat-responses v20, responses/1.0.0, hosted). azd ai agent monitor failed (CLI bug: VNext agents require --session, no session available at P06 time). Overall phase status: fail due to monitor CLI limitation. Log written to P06-monitor.log. No follow-up work identified.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "fail",
+          "displayStatus": "fail",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3908,8 +3925,8 @@
           "phase": "Update & Redeploy",
           "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
           "summary": "P07 Update & Redeploy completed. Code change (UPDATED appended to system prompt) and azd deploy both succeeded (agent v21). However, both new-session and reused-session invokes fail with HTTP 404 ResourceNotFound (Subdomain does not map to a resource) \u2014 same platform routing defect as P05. Overall status: FAIL (deploy pass, invoke fail due to cascade from data-plane routing issue). No follow-up work identified \u2014 root cause is the same platform defect already tracked.",
-          "status": "pass",
-          "displayStatus": "pass",
+          "status": "partial",
+          "displayStatus": "partial",
           "attention": true,
           "attentionReasons": [
             "Exception or failure output was captured",
@@ -3988,11 +4005,111 @@
           "commentCount": 3
         }
       ]
+    },
+    {
+      "name": "[HAT 2026-04-15] P00: Pre-Run Foundry Cleanup",
+      "slug": "hat-2026-04-15-p00-pre-run-foundry-cleanup",
+      "outcome": "pass",
+      "plainSummary": "[HAT 2026-04-15] P00: Pre-Run Foundry Cleanup passed all phases cleanly.",
+      "firstFailure": "No major failure detected.",
+      "buckets": [
+        "baseline-pass"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-3866",
+          "phase": "Pre",
+          "objective": "",
+          "summary": "P00 Pre-Run Foundry Cleanup complete. Deleted 5 HAT resource groups, purged 12 soft-deleted cognitive accounts, verified 0 stale azd environments. Clean state confirmed \u2014 no rg-hat-*, no template-key RGs, no soft-deleted accounts remain. No follow-up work identified.",
+          "status": "pass",
+          "displayStatus": "pass",
+          "attention": true,
+          "attentionReasons": [
+            "Exception or failure output was captured",
+            "Manual intervention or retry was mentioned"
+          ],
+          "html": "<h2>P00 Execution Complete</h2>\n<p>All cleanup steps executed on pc.int via JIT SSH.</p>\n<h3>Step 1: Stale HAT Resource Groups</h3>\n<ul>\n<li>Found 5 stale <code>rg-hat-*</code> resource groups</li>\n<li>All queued for deletion with <code>--no-wait</code></li>\n<li>Post-cleanup verification: 0 <code>rg-hat-*</code> groups remaining</li>\n</ul>\n<h3>Step 2: Soft-Deleted Cognitive Services</h3>\n<ul>\n<li>Found 12 soft-deleted AI accounts (3 eastus2, 9 northcentralus)</li>\n<li>Purge commands accepted for all 12</li>\n<li>1 fully purged, 11 still propagating (normal Azure async behavior)</li>\n</ul>\n<h3>Step 3: Stale azd Environments</h3>\n<ul>\n<li><code>azd env list</code> returned \"no project exists\" \u2014 no stale envs to clean (templates create their own project dirs during scaffold)</li>\n</ul>\n<h3>Step 4: Clean State Verified</h3>\n<ul>\n<li>0 <code>rg-hat-*</code> resource groups remaining</li>\n<li>All cognitive purge requests accepted</li>\n</ul>\n<pre><code class=\"language-json\">{\n  &quot;artifact_version&quot;: &quot;1.0&quot;,\n  &quot;phase_id&quot;: &quot;P00&quot;,\n  &quot;template_key&quot;: &quot;singleton&quot;,\n  &quot;template_name&quot;: &quot;Pre-Run Foundry Cleanup&quot;,\n  &quot;run_date&quot;: &quot;2026-04-15&quot;,\n  &quot;status&quot;: &quot;pass&quot;,\n  &quot;duration_sec&quot;: 105.0,\n  &quot;resource_groups_deleted&quot;: [&quot;rg-hat-echo-midday&quot;, &quot;rg-hat-code-interpreter-custom-0401&quot;, &quot;rg-hat-foundry-0401&quot;, &quot;rg-hat-tools-cs&quot;, &quot;rg-hat-echo-ns-src-dev&quot;],\n  &quot;cognitive_accounts_purged&quot;: [&quot;ai-account-zfckg3khjtiys&quot;, &quot;ai-account-mrh3amzlrcz6c&quot;, &quot;ai-account-wr4acfy7zq7e2&quot;, &quot;ai-account-lcj4w6icfitcs&quot;, &quot;ai-account-rpdtonehvdnfw&quot;, &quot;ai-account-cemvmpn4e7mou&quot;, &quot;ai-account-jgv3cegpklevs&quot;, &quot;ai-account-nvtjqilzfsqwm&quot;, &quot;ai-account-azjrx7v4sfols&quot;, &quot;ai-account-7pzozzz4ixf74&quot;, &quot;ai-account-vg7cjohtbjwcc&quot;, &quot;ai-account-kphv2tq3654cq&quot;],\n  &quot;azd_envs_removed&quot;: [],\n  &quot;clean_state_verified&quot;: true,\n  &quot;error&quot;: null\n}\n</code></pre>\n<hr />\n<p>P00 Pre-Run Foundry Cleanup complete. Deleted 5 stale rg-hat-* resource groups, purged 12 soft-deleted cognitive services accounts, verified clean state. No stale azd envs found (no project in cwd). No follow-up work identified.</p>\n<hr />\n<h2>P00 Pre-Run Foundry Cleanup \u2014 Complete</h2>\n<p>All three cleanup targets executed and verified:</p>\n<p><strong>1. Resource Groups Deleted (5):</strong>\n- <code>rg-hat-echo-midday</code>\n- <code>rg-hat-code-interpreter-custom-0401</code>\n- <code>rg-hat-foundry-0401</code>\n- <code>rg-hat-tools-cs</code>\n- <code>rg-hat-echo-ns-src-dev</code></p>\n<p>All used <code>--no-wait</code> for parallel deletion. Verified all 5 are gone. Non-HAT resource groups (Jeff's personal projects, csb-<em>, quickstart-</em>) left untouched.</p>\n<p><strong>2. Cognitive Services Accounts Purged (12):</strong>\n- ai-account-cemvmpn4e7mou\n- ai-account-jgv3cegpklevs\n- ai-account-nvtjqilzfsqwm\n- ai-account-azjrx7v4sfols\n- ai-account-7pzozzz4ixf74\n- ai-account-vg7cjohtbjwcc\n- ai-account-kphv2tq3654cq\n- ai-account-zfckg3khjtiys\n- ai-account-mrh3amzlrcz6c\n- ai-account-wr4acfy7zq7e2\n- ai-account-lcj4w6icfitcs\n- ai-account-rpdtonehvdnfw</p>\n<p>All 12 soft-deleted accounts purged across multiple passes (some required waiting for parent RG deletion to complete).</p>\n<p><strong>3. azd Environments:</strong> No stale HAT azd environments found on pc.int.</p>\n<p><strong>4. Verification:</strong> Final check shows 0 <code>rg-hat-*</code> groups, 0 template-key groups, 0 soft-deleted cognitive accounts.</p>\n<pre><code class=\"language-json\">{\n  &quot;artifact_version&quot;: &quot;1.0&quot;,\n  &quot;phase_id&quot;: &quot;P00&quot;,\n  &quot;template_key&quot;: &quot;singleton&quot;,\n  &quot;template_name&quot;: &quot;Pre-Run Foundry Cleanup&quot;,\n  &quot;run_date&quot;: &quot;2026-04-15&quot;,\n  &quot;status&quot;: &quot;pass&quot;,\n  &quot;duration_sec&quot;: 720.0,\n  &quot;resource_groups_deleted&quot;: [&quot;rg-hat-echo-midday&quot;, &quot;rg-hat-code-interpreter-custom-0401&quot;, &quot;rg-hat-foundry-0401&quot;, &quot;rg-hat-tools-cs&quot;, &quot;rg-hat-echo-ns-src-dev&quot;],\n  &quot;cognitive_accounts_purged&quot;: [&quot;ai-account-cemvmpn4e7mou&quot;, &quot;ai-account-jgv3cegpklevs&quot;, &quot;ai-account-nvtjqilzfsqwm&quot;, &quot;ai-account-azjrx7v4sfols&quot;, &quot;ai-account-7pzozzz4ixf74&quot;, &quot;ai-account-vg7cjohtbjwcc&quot;, &quot;ai-account-kphv2tq3654cq&quot;, &quot;ai-account-zfckg3khjtiys&quot;, &quot;ai-account-mrh3amzlrcz6c&quot;, &quot;ai-account-wr4acfy7zq7e2&quot;, &quot;ai-account-lcj4w6icfitcs&quot;, &quot;ai-account-rpdtonehvdnfw&quot;],\n  &quot;azd_envs_removed&quot;: [],\n  &quot;clean_state_verified&quot;: true,\n  &quot;error&quot;: null\n}\n</code></pre>\n<hr />\n<p>P00 Pre-Run Foundry Cleanup complete. Deleted 5 HAT resource groups, purged 12 soft-deleted cognitive accounts, verified 0 stale azd environments. Clean state confirmed \u2014 no rg-hat-*, no template-key RGs, no soft-deleted accounts remain. No follow-up work identified.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [
+            "\"error\": null"
+          ],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [
+            {
+              "type": "output",
+              "text": "\"error\": null"
+            }
+          ],
+          "commentCount": 4
+        }
+      ]
+    },
+    {
+      "name": "[HAT 2026-04-15] P09: Report Shepherd",
+      "slug": "hat-2026-04-15-p09-report-shepherd",
+      "outcome": "pass",
+      "plainSummary": "[HAT 2026-04-15] P09: Report Shepherd passed all phases cleanly.",
+      "firstFailure": "No major failure detected.",
+      "buckets": [
+        "baseline-pass"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-3963",
+          "phase": "Report Shepherd",
+          "objective": "",
+          "summary": "[tg-sync] \ud83e\udd16 Radar: Got it, I have the approval and token, and I\u2019m retrying the pc.int publish now.",
+          "status": "pass",
+          "displayStatus": "pass",
+          "attention": true,
+          "attentionReasons": [
+            "Manual intervention or retry was mentioned"
+          ],
+          "html": "<p>Blocked pending Jeff decision. I messaged Jeff via the Telegram issue bridge because report publication is ambiguous right now.</p>\n<p>What I found:\n- HOL-3881 (<code>P07: Update &amp; Redeploy \u2014 Echo Streaming (Python, /invocations)</code>) is still <code>todo</code>\n- HOL-3882 (<code>P08: Cleanup \u2014 Echo Streaming (Python, /invocations)</code>) is still <code>backlog</code>\n- Neither issue has Paperclip execution comments, but remote <code>pc.int</code> log files exist for both phases\n- The remote P07 log is internally inconsistent, so I cannot safely treat that template as final without human guidance</p>\n<p>Question sent to Jeff: should I wait for Hal/Canary to backfill those issue results, or publish now with that template explicitly marked incomplete / validation issue?</p>\n<hr />\n<p>Blocked pending Jeff decision on whether to publish HOL-3865 with HOL-3881/HOL-3882 incomplete or wait for backfill.</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: \\n\\nYeah should wait for all tasks to complete before generating the report\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: [[reply_to_current]] Yep, agreed. I\u2019ll wait until all tasks are complete before generating the report.</p>\n<hr />\n<p>Process-lost retry rechecked HOL-3963, HOL-3881, and HOL-3882. No new Jeff reply is present, HOL-3881 remains todo, HOL-3882 remains backlog, and neither child has Paperclip execution comments. Still blocked pending Jeff guidance or child issue backfill before publishing the report.</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: \\n\\nis this ready now?\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: I\u2019m checking the run state now.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: [[reply_to_current]] Not yet.</p>\n<p>I checked HOL-3865 just now. One task is still open:\n- HOL-3882, P08 Cleanup for Echo Streaming (Python, /invocations) is still <code>todo</code></p>\n<p>Because of that:\n- HOL-3963, Report Shepherd is still <code>blocked</code>\n- the parent run is still <code>in_progress</code></p>\n<p>So by the rule we agreed on, it\u2019s not ready for report generation yet.</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: \\n\\nwtf why is it taking so long\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: Yeah, that\u2019s frustrating. I\u2019m checking the stuck cleanup issue now.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: I found the problem. I\u2019m pinging Hal to unblock it.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: [[reply_to_current]] Because it looks stuck, not slow.</p>\n<p>What I found:\n- HOL-3881 finished at 12:34 PM MDT\n- HOL-3882, the final cleanup for Echo Streaming Python/invocations, never started\n- HOL-3882 is still <code>todo</code>, has no assignee, and has zero execution comments\n- That leaves HOL-3963 (Report Shepherd) blocked, so the parent stays <code>in_progress</code></p>\n<p>So the problem is likely orchestration or trigger logic, not a long-running Azure cleanup.</p>\n<p>I\u2019ve already pinged Hal to unblock HOL-3882 and get the root cause.</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: \\n\\nWhere are we at?\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: I\u2019m checking the live status now.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: [[reply_to_current]] Still stuck, unfortunately.</p>\n<p>Current state right now:\n- Parent run <code>HOL-3865</code> is still <code>in_progress</code>\n- 96/99 child issues are <code>done</code>\n- <code>HOL-3882</code> is still <code>todo</code>\n- <code>HOL-3963</code> Report Shepherd is still <code>blocked</code>\n- <code>HOL-3964</code> Parent Finalization is <code>cancelled</code></p>\n<p>What\u2019s wrong:\n- <code>HOL-3882</code> still has no assignee and no execution comments\n- so this looks like a scheduler/trigger miss, not an Azure cleanup that\u2019s actively running</p>\n<p>On my side:\n- I checked the live issue state again just now\n- I already pinged Hal to investigate and unblock it\n- the earlier timeout was my wait for Hal\u2019s response timing out, not the run finishing</p>\n<p>Bottom line:\n- report is still not ready\n- the blocker is still that one cleanup issue never got picked up</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: \\n\\nOk just continue the report. I don\\u2019t really care about cleanup complete from here\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: Got it. I\u2019m proceeding with the report now and treating the remaining cleanup as non-blocking.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: I hit the publisher and found an accuracy problem in the generated dataset, so I\u2019m fixing that before I publish anything misleading.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: Dataset is built. I\u2019m pushing it live to the explorer site now.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: Local publish is ready, but the live deploy needs Azure-authenticated execution on pc.int. I\u2019m switching to the HAT issue bridge so it won\u2019t wait on manual approval.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: [[reply_to_current]] I did continue it.</p>\n<p>Current state:\n- I fixed the publisher so it stops counting P00/P09/P10 singleton issues as sample results\n- I generated the new HOL-3865 explorer dataset locally\n- Current summary is <strong>4 pass / 8 partial / 0 fail</strong>\n- <code>runs.json</code> now includes HOL-3865</p>\n<p>What\u2019s blocked now is only the <strong>live deploy</strong>:\n- local deploy on the Mac failed because <code>az</code> is not logged in there\n- I switched to <code>pc.int</code>, but the issue-scoped JIT exec path hit a token/auth problem\n- there is also an ad-hoc <code>pc.int</code> execution approval request pending on your side, which would let me finish the live publish fastest</p>\n<p>So, the report data is built, but it is <strong>not live on the explorer site yet</strong>.</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: [{\"type\": \"text\", \"text\": \"Your JIT request for pc.int has been approved (approvalId: 434b4f5e-5288-4df2-a512-c92810a9c2d1). Token is ready. First, send Jeff a short Telegram message confirming you received the approval and have the token, then retry your jit_connect command to continue your work.\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: Got it, I have the token now and I\u2019m retrying the pc.int publish path.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: The approved token got me one step further, but the pc.int JIT bridge then failed in Phase B and spun a fresh approval request. I\u2019m checking if I can avoid another approval by using the existing publish path.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: I\u2019ve got the path now. I\u2019m pushing the HOL-3865 dataset to GitHub first so the pc.int deploy can use a clean clone.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: The dataset is now on GitHub. I\u2019m packaging the remote deploy as one pc.int script so the next approval, if needed, will cover the actual publish.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: The blocker is the JIT bridge itself now, not your approval. It\u2019s getting an approved token, then dying in Phase B with a server 500. I\u2019m checking the bridge code for a workaround before I ask you to do anything else.</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: I found a cleaner workaround. The ad-hoc exec path is misconfigured server-side, but the issue-scoped SSH token flow may still work. I\u2019m forcing a fresh issue JIT SSH token now and then I\u2019ll retry the deploy through the report issue.</p>\n<hr />\n<p>[tg-sync] \ud83d\udcac Jeff: [{\"type\": \"text\", \"text\": \"Your JIT request for pc.int has been approved (approvalId: 2a56c4f2-9d7c-4158-a11b-25fa91ddbbdd). Token is ready. First, send Jeff a short Telegram message confirming you received the approval and have the token, then retry your jit_connect command to continue your work.\"}]</p>\n<hr />\n<p>[tg-sync] \ud83e\udd16 Radar: Got it, I have the approval and token, and I\u2019m retrying the pc.int publish now.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 30
+        }
+      ]
+    },
+    {
+      "name": "[HAT 2026-04-15] P10: Parent Finalization",
+      "slug": "hat-2026-04-15-p10-parent-finalization",
+      "outcome": "fail",
+      "plainSummary": "Failed at Parent Finalization. 0 of 1 phases passed before failure.",
+      "firstFailure": "\u26d4 **CASCADE BLOCKED**: Hard prerequisite(s) cab1781b-6e49-4f93-87ae-9310a2455cf8 (blocked) did not complete successfully. This phase cannot proceed and is not an independent failure.",
+      "buckets": [
+        "unknown"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-3964",
+          "phase": "Parent Finalization",
+          "objective": "",
+          "summary": "\u26d4 **CASCADE BLOCKED**: Hard prerequisite(s) cab1781b-6e49-4f93-87ae-9310a2455cf8 (blocked) did not complete successfully. This phase cannot proceed and is not an independent failure.",
+          "status": "fail",
+          "displayStatus": "fail",
+          "attention": false,
+          "attentionReasons": [],
+          "html": "<p>\u26d4 <strong>CASCADE BLOCKED</strong>: Hard prerequisite(s) cab1781b-6e49-4f93-87ae-9310a2455cf8 (blocked) did not complete successfully. This phase cannot proceed and is not an independent failure.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1
+        }
+      ]
     }
   ],
   "bucketLabels": {
     "baseline-pass": "Clean pass",
     "postdeploy-auth": "Postdeploy RBAC or identity failure",
-    "azd-papercuts": "azd or operator-experience papercut"
+    "azd-papercuts": "azd or operator-experience papercut",
+    "unknown": "Unclassified failure"
   }
 }

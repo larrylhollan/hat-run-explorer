@@ -276,49 +276,54 @@
       "runDate": "2026-04-15",
       "title": "HAT Run HOL-3865",
       "summary": {
-        "pass": 4,
-        "partial": 8,
-        "fail": 0,
+        "pass": 7,
+        "partial": 7,
+        "fail": 1,
         "bucketCounts": [
-          {
-            "key": "postdeploy-auth",
-            "label": "Postdeploy RBAC or identity failure",
-            "count": 5
-          },
           {
             "key": "azd-papercuts",
             "label": "azd or operator-experience papercut",
-            "count": 5
+            "count": 8
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 7
           },
           {
             "key": "baseline-pass",
             "label": "Clean pass",
             "count": 4
+          },
+          {
+            "key": "unknown",
+            "label": "Unclassified failure",
+            "count": 1
           }
         ],
         "executiveThemes": [
           {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 8,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (.NET, /responses)",
+              "Echo Streaming (Python, /invocations)"
+            ]
+          },
+          {
             "key": "postdeploy-auth",
             "label": "Postdeploy RBAC or identity failure",
-            "count": 5,
+            "count": 7,
             "paragraph": "",
             "examples": [
               "Echo Non-Streaming (.NET, /responses)",
               "Echo Streaming (.NET, /invocations)",
               "Echo Streaming (.NET, /responses)",
-              "Multi-Turn Chat (.NET, /invocations)"
-            ]
-          },
-          {
-            "key": "azd-papercuts",
-            "label": "azd or operator-experience papercut",
-            "count": 5,
-            "paragraph": "",
-            "examples": [
-              "Echo Streaming (.NET, /invocations)",
-              "Echo Streaming (.NET, /responses)",
-              "Echo Streaming (Python, /invocations)",
-              "Echo Streaming (Python, /responses)"
+              "LangGraph Calculator (Python, /responses)"
             ]
           },
           {
@@ -327,15 +332,207 @@
             "count": 4,
             "paragraph": "",
             "examples": [
-              "Echo Non-Streaming (.NET, /invocations)",
               "Echo Non-Streaming (Python, /invocations)",
-              "Multi-Turn Chat (Python, /invocations)",
-              "Multi-Turn Chat (Python, /responses)"
+              "Multi-Turn Chat (.NET, /responses)",
+              "[HAT 2026-04-15] P00: Pre-Run Foundry Cleanup",
+              "[HAT 2026-04-15] P09: Report Shepherd"
+            ]
+          },
+          {
+            "key": "unknown",
+            "label": "Unclassified failure",
+            "count": 1,
+            "paragraph": "",
+            "examples": [
+              "[HAT 2026-04-15] P10: Parent Finalization"
             ]
           }
         ]
       },
       "file": "./data/runs/2026-04-15-hol-3865.json"
+    },
+    {
+      "slug": "2026-04-16-hol-3994",
+      "runId": "HOL-3994",
+      "runDate": "2026-04-16",
+      "title": "HAT Run HOL-3994",
+      "summary": {
+        "pass": 6,
+        "partial": 6,
+        "fail": 0,
+        "bucketCounts": [
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 5
+          },
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 5
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 4
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "baseline-pass",
+            "label": "Clean pass",
+            "count": 5,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /responses)"
+            ]
+          },
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 5,
+            "paragraph": "",
+            "examples": [
+              "LangGraph Calculator (Python, /responses)",
+              "Multi-Turn Chat (.NET, /invocations)",
+              "Multi-Turn Chat (.NET, /responses)",
+              "Multi-Turn Chat (Python, /invocations)"
+            ]
+          },
+          {
+            "key": "postdeploy-auth",
+            "label": "Postdeploy RBAC or identity failure",
+            "count": 4,
+            "paragraph": "",
+            "examples": [
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /invocations)",
+              "Multi-Turn Chat (.NET, /responses)",
+              "Multi-Turn Chat (Python, /invocations)"
+            ]
+          }
+        ]
+      },
+      "file": "./data/runs/2026-04-16-hol-3994.json"
+    },
+    {
+      "slug": "2026-04-16-hol-4107",
+      "runId": "HOL-4107",
+      "runDate": "2026-04-16",
+      "title": "HAT Run HOL-4107",
+      "summary": {
+        "pass": 0,
+        "partial": 12,
+        "fail": 0,
+        "bucketCounts": [
+          {
+            "key": "deploy-failure",
+            "label": "Deploy failure",
+            "count": 9
+          },
+          {
+            "key": "invoke-failure",
+            "label": "Remote invoke failure",
+            "count": 9
+          },
+          {
+            "key": "provision-failure",
+            "label": "Provision infrastructure failure",
+            "count": 8
+          },
+          {
+            "key": "local-run-failure",
+            "label": "Local run failure",
+            "count": 8
+          },
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 7
+          },
+          {
+            "key": "harness-noise",
+            "label": "Harness or environment noise",
+            "count": 2
+          }
+        ],
+        "executiveThemes": [
+          {
+            "key": "deploy-failure",
+            "label": "Deploy failure",
+            "count": 9,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "invoke-failure",
+            "label": "Remote invoke failure",
+            "count": 9,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "provision-failure",
+            "label": "Provision infrastructure failure",
+            "count": 8,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "local-run-failure",
+            "label": "Local run failure",
+            "count": 8,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)",
+              "Echo Streaming (Python, /responses)"
+            ]
+          },
+          {
+            "key": "azd-papercuts",
+            "label": "azd or operator-experience papercut",
+            "count": 7,
+            "paragraph": "",
+            "examples": [
+              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /responses)",
+              "Echo Non-Streaming (Python, /invocations)",
+              "Echo Streaming (.NET, /invocations)"
+            ]
+          },
+          {
+            "key": "harness-noise",
+            "label": "Harness or environment noise",
+            "count": 2,
+            "paragraph": "",
+            "examples": [
+              "Echo Streaming (Python, /invocations)",
+              "Multi-Turn Chat (.NET, /responses)"
+            ]
+          }
+        ]
+      },
+      "file": "./data/runs/2026-04-16-hol-4107.json"
     }
   ]
 }
