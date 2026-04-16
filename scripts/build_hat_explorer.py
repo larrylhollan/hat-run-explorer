@@ -9,7 +9,14 @@ import urllib.request
 from collections import Counter, defaultdict
 from pathlib import Path
 
-import markdown
+try:
+    import markdown
+except ImportError:
+    raise SystemExit(
+        "ERROR: 'markdown' package not installed.\n"
+        "Install it with: python3 -m pip install markdown\n"
+        "Or set SKIP_BUILD_DATA=1 to skip data rebuild."
+    )
 
 ROOT = Path('/Users/larry/.openclaw/workspace-radar')
 RUNS_JSON = ROOT / 'explorer/data/runs.json'
