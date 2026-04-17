@@ -40,11 +40,11 @@
     "runDate": "2026-04-15",
     "label": "HOL-3865 \u00b7 2026-04-15",
     "file": "runs/2026-04-15-hol-3865.json",
-    "sampleCount": 15,
+    "sampleCount": 12,
     "summary": {
-      "pass": 7,
-      "partial": 7,
-      "fail": 1
+      "pass": 2,
+      "partial": 10,
+      "fail": 0
     }
   },
   {
