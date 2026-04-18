@@ -1,0 +1,2240 @@
+{
+  "runId": "HOL-4352",
+  "runDate": "2026-04-18",
+  "runSlug": "2026-04-18-hol-4352",
+  "title": "HAT Run HOL-4352",
+  "phases": [
+    "Create/Scaffold",
+    "Provision",
+    "Local Run",
+    "Deploy",
+    "Remote Invoke",
+    "Monitor",
+    "Update & Redeploy",
+    "Cleanup"
+  ],
+  "phaseGoals": {
+    "Create/Scaffold": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+    "Provision": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+    "Local Run": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+    "Deploy": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+    "Remote Invoke": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+    "Monitor": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+    "Update & Redeploy": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+    "Cleanup": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure."
+  },
+  "summary": {
+    "pass": 0,
+    "partial": 0,
+    "fail": 12,
+    "bucketCounts": [
+      {
+        "key": "needs-review",
+        "label": "Needs review",
+        "count": 11
+      },
+      {
+        "key": "harness-noise",
+        "label": "Harness or environment noise",
+        "count": 1
+      }
+    ],
+    "executiveThemes": [
+      {
+        "key": "needs-review",
+        "label": "Needs review",
+        "count": 11,
+        "paragraph": "These samples need manual review before treating the explorer summary as final.",
+        "examples": [
+          "Echo Non-Streaming (.NET, /invocations)",
+          "Echo Non-Streaming (.NET, /responses)",
+          "Echo Streaming (.NET, /invocations)",
+          "Echo Streaming (.NET, /responses)",
+          "Echo Streaming (Python, /invocations)",
+          "Echo Streaming (Python, /responses)"
+        ]
+      },
+      {
+        "key": "harness-noise",
+        "label": "Harness or environment noise",
+        "count": 1,
+        "paragraph": "These samples were blocked by upstream harness state rather than by an independently exercised product failure. They should be read as run-noise and dependency fallout, not as clean sample verdicts.",
+        "examples": [
+          "Echo Non-Streaming (Python, /invocations)"
+        ]
+      }
+    ]
+  },
+  "samples": [
+    {
+      "name": "Echo Non-Streaming (.NET, /invocations)",
+      "slug": "echo-non-streaming-net-invocations",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4402",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4403",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4404",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4405",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4406",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4407",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4408",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4409",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Echo Non-Streaming (.NET, /responses)",
+      "slug": "echo-non-streaming-net-responses",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4426",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4427",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4428",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4429",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4430",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4431",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4432",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4433",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Echo Non-Streaming (Python, /invocations)",
+      "slug": "echo-non-streaming-python-invocations",
+      "outcome": "fail",
+      "plainSummary": "Blocked before completion because an upstream dependency never became runnable or was cancelled, so downstream phases are harness noise rather than independent product failures.",
+      "firstFailure": "Create/Scaffold: \u26d4 **CASCADE BLOCKED**: Hard prerequisite(s) 6baf90d1-1025-4fc8-8571-0e4890c3a428 (blocked) did not complete successfully. This phase cannot proceed and is not an independent failure.",
+      "buckets": [
+        "harness-noise"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4354",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "\u26d4 **CASCADE BLOCKED**: Hard prerequisite(s) 6baf90d1-1025-4fc8-8571-0e4890c3a428 (blocked) did not complete successfully. This phase cannot proceed and is not an independent failure.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>\u26d4 <strong>CASCADE BLOCKED</strong>: Hard prerequisite(s) 6baf90d1-1025-4fc8-8571-0e4890c3a428 (blocked) did not complete successfully. This phase cannot proceed and is not an independent failure.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4355",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "Auto-cancelled: dependency was cancelled.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Auto-cancelled: dependency was cancelled.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4356",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "Auto-cancelled: dependency was cancelled.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Auto-cancelled: dependency was cancelled.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4357",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "Auto-cancelled: dependency was cancelled.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Auto-cancelled: dependency was cancelled.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4358",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "Auto-cancelled: dependency was cancelled.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Auto-cancelled: dependency was cancelled.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4359",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "Auto-cancelled: dependency was cancelled.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Auto-cancelled: dependency was cancelled.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4360",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "Auto-cancelled: dependency was cancelled.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Auto-cancelled: dependency was cancelled.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4361",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "Paperclip automatically retried dispatch for this assigned `todo` issue after a lost wake/run, but it still has no live execution path. Latest retry failure: Circuit breaker: kicked 10 times without dispatch. Marking as failed to unblock queue. Issue: bdff0057-e530-47b7-b522-2f09c1fc330f. Moving it to `blocked` so it is visible for intervention.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>Paperclip automatically retried dispatch for this assigned <code>todo</code> issue after a lost wake/run, but it still has no live execution path. Latest retry failure: Circuit breaker: kicked 10 times without dispatch. Marking as failed to unblock queue. Issue: bdff0057-e530-47b7-b522-2f09c1fc330f. Moving it to <code>blocked</code> so it is visible for intervention.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 1,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Echo Streaming (.NET, /invocations)",
+      "slug": "echo-streaming-net-invocations",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4410",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4411",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4412",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4413",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4414",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4415",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4416",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4417",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Echo Streaming (.NET, /responses)",
+      "slug": "echo-streaming-net-responses",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4434",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4435",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4436",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4437",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4438",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4439",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4440",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4441",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Echo Streaming (Python, /invocations)",
+      "slug": "echo-streaming-python-invocations",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4362",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4363",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4364",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4365",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4366",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4367",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4368",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4369",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Echo Streaming (Python, /responses)",
+      "slug": "echo-streaming-python-responses",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4378",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4379",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4380",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4381",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4382",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4383",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4384",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4385",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "LangGraph Calculator (Python, /responses)",
+      "slug": "langgraph-calculator-python-responses",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4394",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4395",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4396",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4397",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4398",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4399",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4400",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4401",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Multi-Turn Chat (.NET, /invocations)",
+      "slug": "multi-turn-chat-net-invocations",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4418",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4419",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4420",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4421",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4422",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4423",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4424",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4425",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Multi-Turn Chat (.NET, /responses)",
+      "slug": "multi-turn-chat-net-responses",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4442",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4443",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4444",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4445",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4446",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4447",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4448",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4449",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Multi-Turn Chat (Python, /invocations)",
+      "slug": "multi-turn-chat-python-invocations",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4370",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4371",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4372",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4373",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4374",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4375",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4376",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4377",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    },
+    {
+      "name": "Multi-Turn Chat (Python, /responses)",
+      "slug": "multi-turn-chat-python-responses",
+      "outcome": "fail",
+      "plainSummary": "One or more phases failed and need narrative review.",
+      "firstFailure": "Create/Scaffold: No summary captured.",
+      "buckets": [
+        "needs-review"
+      ],
+      "steps": [
+        {
+          "issueId": "HOL-4386",
+          "phase": "Create/Scaffold",
+          "objective": "Create the sample workspace, pull down the sample files, and initialize the azd project shape needed for the rest of the run.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4387",
+          "phase": "Provision",
+          "objective": "Provision the Azure-side infrastructure and verify that the expected account, project, model, and related resources exist.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4388",
+          "phase": "Local Run",
+          "objective": "Run the sample locally and prove that the basic protocol path works before deploying it remotely.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4389",
+          "phase": "Deploy",
+          "objective": "Package the sample, push the image if needed, and register or deploy the hosted agent so the remote endpoint exists.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4390",
+          "phase": "Remote Invoke",
+          "objective": "Call the remotely deployed sample the way a user or engineer would and verify the result, latency, and first-use behavior.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4391",
+          "phase": "Monitor",
+          "objective": "Inspect the deployed agent, capture its metadata, and confirm whether the runtime looks healthy from a monitoring perspective.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4392",
+          "phase": "Update & Redeploy",
+          "objective": "Make a visible code change, redeploy it, and verify that the new behavior appears on a fresh remote execution path.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        },
+        {
+          "issueId": "HOL-4393",
+          "phase": "Cleanup",
+          "objective": "Remove provisioned resources so the next run starts from a clean state and does not leak infrastructure.",
+          "summary": "No summary captured.",
+          "status": "cancelled",
+          "displayStatus": "cancelled",
+          "attention": true,
+          "attentionReasons": [
+            "Latest step status is cancelled"
+          ],
+          "html": "<p>No journal captured.</p>",
+          "commandSnippets": [],
+          "outputSnippets": [],
+          "rootCauses": [],
+          "workarounds": [],
+          "timeline": [],
+          "commentCount": 0,
+          "coverageGaps": [],
+          "error": null
+        }
+      ]
+    }
+  ],
+  "bucketLabels": {
+    "baseline-pass": "Clean pass",
+    "azd-papercuts": "azd or operator-experience papercut",
+    "platform-data-plane": "Foundry data-plane inconsistency",
+    "infra-integrity": "Run integrity or infrastructure deletion",
+    "template-contract": "Template or azd contract mismatch",
+    "postdeploy-rbac": "Postdeploy RBAC or identity failure",
+    "harness-noise": "Harness or environment noise",
+    "needs-review": "Needs review"
+  }
+}

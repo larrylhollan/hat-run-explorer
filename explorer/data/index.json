@@ -1,6 +1,30 @@
 {
   "runs": [
     {
+      "slug": "2026-04-18-hol-4352",
+      "runId": "HOL-4352",
+      "runDate": "2026-04-18",
+      "title": "HAT Run HOL-4352",
+      "summary": {
+        "pass": 0,
+        "partial": 0,
+        "fail": 12
+      },
+      "file": "./data/runs/2026-04-18-hol-4352.json"
+    },
+    {
+      "slug": "2026-04-17-hol-4219",
+      "runId": "HOL-4219",
+      "runDate": "2026-04-17",
+      "title": "HAT Run HOL-4219",
+      "summary": {
+        "pass": 0,
+        "partial": 0,
+        "fail": 12
+      },
+      "file": "./data/runs/2026-04-17-hol-4219.json"
+    },
+    {
       "slug": "2026-04-14-hol-3224",
       "runId": "HOL-3224",
       "runDate": "2026-04-14",
@@ -276,9 +300,9 @@
       "runDate": "2026-04-15",
       "title": "HAT Run HOL-3865",
       "summary": {
-        "pass": 7,
-        "partial": 7,
-        "fail": 1,
+        "pass": 2,
+        "partial": 10,
+        "fail": 0,
         "bucketCounts": [
           {
             "key": "azd-papercuts",
@@ -288,16 +312,11 @@
           {
             "key": "postdeploy-auth",
             "label": "Postdeploy RBAC or identity failure",
-            "count": 7
+            "count": 5
           },
           {
             "key": "baseline-pass",
             "label": "Clean pass",
-            "count": 4
-          },
-          {
-            "key": "unknown",
-            "label": "Unclassified failure",
             "count": 1
           }
         ],
@@ -308,7 +327,7 @@
             "count": 8,
             "paragraph": "",
             "examples": [
-              "Echo Non-Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /responses)",
               "Echo Streaming (.NET, /invocations)",
               "Echo Streaming (.NET, /responses)",
               "Echo Streaming (Python, /invocations)"
@@ -317,34 +336,22 @@
           {
             "key": "postdeploy-auth",
             "label": "Postdeploy RBAC or identity failure",
-            "count": 7,
+            "count": 5,
             "paragraph": "",
             "examples": [
-              "Echo Non-Streaming (.NET, /responses)",
-              "Echo Streaming (.NET, /invocations)",
+              "Echo Non-Streaming (.NET, /invocations)",
               "Echo Streaming (.NET, /responses)",
-              "LangGraph Calculator (Python, /responses)"
+              "Multi-Turn Chat (.NET, /invocations)",
+              "Multi-Turn Chat (.NET, /responses)"
             ]
           },
           {
             "key": "baseline-pass",
             "label": "Clean pass",
-            "count": 4,
-            "paragraph": "",
-            "examples": [
-              "Echo Non-Streaming (Python, /invocations)",
-              "Multi-Turn Chat (.NET, /responses)",
-              "[HAT 2026-04-15] P00: Pre-Run Foundry Cleanup",
-              "[HAT 2026-04-15] P09: Report Shepherd"
-            ]
-          },
-          {
-            "key": "unknown",
-            "label": "Unclassified failure",
             "count": 1,
             "paragraph": "",
             "examples": [
-              "[HAT 2026-04-15] P10: Parent Finalization"
+              "Echo Non-Streaming (Python, /invocations)"
             ]
           }
         ]
