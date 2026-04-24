@@ -36,13 +36,18 @@ This repo contains only the explorer app and publishing artifacts, not the full 
 ## Current app structure
 
 ## Main files
+
+**Inside `explorer/` directory** (the web app itself):
 - `explorer/index.html` — shell of the web app
 - `explorer/app.js` — run selector, scorecard UI, detail view, executive summary
 - `explorer/styles.css` — app styling
+
+**Workspace root** (NOT inside explorer/):
 - `scripts/build_hat_explorer.py` — builds explorer datasets from issue/comment exports
 - `scripts/deploy_app_service.sh` — deploys the app to Azure App Service
-- `package.json` — Node start script for App Service
-- `web.config` — static hosting rewrite support
+- `package.json` — Node start script for App Service (workspace root, not explorer/)
+- `web.config` — static hosting rewrite support (workspace root, not explorer/)
+- `README.md` — workspace readme (workspace root, not explorer/)
 
 ## Data files
 - `explorer/data/runs/<run-slug>.json` — one JSON file per published run/day
@@ -201,7 +206,7 @@ That can be done by teaching the report-completion path to call a generalized ex
 
 - `docs/hat-explorer-cell-data-contract.md`
 - `docs/hat-explorer-publishing-runbook.md`
-- `README.md`
+- `README.md` (workspace root — NOT explorer/README.md)
 - `scripts/build_hat_explorer.py`
 - `scripts/deploy_app_service.sh`
 
