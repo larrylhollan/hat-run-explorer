@@ -30,3 +30,15 @@ USER.md
 
 # Coverage / misc
 coverage/
+
+# Temp debug/investigation scripts
+tmp_*.py
+tmp_*.json
+
+# One-off payload/patch artifacts
+payload_*.json
+hol*-blocked-*.json
+
+# Ad-hoc audit scripts (not part of the app)
+paperclip_issue_audit.py
+paperclip_mutate.py
