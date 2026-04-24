@@ -133,6 +133,9 @@ def classify_sample(steps: list[dict]) -> tuple[str, str, list[str]]:
         return 'pass', 'Completed all eight phases through the canonical path recorded in Paperclip.', ['baseline-pass']
     first_fail = next((step for step in steps if step['status'] != 'pass'), None)
     text = ((first_fail or {}).get('error') or (first_fail or {}).get('summary') or '').lower()
+    all_text = ' '.join(filter(None, [((step.get('error') or '') + ' ' + (step.get('summary') or '')).lower() for step in steps]))
+    if 'cascade blocked' in all_text or 'hard dependency' in all_text or 'dependency was cancelled' in all_text:
+        return 'fail', 'Blocked before completion because an upstream dependency never became runnable or was cancelled, so downstream phases are harness noise rather than independent product failures.', ['harness-noise']
     if any(s in text for s in ['project not found', 'subdomain does not map to a resource', 'resourcenotfound']):
         return 'fail', 'Remote deploy or invoke failed because the Foundry data plane did not recognize a provisioned project or subdomain.', ['platform-data-plane']
     if any(s in text for s in ['resource group', 'deleted between', 'nxdomain', 'does not resolve']):
@@ -152,6 +155,7 @@ def theme_paragraph(run_id: str, key: str) -> str:
         'infra-integrity': 'These failures are run-integrity problems. The underlying resource group or endpoint disappeared between phases, which makes downstream deploy, invoke, and monitor results unreliable as product signals.',
         'template-contract': 'These samples failed because the scaffolded project shape and the azd contract do not agree. Missing infra files, missing azure.ai.agent service entries, or no-op deploy shapes forced manual repair or immediate failure.',
         'postdeploy-rbac': 'These samples got through the core deploy path, but the postdeploy identity or RBAC steps did not finish, so the agent could not create sessions or complete remote work.',
+        'harness-noise': 'These samples were blocked by upstream harness state rather than by an independently exercised product failure. They should be read as run-noise and dependency fallout, not as clean sample verdicts.',
         'needs-review': 'These samples need manual review before treating the explorer summary as final.',
     }
     return paragraphs[key]
@@ -175,12 +179,16 @@ def main() -> None:
 
     by_sample: dict[str, list[dict]] = defaultdict(list)
     comments_cache: dict[str, list[dict]] = {}
+    sample_issue_re = re.compile(r'\] P0([1-8]):\s*.+[—-].+')
     for child in children:
-        phase, sample = parse_title(child['title'])
-        by_sample[sample].append(child)
         comments = http_get_json(f"{base}/issues/{child['id']}/comments", headers)
         assert isinstance(comments, list)
         comments_cache[child['id']] = strip_jit(comments)
+        title = child['title']
+        if not sample_issue_re.search(title):
+            continue
+        phase, sample = parse_title(title)
+        by_sample[sample].append(child)
 
     samples = []
     bucket_counts = Counter()
@@ -244,6 +252,7 @@ def main() -> None:
         'infra-integrity': 'Run integrity or infrastructure deletion',
         'template-contract': 'Template or azd contract mismatch',
         'postdeploy-rbac': 'Postdeploy RBAC or identity failure',
+        'harness-noise': 'Harness or environment noise',
         'needs-review': 'Needs review',
     }
     summary = {
