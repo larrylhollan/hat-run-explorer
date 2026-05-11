@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HAT v2 — Report Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-brand">
+      <div class="logo-mark">H2</div>
+      <div>
+        <h1>HAT v2 — Coding Agent Experience Test</h1>
+        <p id="run-meta" class="run-meta">Loading…</p>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button id="btn-back" class="btn-back hidden" type="button">← All Runs</button>
+      <select id="run-selector" class="run-selector hidden"></select>
+    </div>
+  </header>
+
+  <!-- Landing: run list -->
+  <section id="landing" class="landing">
+    <div class="landing-inner">
+      <div class="landing-header">
+        <div class="landing-logo">H2</div>
+        <h2>HAT v2 Report Dashboard</h2>
+        <p>Daily coding agent experience test results for Azure AI Foundry Hosted Agents GA readiness.</p>
+        <p class="subtle">4 scenarios × 2 strategies × 2 agents = 16 runs per night</p>
+      </div>
+      <div id="run-list" class="run-list"><p class="subtle">Loading available runs…</p></div>
+    </div>
+  </section>
+
+  <!-- Run page: tabs -->
+  <main id="run-page" class="page hidden">
+
+    <!-- Summary hero -->
+    <section class="hero-panel">
+      <div id="hero-cards" class="hero-cards"></div>
+    </section>
+
+    <!-- Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="runs">Run Details</button>
+      <button class="tab" data-tab="taxonomy">Failure Taxonomy</button>
+    </nav>
+
+    <!-- Dashboard Tab -->
+    <section id="tab-dashboard" class="tab-panel active">
+      <div class="dashboard-grid">
+        <!-- Scorecard matrix -->
+        <section class="panel full-width">
+          <div class="section-head">
+            <h2>Scorecard Matrix</h2>
+            <p class="subtle">Rows = scenarios, columns = strategy × agent. Click any cell for details.</p>
+          </div>
+          <div class="scorecard-wrap">
+            <table id="scorecard-table" class="scorecard-table"></table>
+          </div>
+        </section>
+
+        <!-- GA Readiness -->
+        <section class="panel">
+          <h2>GA Readiness Score</h2>
+          <div id="readiness-gauge" class="readiness-gauge"></div>
+          <div id="readiness-pillars" class="pillar-bars"></div>
+        </section>
+
+        <!-- Breakdown charts -->
+        <section class="panel">
+          <h2>Breakdown</h2>
+          <div class="breakdown-section">
+            <h3>By Scenario</h3>
+            <div id="chart-scenarios" class="bar-chart"></div>
+          </div>
+          <div class="breakdown-section">
+            <h3>By Strategy</h3>
+            <div id="chart-strategies" class="bar-chart"></div>
+          </div>
+          <div class="breakdown-section">
+            <h3>By Agent</h3>
+            <div id="chart-agents" class="bar-chart"></div>
+          </div>
+        </section>
+
+        <!-- Trend (multi-run) -->
+        <section class="panel full-width" id="trend-section">
+          <h2>Trend Over Time</h2>
+          <p class="subtle">Success rate across available runs.</p>
+          <canvas id="trend-canvas" height="200"></canvas>
+          <p id="trend-no-data" class="subtle hidden">Only one run loaded — trend requires multiple runs.</p>
+        </section>
+      </div>
+    </section>
+
+    <!-- Run Details Tab -->
+    <section id="tab-runs" class="tab-panel hidden">
+      <div class="runs-layout">
+        <aside class="run-list-sidebar">
+          <input id="run-search" type="search" placeholder="Filter runs…" class="run-search" />
+          <select id="run-outcome-filter" class="run-filter">
+            <option value="all">All outcomes</option>
+            <option value="pass">Pass</option>
+            <option value="partial">Partial</option>
+            <option value="fail">Fail</option>
+          </select>
+          <div id="run-sidebar-list" class="sidebar-list"></div>
+        </aside>
+        <section id="run-detail" class="run-detail-panel">
+          <div id="run-detail-empty" class="detail-empty">
+            <h2>Select a run</h2>
+            <p>Pick a run from the sidebar to see its full transcript, commands, and errors.</p>
+          </div>
+          <div id="run-detail-content" class="hidden"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Failure Taxonomy Tab -->
+    <section id="tab-taxonomy" class="tab-panel hidden">
+      <div class="taxonomy-grid">
+        <!-- Pillar breakdown -->
+        <section class="panel full-width">
+          <h2>Failure Categories by GA Readiness Pillar</h2>
+          <p class="subtle">Every failure maps to one of 5 pillars. The bar shows frequency across all runs.</p>
+          <div id="pillar-chart" class="pillar-chart"></div>
+        </section>
+
+        <!-- Category frequency -->
+        <section class="panel">
+          <h2>Failure Category Frequency</h2>
+          <div id="category-bars" class="bar-chart category-bars"></div>
+        </section>
+
+        <!-- Root causes -->
+        <section class="panel">
+          <h2>Top Root Causes</h2>
+          <div id="root-causes" class="root-cause-list"></div>
+        </section>
+
+        <!-- Proposed fixes -->
+        <section class="panel full-width">
+          <h2>Proposed Fixes</h2>
+          <p class="subtle">Draft doc fixes, error message improvements, and sample code suggestions extracted from grading.</p>
+          <div id="proposed-fixes" class="fixes-list"></div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

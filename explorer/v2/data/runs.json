@@ -1,0 +1,13 @@
+[
+  {
+    "date": "2026-05-11",
+    "label": "2026-05-11 (Mock)",
+    "file": "runs/2026-05-11-mock.json",
+    "scorecard": {
+      "total": 16,
+      "pass": 4,
+      "partial": 4,
+      "fail": 8
+    }
+  }
+]

@@ -1,0 +1,703 @@
+{
+  "version": "2.0",
+  "date": "2026-05-11",
+  "generatedAt": "2026-05-11T10:30:00Z",
+  "graderModel": "gpt-5.4",
+  "scorecard": {
+    "total": 16,
+    "pass": 4,
+    "partial": 4,
+    "fail": 8,
+    "passRate": 0.25,
+    "passPartialRate": 0.5
+  },
+  "failureCategoryDistribution": {
+    "Toolbox/connection configuration": 2,
+    "Docs gap": 2,
+    "Interactive CLI stuck": 1,
+    "Model deployment issue": 1,
+    "Concept gap": 2,
+    "Docker build failure": 1,
+    "Manifest format confusion": 2,
+    "azure.yaml structure wrong": 1
+  },
+  "readinessPillarBreakdown": {
+    "Quality": { "pass": 4, "partial": 0, "fail": 0 },
+    "Tools": { "pass": 0, "partial": 2, "fail": 1 },
+    "Docs": { "pass": 0, "partial": 0, "fail": 4 },
+    "Samples": { "pass": 0, "partial": 0, "fail": 0 },
+    "Seams": { "pass": 0, "partial": 2, "fail": 3 }
+  },
+  "scenarioBreakdown": {
+    "S1": { "pass": 3, "partial": 1, "fail": 0 },
+    "S2": { "pass": 0, "partial": 1, "fail": 3 },
+    "S3": { "pass": 1, "partial": 1, "fail": 2 },
+    "S4": { "pass": 0, "partial": 1, "fail": 3 }
+  },
+  "strategyBreakdown": {
+    "A": { "pass": 1, "partial": 0, "fail": 7 },
+    "B": { "pass": 3, "partial": 4, "fail": 1 }
+  },
+  "agentBreakdown": {
+    "claude": { "pass": 3, "partial": 2, "fail": 3 },
+    "copilot": { "pass": 1, "partial": 2, "fail": 5 }
+  },
+  "skillsDeltaSummary": { "applicable": false },
+  "topRootCauses": [
+    { "cause": "Toolbox API not discoverable without docs — agent tries REST directly instead of SDK connection manager", "count": 2 },
+    { "cause": "No public docs explain the manifest trinity (agent.yaml + agent.manifest.yaml + azure.yaml) and which fields are required", "count": 2 },
+    { "cause": "Agent cannot find LangGraph-specific hosted agent template; falls back to MAF template and fails", "count": 1 },
+    { "cause": "azd provision prompts for subscription interactively with no --subscription flag", "count": 1 }
+  ],
+  "cliInteractiveIssues": {
+    "total": 3,
+    "issues": [
+      { "cli": "azd", "prompt": "Select an Azure subscription", "missingFlag": "--subscription", "affectedRuns": ["S1-A-copilot", "S2-B-copilot"] },
+      { "cli": "docker", "prompt": "Docker Desktop is not running. Start Docker Desktop?", "missingFlag": "--no-prompt", "affectedRuns": ["S3-B-copilot"] },
+      { "cli": "azd", "prompt": "Select a location for the new environment", "missingFlag": "--location", "affectedRuns": ["S4-A-copilot"] }
+    ]
+  },
+  "grades": [
+    {
+      "runId": "S1-A-claude",
+      "success": "pass",
+      "failureCategory": null,
+      "failureCategoryDetail": null,
+      "readinessPillar": "Quality",
+      "rootCause": "No failure — agent discovered azd ai agent init organically via web search",
+      "improvementSuggestions": { "docContent": null, "errorMessage": null, "sampleCode": null },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 1,
+        "stuckPoints": [],
+        "timeoutReached": false
+      },
+      "confidenceScore": 0.95,
+      "transcript": {
+        "excerpt": "Agent searched for 'Azure Foundry hosted agent quickstart', found the azd CLI docs, ran azd ai agent init...",
+        "commands": [
+          { "cmd": "azd extension install ai", "exitCode": 0, "output": "Extension 'ai' installed successfully." },
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized agent project in ./my-agent" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "Provisioning Azure resources...\n(✓) Done: Resource group 'rg-my-agent'" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "Deploying agent...\n(✓) Agent deployed successfully" },
+          { "cmd": "azd ai agent invoke --prompt 'What is Azure?'", "exitCode": 0, "output": "Azure is Microsoft's cloud computing platform..." }
+        ],
+        "reasoning": [
+          "I need to deploy a hosted agent on Azure Foundry. Let me search for the right tooling.",
+          "Found azd CLI with AI extensions. I'll use azd ai agent init with a template.",
+          "Provision succeeded. Now deploying the agent code to the hosted agent service."
+        ],
+        "errors": [],
+        "durationSeconds": 420
+      },
+      "_meta": { "scenario": 1, "scenarioName": "Greenfield MAF Agent", "strategy": "A", "strategyName": "Open-Ended", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S1-A-copilot",
+      "success": "partial",
+      "failureCategory": "Interactive CLI stuck",
+      "failureCategoryDetail": "azd provision prompted for subscription selection interactively; Copilot CLI could not respond to the interactive prompt and the process timed out",
+      "readinessPillar": "Tools",
+      "rootCause": "azd provision prompts for subscription interactively with no --subscription flag",
+      "improvementSuggestions": {
+        "docContent": "Document the AZURE_SUBSCRIPTION_ID environment variable as the non-interactive alternative to subscription selection",
+        "errorMessage": "azd should suggest setting AZURE_SUBSCRIPTION_ID when detecting non-interactive mode",
+        "sampleCode": null
+      },
+      "cliInteractiveIssues": [
+        { "cli": "azd", "prompt": "Select an Azure subscription", "missingFlag": "--subscription" }
+      ],
+      "draftFix": "## Quickstart: Add non-interactive note\n\n```diff\n- Run `azd provision` to create the Azure resources.\n+ Run `azd provision` to create the Azure resources.\n+ \n+ > **Tip:** For non-interactive usage (CI/CD, coding agents), set\n+ > `AZURE_SUBSCRIPTION_ID` before running `azd provision`.\n```",
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 2,
+        "stuckPoints": ["azd provision subscription selector hung for 3 minutes"],
+        "timeoutReached": false
+      },
+      "confidenceScore": 0.88,
+      "transcript": {
+        "excerpt": "Agent ran azd ai agent init successfully but got stuck at azd provision subscription prompt...",
+        "commands": [
+          { "cmd": "azd extension install ai", "exitCode": 0, "output": "Extension 'ai' installed successfully." },
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized agent project in ./my-agent" },
+          { "cmd": "azd provision", "exitCode": 1, "output": "? Select an Azure subscription:\n  > subscription-1\n    subscription-2\n[hung for 180s — interactive prompt not handled]" },
+          { "cmd": "export AZURE_SUBSCRIPTION_ID=...", "exitCode": 0, "output": "" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "Provisioning Azure resources...\n(✓) Done" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Agent deployed successfully" },
+          { "cmd": "azd ai agent invoke --prompt 'Hello'", "exitCode": 0, "output": "Hello! How can I help you today?" }
+        ],
+        "reasoning": [
+          "Starting with azd CLI to scaffold a hosted agent.",
+          "The provision command is stuck on an interactive prompt. Let me set the subscription ID via environment variable.",
+          "After setting AZURE_SUBSCRIPTION_ID, provision succeeded. Deploying now."
+        ],
+        "errors": [
+          "azd provision: interactive subscription selection timed out after 180 seconds"
+        ],
+        "durationSeconds": 680
+      },
+      "_meta": { "scenario": 1, "scenarioName": "Greenfield MAF Agent", "strategy": "A", "strategyName": "Open-Ended", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S1-B-claude",
+      "success": "pass",
+      "failureCategory": null,
+      "failureCategoryDetail": null,
+      "readinessPillar": "Quality",
+      "rootCause": "No failure — doc-pointed approach led directly to success",
+      "improvementSuggestions": { "docContent": null, "errorMessage": null, "sampleCode": null },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": { "usedTemplate": true, "iterationCount": 1, "stuckPoints": [], "timeoutReached": false },
+      "confidenceScore": 0.92,
+      "transcript": {
+        "excerpt": "Agent followed quickstart doc step by step, completed all phases on first try...",
+        "commands": [
+          { "cmd": "azd extension install ai", "exitCode": 0, "output": "Extension 'ai' installed." },
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized agent project" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Done: All resources provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Agent deployed" },
+          { "cmd": "azd ai agent invoke --prompt 'Tell me about Azure AI'", "exitCode": 0, "output": "Azure AI provides a comprehensive set of AI services..." }
+        ],
+        "reasoning": [
+          "Following the quickstart URL provided. Step 1: install azd ai extension.",
+          "Step 2: Initialize from template. Step 3: Provision. Step 4: Deploy.",
+          "All steps completed. Verifying with invoke."
+        ],
+        "errors": [],
+        "durationSeconds": 360
+      },
+      "_meta": { "scenario": 1, "scenarioName": "Greenfield MAF Agent", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S1-B-copilot",
+      "success": "pass",
+      "failureCategory": null,
+      "failureCategoryDetail": null,
+      "readinessPillar": "Quality",
+      "rootCause": "No failure — doc-pointed approach worked for Copilot CLI on greenfield scenario",
+      "improvementSuggestions": { "docContent": null, "errorMessage": null, "sampleCode": null },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": { "usedTemplate": true, "iterationCount": 1, "stuckPoints": [], "timeoutReached": false },
+      "confidenceScore": 0.90,
+      "transcript": {
+        "excerpt": "Copilot CLI followed quickstart, handled provisioning cleanly with pre-set subscription...",
+        "commands": [
+          { "cmd": "azd extension install ai", "exitCode": 0, "output": "Extension 'ai' installed." },
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed" },
+          { "cmd": "azd ai agent invoke --prompt 'Hello world'", "exitCode": 0, "output": "Hello! I'm your Azure AI agent." }
+        ],
+        "reasoning": [
+          "Reading the quickstart doc. I'll follow the steps exactly.",
+          "All steps completed successfully."
+        ],
+        "errors": [],
+        "durationSeconds": 380
+      },
+      "_meta": { "scenario": 1, "scenarioName": "Greenfield MAF Agent", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S2-A-claude",
+      "success": "fail",
+      "failureCategory": "Toolbox/connection configuration",
+      "failureCategoryDetail": "Agent deployed a basic agent but could not discover or configure Toolbox connections. Tried REST API directly instead of using the SDK connection manager.",
+      "readinessPillar": "Seams",
+      "rootCause": "Toolbox API not discoverable without docs — agent tries REST directly instead of SDK connection manager",
+      "improvementSuggestions": {
+        "docContent": "Add a 'Toolbox Quick Start' section showing the minimum code to create a connection and wire tools",
+        "errorMessage": "When agent.yaml references a toolbox connection that doesn't exist, the error should suggest 'az ai agent toolbox connection create'",
+        "sampleCode": "Sample showing ToolboxClient initialization with connection ID wiring"
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": "## Add Toolbox quickstart section\n\n```diff\n+ ## Adding Tools with Toolbox\n+ \n+ After deploying your basic agent, add tools via Toolbox:\n+ \n+ ```python\n+ from azure.ai.agents import ToolboxClient\n+ \n+ toolbox = ToolboxClient(connection_id=\"my-connection\")\n+ toolbox.add_tool(\"web_search\")\n+ toolbox.add_tool(\"code_interpreter\")\n+ ```\n```",
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 4,
+        "stuckPoints": ["Could not find Toolbox API docs", "Tried raw REST calls to /toolbox endpoint — 404", "Attempted to reverse-engineer SDK from pip package"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.85,
+      "transcript": {
+        "excerpt": "Agent deployed basic agent successfully but spent 15 minutes trying to add Toolbox tools without finding the right API...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed" },
+          { "cmd": "curl -X POST https://.../toolbox/connections -d '{}'", "exitCode": 0, "output": "404 Not Found" },
+          { "cmd": "pip show azure-ai-agents | grep -i toolbox", "exitCode": 1, "output": "(no output)" },
+          { "cmd": "python3 -c \"from azure.ai.agents import ToolboxClient\"", "exitCode": 1, "output": "ImportError: cannot import name 'ToolboxClient'" }
+        ],
+        "reasoning": [
+          "Basic agent deployed. Now I need to add Toolbox with 3 tools.",
+          "I can't find the Toolbox API endpoint. Let me try the REST API directly.",
+          "REST API returns 404. Let me check the SDK for Toolbox classes.",
+          "The SDK doesn't have a ToolboxClient. I'm running out of time."
+        ],
+        "errors": [
+          "curl: 404 Not Found — /toolbox/connections endpoint doesn't exist",
+          "ImportError: cannot import name 'ToolboxClient' from 'azure.ai.agents'",
+          "Timeout reached at 20 minutes — Toolbox configuration incomplete"
+        ],
+        "durationSeconds": 1200
+      },
+      "_meta": { "scenario": 2, "scenarioName": "MAF + Toolbox + Tools", "strategy": "A", "strategyName": "Open-Ended", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S2-A-copilot",
+      "success": "fail",
+      "failureCategory": "Docs gap",
+      "failureCategoryDetail": "Agent could not find documentation about Toolbox at all through organic search. All search results pointed to Azure AI Studio, not Foundry Agent Service.",
+      "readinessPillar": "Docs",
+      "rootCause": "Toolbox docs not indexed in public search — agent searches 'Azure AI toolbox' and gets AI Studio results, not Foundry",
+      "improvementSuggestions": {
+        "docContent": "Ensure Toolbox docs are SEO-indexed under 'Azure AI Foundry Toolbox' and cross-linked from the quickstart",
+        "errorMessage": null,
+        "sampleCode": "End-to-end sample showing agent + Toolbox + 3 tools deployed via azd"
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": false,
+        "iterationCount": 3,
+        "stuckPoints": ["Could not find Toolbox docs via web search", "Confused AI Studio with Foundry Agent Service"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.82,
+      "transcript": {
+        "excerpt": "Agent searched for Toolbox docs extensively, found Azure AI Studio results instead of Foundry Agent Service...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed" },
+          { "cmd": "az ai studio toolbox create --name web-search", "exitCode": 1, "output": "ERROR: 'ai' is not a registered command." }
+        ],
+        "reasoning": [
+          "I need to find the Toolbox API for Azure AI Foundry.",
+          "Web search returns Azure AI Studio results. Let me try the az CLI.",
+          "The az CLI doesn't have an 'ai' subcommand. This is confusing."
+        ],
+        "errors": [
+          "ERROR: 'ai' is not a registered command. Run 'az extension list-available' for help.",
+          "Timeout reached — could not discover Toolbox configuration path"
+        ],
+        "durationSeconds": 1200
+      },
+      "_meta": { "scenario": 2, "scenarioName": "MAF + Toolbox + Tools", "strategy": "A", "strategyName": "Open-Ended", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S2-B-claude",
+      "success": "partial",
+      "failureCategory": "Toolbox/connection configuration",
+      "failureCategoryDetail": "Agent followed Toolbox docs but connection wiring failed — connection ID format in docs didn't match what the SDK expected",
+      "readinessPillar": "Seams",
+      "rootCause": "Toolbox docs show connection ID as 'projects/{id}/connections/{name}' but SDK expects just '{name}' — format mismatch between docs and SDK",
+      "improvementSuggestions": {
+        "docContent": "Fix connection ID format in Toolbox docs to match SDK expectations: use short name, not full resource path",
+        "errorMessage": "SDK should accept both full path and short name for connection IDs",
+        "sampleCode": null
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": "## Fix connection ID format in Toolbox docs\n\n```diff\n  toolbox_config = {\n-   \"connection_id\": \"projects/my-project/connections/my-connection\",\n+   \"connection_id\": \"my-connection\",\n    \"tools\": [\"web_search\", \"code_interpreter\"]\n  }\n```",
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 3,
+        "stuckPoints": ["Connection ID format mismatch — tried 5 variations"],
+        "timeoutReached": false
+      },
+      "confidenceScore": 0.87,
+      "transcript": {
+        "excerpt": "Agent followed Toolbox docs, deployed agent with tools, but connection wiring failed due to ID format mismatch...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed" },
+          { "cmd": "azd ai agent invoke --prompt 'Search for Azure news'", "exitCode": 1, "output": "Error: Connection 'projects/my-project/connections/web-search' not found" },
+          { "cmd": "azd ai agent invoke --prompt 'Hello'", "exitCode": 0, "output": "Hello! (Note: tools unavailable)" }
+        ],
+        "reasoning": [
+          "Following the Toolbox docs to wire up tools after deploying the basic agent.",
+          "Connection ID format from docs doesn't work. Let me try the short name.",
+          "Agent responds to basic prompts but tools aren't wired — partial success."
+        ],
+        "errors": [
+          "Connection 'projects/my-project/connections/web-search' not found",
+          "ToolboxError: Invalid connection format"
+        ],
+        "durationSeconds": 900
+      },
+      "_meta": { "scenario": 2, "scenarioName": "MAF + Toolbox + Tools", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S2-B-copilot",
+      "success": "fail",
+      "failureCategory": "Model deployment issue",
+      "failureCategoryDetail": "Agent followed docs but model deployment quota was exceeded — no clear error message about SKU/quota, just a generic 'deployment failed'",
+      "readinessPillar": "Tools",
+      "rootCause": "Model deployment returns generic 'deployment failed' instead of specifying quota exceeded — agent retried 4 times with same SKU",
+      "improvementSuggestions": {
+        "docContent": "Add troubleshooting section for model deployment quota errors",
+        "errorMessage": "Model deployment error should include quota details: 'Quota exceeded for gpt-4o-mini in eastus. Current usage: 3/3 deployments. Request a quota increase at https://...'",
+        "sampleCode": null
+      },
+      "cliInteractiveIssues": [
+        { "cli": "azd", "prompt": "Select an Azure subscription", "missingFlag": "--subscription" }
+      ],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 4,
+        "stuckPoints": ["Model deployment failed with generic error", "Retried same deployment 4 times without understanding quota"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.80,
+      "transcript": {
+        "excerpt": "Agent hit model deployment quota but error was generic 'deployment failed'...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "azd provision", "exitCode": 1, "output": "ERROR: deployment failed\nDeployment 'gpt-4o-mini' in resource 'my-openai' failed." },
+          { "cmd": "azd provision", "exitCode": 1, "output": "ERROR: deployment failed (same error)" },
+          { "cmd": "azd provision", "exitCode": 1, "output": "ERROR: deployment failed (same error)" }
+        ],
+        "reasoning": [
+          "Following the quickstart. Provisioning failed — let me retry.",
+          "Same error on retry. The error message doesn't tell me what's wrong.",
+          "I've retried 4 times. Something about the deployment is fundamentally broken."
+        ],
+        "errors": [
+          "ERROR: deployment failed — Deployment 'gpt-4o-mini' in resource 'my-openai' failed.",
+          "No additional diagnostic information provided"
+        ],
+        "durationSeconds": 1100
+      },
+      "_meta": { "scenario": 2, "scenarioName": "MAF + Toolbox + Tools", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S3-A-claude",
+      "success": "fail",
+      "failureCategory": "Concept gap",
+      "failureCategoryDetail": "Agent didn't understand that LangGraph agents need a specific template and manifest format different from MAF. Tried to deploy a LangGraph app using MAF template.",
+      "readinessPillar": "Docs",
+      "rootCause": "Agent cannot find LangGraph-specific hosted agent template; falls back to MAF template and fails",
+      "improvementSuggestions": {
+        "docContent": "Create a dedicated LangGraph quickstart showing the LangGraph template, LangGraph-specific manifest, and framework differences",
+        "errorMessage": "When agent.yaml framework field is 'langgraph' but template is MAF, error should suggest the correct template",
+        "sampleCode": "LangGraph template sample with proper agent.yaml framework field"
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": "## Add LangGraph template reference\n\n```diff\n  ## Available Templates\n  \n  | Template | Framework | Description |\n  |----------|-----------|-------------|\n  | hosted-agent-quickstart-python | MAF | Basic Python agent |\n+ | hosted-agent-langgraph-python | LangGraph | LangGraph Python agent |\n```",
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 3,
+        "stuckPoints": ["Couldn't find LangGraph template", "Tried modifying MAF template to add LangGraph", "agent.yaml framework mismatch caused deploy failure"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.83,
+      "transcript": {
+        "excerpt": "Agent tried to build LangGraph agent using MAF template — framework mismatch caused deployment failure...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized (MAF template)" },
+          { "cmd": "pip install langgraph", "exitCode": 0, "output": "Successfully installed langgraph-0.3.1" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 1, "output": "ERROR: Agent validation failed — framework 'langgraph' not supported by template 'hosted-agent-quickstart-python'" }
+        ],
+        "reasoning": [
+          "I need to create a LangGraph agent. Let me search for a LangGraph template.",
+          "No LangGraph template found. I'll use the MAF template and modify it.",
+          "Deploy failed — the template doesn't support LangGraph framework."
+        ],
+        "errors": [
+          "ERROR: Agent validation failed — framework 'langgraph' not supported by template",
+          "manifest.yaml: unsupported framework 'langgraph' for template 'hosted-agent-quickstart-python'"
+        ],
+        "durationSeconds": 1050
+      },
+      "_meta": { "scenario": 3, "scenarioName": "LangGraph Agent", "strategy": "A", "strategyName": "Open-Ended", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S3-A-copilot",
+      "success": "fail",
+      "failureCategory": "Docs gap",
+      "failureCategoryDetail": "Agent searched for LangGraph hosted agent docs but found nothing relevant. All docs point to MAF only.",
+      "readinessPillar": "Docs",
+      "rootCause": "No public documentation exists for deploying LangGraph agents as hosted agents — only MAF docs available",
+      "improvementSuggestions": {
+        "docContent": "Publish a LangGraph-specific quickstart for hosted agents with framework differences explained",
+        "errorMessage": null,
+        "sampleCode": "End-to-end LangGraph hosted agent sample"
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": false,
+        "iterationCount": 2,
+        "stuckPoints": ["No LangGraph docs for hosted agents", "Tried to reverse-engineer from MAF template"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.85,
+      "transcript": {
+        "excerpt": "Agent searched extensively for LangGraph hosted agent docs — nothing relevant found...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-langgraph-python", "exitCode": 1, "output": "ERROR: Template 'hosted-agent-langgraph-python' not found" },
+          { "cmd": "azd ai agent init", "exitCode": 0, "output": "Available templates:\n  - hosted-agent-quickstart-python\n  - hosted-agent-quickstart-dotnet" }
+        ],
+        "reasoning": [
+          "Searching for LangGraph hosted agent template. None found.",
+          "Only MAF templates available. I don't know how to adapt these for LangGraph."
+        ],
+        "errors": [
+          "Template 'hosted-agent-langgraph-python' not found",
+          "Timeout — could not find path to deploy LangGraph as hosted agent"
+        ],
+        "durationSeconds": 1200
+      },
+      "_meta": { "scenario": 3, "scenarioName": "LangGraph Agent", "strategy": "A", "strategyName": "Open-Ended", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S3-B-claude",
+      "success": "pass",
+      "failureCategory": null,
+      "failureCategoryDetail": null,
+      "readinessPillar": "Quality",
+      "rootCause": "No failure — quickstart URL included enough context for agent to adapt MAF template for LangGraph",
+      "improvementSuggestions": { "docContent": null, "errorMessage": null, "sampleCode": null },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": { "usedTemplate": true, "iterationCount": 2, "stuckPoints": ["Initial MAF template needed Dockerfile modification for LangGraph"], "timeoutReached": false },
+      "confidenceScore": 0.80,
+      "transcript": {
+        "excerpt": "Agent followed quickstart, adapted for LangGraph by modifying Dockerfile and requirements, succeeded after one retry...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "pip install langgraph", "exitCode": 0, "output": "Installed" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed" },
+          { "cmd": "azd ai agent invoke --prompt 'Run a multi-step analysis'", "exitCode": 0, "output": "Analysis complete: Step 1: data collection..." }
+        ],
+        "reasoning": [
+          "Following quickstart but adapting for LangGraph. Need to modify Dockerfile to install langgraph.",
+          "First attempt failed — missing langgraph in requirements.txt. Fixed and retrying.",
+          "Deploy succeeded after adding langgraph to requirements."
+        ],
+        "errors": [],
+        "durationSeconds": 720
+      },
+      "_meta": { "scenario": 3, "scenarioName": "LangGraph Agent", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S3-B-copilot",
+      "success": "partial",
+      "failureCategory": "Docker build failure",
+      "failureCategoryDetail": "Agent followed docs and got through provision/deploy but Docker build failed on ARM vs AMD architecture mismatch. Agent couldn't resolve the platform flag.",
+      "readinessPillar": "Tools",
+      "rootCause": "Docker build fails with 'exec format error' on ARM machines when building for AMD64 — docs don't mention --platform flag",
+      "improvementSuggestions": {
+        "docContent": "Add note about --platform linux/amd64 for ARM-based dev machines",
+        "errorMessage": "Docker build error should suggest --platform flag when detecting architecture mismatch",
+        "sampleCode": null
+      },
+      "cliInteractiveIssues": [
+        { "cli": "docker", "prompt": "Docker Desktop is not running. Start Docker Desktop?", "missingFlag": "--no-prompt" }
+      ],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": true,
+        "iterationCount": 3,
+        "stuckPoints": ["Docker build ARM/AMD mismatch", "Tried multiple base images"],
+        "timeoutReached": false
+      },
+      "confidenceScore": 0.78,
+      "transcript": {
+        "excerpt": "Agent followed docs but Docker build failed on ARM architecture...",
+        "commands": [
+          { "cmd": "azd ai agent init --template hosted-agent-quickstart-python", "exitCode": 0, "output": "Initialized" },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 1, "output": "Docker build failed: exec format error" },
+          { "cmd": "docker build --platform linux/amd64 .", "exitCode": 0, "output": "Built successfully" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed (but invoke returned empty)" }
+        ],
+        "reasoning": [
+          "Docker build failed with exec format error — this is an ARM vs AMD issue.",
+          "Added --platform flag. Build succeeded but deploy returns empty on invoke."
+        ],
+        "errors": [
+          "Docker build failed: exec /usr/local/bin/python3: exec format error",
+          "azd ai agent invoke returned empty response after deploy"
+        ],
+        "durationSeconds": 980
+      },
+      "_meta": { "scenario": 3, "scenarioName": "LangGraph Agent", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S4-A-claude",
+      "success": "fail",
+      "failureCategory": "Manifest format confusion",
+      "failureCategoryDetail": "Agent confused agent.yaml with agent.manifest.yaml — created a single 'agent.yaml' that mixed fields from both specs",
+      "readinessPillar": "Seams",
+      "rootCause": "No public docs explain the manifest trinity (agent.yaml + agent.manifest.yaml + azure.yaml) and which fields are required",
+      "improvementSuggestions": {
+        "docContent": "Create a 'manifest reference' page explaining agent.yaml vs agent.manifest.yaml vs azure.yaml — when to use each, required fields, and how they relate",
+        "errorMessage": "Validation error should specify which file (agent.yaml or agent.manifest.yaml) has the problem and what fields are expected",
+        "sampleCode": "Minimal valid agent.yaml + agent.manifest.yaml + azure.yaml set for migration"
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": "## Add manifest trinity reference\n\n```diff\n+ ## Manifest Files Reference\n+ \n+ Hosted agents require three manifest files:\n+ \n+ | File | Purpose | Key Fields |\n+ |------|---------|------------|\n+ | `agent.yaml` | Agent runtime config | name, version, framework, entrypoint |\n+ | `agent.manifest.yaml` | Agent metadata | capabilities, model, tools |\n+ | `azure.yaml` | Azure deployment | services, infra, hooks |\n```",
+      "agentPath": {
+        "usedTemplate": false,
+        "iterationCount": 5,
+        "stuckPoints": ["Confused agent.yaml with agent.manifest.yaml", "Created hybrid file with fields from both", "Validation errors were unhelpful — just said 'invalid manifest'"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.88,
+      "transcript": {
+        "excerpt": "Agent tried to containerize existing agent but confused the manifest files...",
+        "commands": [
+          { "cmd": "cat agent.yaml", "exitCode": 0, "output": "name: my-agent\nversion: 1.0\ncapabilities: [web_search]\nmodel: gpt-4o-mini\nentrypoint: agent.py" },
+          { "cmd": "azd deploy", "exitCode": 1, "output": "ERROR: Invalid agent manifest — unexpected fields: 'capabilities', 'model'" },
+          { "cmd": "azd deploy", "exitCode": 1, "output": "ERROR: Missing required file: agent.manifest.yaml" }
+        ],
+        "reasoning": [
+          "I need to create manifest files for my existing agent. What files are needed?",
+          "I'll create agent.yaml with all the agent metadata.",
+          "Deploy says 'unexpected fields'. The docs don't clearly separate which fields go in which file."
+        ],
+        "errors": [
+          "ERROR: Invalid agent manifest — unexpected fields: 'capabilities', 'model'",
+          "ERROR: Missing required file: agent.manifest.yaml",
+          "Timeout — could not resolve manifest format"
+        ],
+        "durationSeconds": 1200
+      },
+      "_meta": { "scenario": 4, "scenarioName": "Migration (Existing Agent → Hosted)", "strategy": "A", "strategyName": "Open-Ended", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S4-A-copilot",
+      "success": "fail",
+      "failureCategory": "Concept gap",
+      "failureCategoryDetail": "Agent didn't understand the hosted agent deployment model at all — tried to deploy a Flask app to App Service instead of using the hosted agent pipeline",
+      "readinessPillar": "Docs",
+      "rootCause": "Without docs, agent defaults to 'deploy Python app to Azure' mental model — doesn't discover the hosted agent pipeline at all",
+      "improvementSuggestions": {
+        "docContent": "Add a 'What is a hosted agent?' conceptual overview that explains the deployment model vs. traditional web apps",
+        "errorMessage": null,
+        "sampleCode": "Migration guide: from Flask/FastAPI app to hosted agent step-by-step"
+      },
+      "cliInteractiveIssues": [
+        { "cli": "azd", "prompt": "Select a location for the new environment", "missingFlag": "--location" }
+      ],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": false,
+        "iterationCount": 2,
+        "stuckPoints": ["Tried to deploy as App Service web app", "Never discovered azd ai agent commands"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.82,
+      "transcript": {
+        "excerpt": "Agent tried to deploy existing agent as App Service web app — wrong paradigm entirely...",
+        "commands": [
+          { "cmd": "az webapp create --name my-agent-app --resource-group rg-agent", "exitCode": 0, "output": "Created web app" },
+          { "cmd": "az webapp deploy --src-path . --name my-agent-app", "exitCode": 0, "output": "Deployed to App Service" },
+          { "cmd": "curl https://my-agent-app.azurewebsites.net/health", "exitCode": 0, "output": "200 OK" },
+          { "cmd": "azd ai agent invoke", "exitCode": 1, "output": "ERROR: No hosted agent found in current environment" }
+        ],
+        "reasoning": [
+          "I need to deploy my existing agent to Azure. I'll use App Service.",
+          "App Service deploy worked but azd ai agent invoke doesn't find it — I deployed wrong."
+        ],
+        "errors": [
+          "ERROR: No hosted agent found in current environment",
+          "Timeout — agent deployed to wrong service, never discovered hosted agent pipeline"
+        ],
+        "durationSeconds": 1200
+      },
+      "_meta": { "scenario": 4, "scenarioName": "Migration (Existing Agent → Hosted)", "strategy": "A", "strategyName": "Open-Ended", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S4-B-claude",
+      "success": "partial",
+      "failureCategory": "azure.yaml structure wrong",
+      "failureCategoryDetail": "Agent followed migration docs but azure.yaml service configuration had wrong resource type — used 'web' instead of 'agent'",
+      "readinessPillar": "Seams",
+      "rootCause": "azure.yaml docs show 'type: web' for services but hosted agents need 'type: agent' — docs don't clarify this for migration",
+      "improvementSuggestions": {
+        "docContent": "In azure.yaml reference, clearly document the 'type: agent' service type vs 'type: web' and when to use each",
+        "errorMessage": "When azure.yaml has type 'web' but agent.yaml exists, warn about mismatched service type",
+        "sampleCode": null
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": "## Fix azure.yaml service type in migration docs\n\n```diff\n  services:\n    my-agent:\n-     type: web\n+     type: agent\n      host: containerapp\n      project: .\n```",
+      "agentPath": {
+        "usedTemplate": false,
+        "iterationCount": 3,
+        "stuckPoints": ["azure.yaml service type wrong — 'web' vs 'agent'"],
+        "timeoutReached": false
+      },
+      "confidenceScore": 0.85,
+      "transcript": {
+        "excerpt": "Agent followed migration quickstart, created manifests, but azure.yaml had wrong service type...",
+        "commands": [
+          { "cmd": "cat azure.yaml", "exitCode": 0, "output": "services:\n  my-agent:\n    type: web\n    host: containerapp\n    project: ." },
+          { "cmd": "azd provision", "exitCode": 0, "output": "(✓) Provisioned" },
+          { "cmd": "azd deploy", "exitCode": 0, "output": "(✓) Deployed as web app" },
+          { "cmd": "azd ai agent invoke --prompt 'Hello'", "exitCode": 1, "output": "ERROR: No hosted agent found — service deployed as web app, not agent" }
+        ],
+        "reasoning": [
+          "Following the quickstart to create azure.yaml. Using 'type: web' as shown in examples.",
+          "Deploy succeeded but invoke fails — it's a web app, not a hosted agent.",
+          "I see — the service type should be 'agent', not 'web'."
+        ],
+        "errors": [
+          "ERROR: No hosted agent found — service deployed as web app, not agent"
+        ],
+        "durationSeconds": 850
+      },
+      "_meta": { "scenario": 4, "scenarioName": "Migration (Existing Agent → Hosted)", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "claude", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    },
+    {
+      "runId": "S4-B-copilot",
+      "success": "fail",
+      "failureCategory": "Manifest format confusion",
+      "failureCategoryDetail": "Agent created agent.manifest.yaml but with wrong field names — used 'tools' instead of 'capabilities', 'endpoint' instead of 'entrypoint'",
+      "readinessPillar": "Seams",
+      "rootCause": "No public docs explain the manifest trinity (agent.yaml + agent.manifest.yaml + azure.yaml) and which fields are required",
+      "improvementSuggestions": {
+        "docContent": "Publish manifest file schema reference with required vs optional fields and examples",
+        "errorMessage": "Manifest validation should suggest correct field names when common typos/alternatives are detected (e.g., 'tools' → 'capabilities')",
+        "sampleCode": null
+      },
+      "cliInteractiveIssues": [],
+      "draftFix": null,
+      "agentPath": {
+        "usedTemplate": false,
+        "iterationCount": 4,
+        "stuckPoints": ["Wrong field names in agent.manifest.yaml", "Validation errors didn't suggest correct fields"],
+        "timeoutReached": true
+      },
+      "confidenceScore": 0.80,
+      "transcript": {
+        "excerpt": "Agent created manifest files but used wrong field names throughout...",
+        "commands": [
+          { "cmd": "cat agent.manifest.yaml", "exitCode": 0, "output": "tools:\n  - web_search\nendpoint: agent.py\nruntime: python3" },
+          { "cmd": "azd deploy", "exitCode": 1, "output": "ERROR: Invalid manifest — unknown fields: 'tools', 'endpoint', 'runtime'" },
+          { "cmd": "azd deploy", "exitCode": 1, "output": "ERROR: Invalid manifest — 'capabilities' is required" }
+        ],
+        "reasoning": [
+          "Creating manifest files for migration. Using field names that seem reasonable.",
+          "Manifest rejected — 'tools' should be 'capabilities'? The error messages are confusing."
+        ],
+        "errors": [
+          "ERROR: Invalid manifest — unknown fields: 'tools', 'endpoint', 'runtime'",
+          "ERROR: Invalid manifest — 'capabilities' is required",
+          "Timeout — could not resolve manifest format after 4 attempts"
+        ],
+        "durationSeconds": 1200
+      },
+      "_meta": { "scenario": 4, "scenarioName": "Migration (Existing Agent → Hosted)", "strategy": "B", "strategyName": "Doc-Pointed", "agent": "copilot", "gradedAt": "2026-05-11T10:30:00Z", "model": "gpt-5.4", "temperature": 0.1 }
+    }
+  ]
+}
