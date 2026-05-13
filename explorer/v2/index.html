@@ -42,13 +42,14 @@
 
     <!-- Summary hero -->
     <section class="hero-panel">
+      <div id="harness-banner" class="harness-banner hidden"></div>
+      <div id="bucket-hero" class="bucket-hero hidden"></div>
       <div id="hero-cards" class="hero-cards"></div>
     </section>
 
     <!-- Tabs -->
     <nav class="tabs">
       <button class="tab active" data-tab="dashboard">Dashboard</button>
-      <button class="tab" data-tab="cell-details">Cell Details</button>
       <button class="tab" data-tab="runs">Run Details</button>
       <button class="tab" data-tab="taxonomy">Failure Taxonomy</button>
     </nav>
@@ -101,18 +102,6 @@
       </div>
     </section>
 
-    <!-- Cell Details Tab -->
-    <section id="tab-cell-details" class="tab-panel hidden">
-      <div id="cell-detail-empty" class="detail-empty">
-        <h2>Click a heatmap cell</h2>
-        <p>Select any cell in the scorecard matrix to see why it passed, failed, or timed out.</p>
-      </div>
-      <div id="cell-detail-content" class="hidden">
-        <div id="cell-detail-header" class="cell-detail-header"></div>
-        <div id="cell-detail-agents" class="cell-detail-agents"></div>
-      </div>
-    </section>
-
     <!-- Run Details Tab -->
     <section id="tab-runs" class="tab-panel hidden">
       <div class="runs-layout">
@@ -123,6 +112,12 @@
             <option value="pass">Pass</option>
             <option value="partial">Partial</option>
             <option value="fail">Fail</option>
+            <option value="bucket:product">🏗️ Product issues</option>
+            <option value="bucket:docs">📄 Docs gaps</option>
+            <option value="bucket:skills">🔌 Skills gaps</option>
+            <option value="bucket:harness">🔧 Harness bugs</option>
+            <option value="bucket:pass">✅ Passing</option>
+            <option value="platform">Platform failures (all non-harness)</option>
           </select>
           <div id="run-sidebar-list" class="sidebar-list"></div>
         </aside>

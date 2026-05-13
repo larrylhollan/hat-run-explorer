@@ -105,6 +105,19 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
   display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.75rem; margin-bottom: 1rem;
 }
+
+/* Harness-limitation banner */
+.harness-banner {
+  display: flex; align-items: flex-start; gap: 0.75rem;
+  background: rgba(251, 191, 36, 0.08); border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius); padding: 0.85rem 1.1rem; margin-bottom: 1rem;
+  font-size: 0.85rem; line-height: 1.5;
+}
+.harness-banner.hidden { display: none !important; }
+.banner-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+.banner-content { flex: 1; }
+.banner-detail { display: block; margin-top: 0.25rem; font-size: 0.78rem; color: var(--text-dim); }
+.sidebar-badge.harness { background: rgba(251, 191, 36, 0.15); color: var(--partial); font-size: 0.65rem; }
 .hero-card {
   background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 1rem 1.25rem; text-align: center;
@@ -157,11 +170,33 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 .scorecard-table td.cell-pass { background: var(--pass-bg); color: var(--pass); font-weight: 600; }
 .scorecard-table td.cell-partial { background: var(--partial-bg); color: var(--partial); font-weight: 600; }
 .scorecard-table td.cell-fail { background: var(--fail-bg); color: var(--fail); font-weight: 600; }
+.scorecard-table td.cell-harness {
+  background: repeating-linear-gradient(
+    -45deg,
+    rgba(251, 191, 36, 0.06),
+    rgba(251, 191, 36, 0.06) 4px,
+    rgba(251, 191, 36, 0.12) 4px,
+    rgba(251, 191, 36, 0.12) 8px
+  );
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+}
 .scorecard-table td.cell-empty { color: var(--text-dim); }
 .scorecard-table .row-label { text-align: left; font-weight: 600; color: var(--text); white-space: nowrap; }
 
 /* GA Readiness */
 .readiness-gauge { text-align: center; margin: 1.5rem 0; }
+.dual-readiness {
+  display: flex; align-items: center; justify-content: center; gap: 1.5rem;
+}
+.readiness-block { text-align: center; }
+.readiness-divider {
+  width: 1px; height: 60px; background: var(--border);
+}
+.gauge-score.harness { font-size: 2rem; }
+.gauge-sublabel { font-size: 0.72rem; color: var(--text-dim); margin-top: 0.15rem; }
 .gauge-ring {
   width: 120px; height: 120px; margin: 0 auto 0.75rem;
 }
@@ -357,118 +392,165 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
   .runs-layout { grid-template-columns: 1fr; }
   .run-list-sidebar { max-height: 300px; }
   .meta-grid { grid-template-columns: 1fr; }
-  .cell-detail-agents { grid-template-columns: 1fr; }
+  .bucket-cards { grid-template-columns: repeat(3, 1fr); }
+  .bucket-hero { flex-direction: column; }
 }
 @media (max-width: 600px) {
   .topbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .hero-cards { grid-template-columns: repeat(2, 1fr); }
+  .bucket-cards { grid-template-columns: repeat(2, 1fr); }
 }
 
 /* ==========================================================================
-   Cell Details Tab
+   4-Bucket Failure Classification Hero
    ========================================================================== */
 
-.cell-detail-header {
-  margin-bottom: 1.25rem;
-}
-.cell-detail-header h2 {
-  font-size: 1.15rem;
-  margin-bottom: 0.25rem;
-}
-
-.cell-detail-agents {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
-  gap: 1rem;
-}
-
-.cell-agent-card {
+.bucket-hero {
+  display: flex;
+  align-items: stretch;
+  gap: 1.25rem;
+  margin-bottom: 1rem;
+  padding: 1.25rem;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.25rem;
-  overflow-y: auto;
-  max-height: calc(100vh - 240px);
+  box-shadow: var(--shadow);
 }
+.bucket-hero.hidden { display: none !important; }
 
-.cell-agent-header {
-  margin-bottom: 1rem;
-}
-.cell-agent-header h3 {
-  font-size: 1rem;
-  font-weight: 700;
-  margin-bottom: 0.25rem;
-}
-.cell-agent-meta {
+.bucket-platform-score {
   display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 180px;
+  padding-right: 1.25rem;
+  border-right: 1px solid var(--border);
+}
+.bps-score {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.bps-label {
   font-size: 0.82rem;
   color: var(--text-muted);
+  margin-top: 0.25rem;
+  text-align: center;
+}
+.bps-note {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+.bps-agents {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-top: 0.5rem;
+  text-align: center;
 }
 
-.cell-failure-info {
-  background: var(--fail-bg);
-  border: 1px solid rgba(248, 113, 113, 0.2);
+.bucket-cards {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.bucket-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 0.5rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 0.75rem;
-  margin-bottom: 1rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+  text-align: center;
 }
-.cell-info-row {
-  font-size: 0.82rem;
-  margin-bottom: 0.25rem;
+.bucket-card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--accent-dim);
+  transform: translateY(-2px);
 }
-.cell-info-row:last-child {
-  margin-bottom: 0;
+.bucket-card-icon {
+  font-size: 1.4rem;
+  margin-bottom: 0.35rem;
 }
-
-.cell-section {
-  margin-bottom: 1rem;
+.bucket-card-count {
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1.2;
 }
-.cell-section h4 {
-  font-size: 0.82rem;
-  font-weight: 700;
-  margin-bottom: 0.4rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.cell-section ul {
-  list-style: disc;
-  padding-left: 1.25rem;
-  font-size: 0.82rem;
-  color: var(--text-muted);
-}
-.cell-section ul li {
-  margin-bottom: 0.2rem;
-}
-
-.cell-view-full {
-  display: inline-block;
-  background: var(--accent-dim);
-  color: var(--accent);
-  border: 1px solid var(--accent);
-  border-radius: var(--radius-sm);
-  padding: 0.4rem 0.85rem;
-  font-size: 0.82rem;
+.bucket-card-label {
+  font-size: 0.75rem;
   font-weight: 600;
-  font-family: var(--font);
-  cursor: pointer;
-  transition: background 0.15s;
+  color: var(--text);
+  margin-top: 0.2rem;
 }
-.cell-view-full:hover {
-  background: var(--accent);
-  color: #fff;
+.bucket-card-desc {
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  margin-top: 0.1rem;
 }
 
-/* Heatmap cell clickable affordance */
-.scorecard-table td.heatmap-cell {
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-  position: relative;
+.bucket-verdict {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  border-left: 3px solid var(--accent);
 }
-.scorecard-table td.heatmap-cell:hover {
-  box-shadow: inset 0 0 0 2px var(--accent);
-  transform: scale(1.05);
-  z-index: 2;
+.bucket-verdict strong {
+  color: var(--text);
 }
+
+/* Bucket classification card in run detail */
+.bucket-classification-card {
+  margin-bottom: 1.25rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-input);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--fail);
+}
+.bcc-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.65rem;
+}
+.bcc-icon {
+  font-size: 1.2rem;
+}
+.bcc-bucket {
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+.bcc-row {
+  font-size: 0.82rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-muted);
+}
+.bcc-row strong {
+  color: var(--text);
+}
+.bcc-evidence {
+  margin-top: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  overflow-x: auto;
+}
+
+/* Sidebar bucket badges */
+.sidebar-badge.bucket-product { background: var(--fail-bg); color: var(--fail); font-size: 0.62rem; }
+.sidebar-badge.bucket-docs { background: var(--partial-bg); color: var(--partial); font-size: 0.62rem; }
+.sidebar-badge.bucket-skills { background: rgba(167, 139, 250, 0.15); color: #a78bfa; font-size: 0.62rem; }
+.sidebar-badge.bucket-harness { background: rgba(107, 112, 128, 0.15); color: var(--text-dim); font-size: 0.62rem; }

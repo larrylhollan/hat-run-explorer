@@ -1,7 +1,7 @@
 {
-  "version": "2.0",
+  "version": "2.1",
   "date": "2026-05-13",
-  "generatedAt": "2026-05-13T17:18:16.761858+00:00",
+  "generatedAt": "2026-05-13T17:52:38.938331+00:00",
   "graderModel": "gpt-5.4",
   "scorecard": {
     "total": 28,
@@ -10,6 +10,48 @@
     "fail": 22,
     "passRate": 0.214,
     "passPartialRate": 0.214
+  },
+  "cellClassification": {
+    "harnessLimitedCellIds": [
+      "S1-A-copilot",
+      "S1-B-copilot",
+      "S1-C-copilot",
+      "S1-D-copilot",
+      "S2-A-copilot",
+      "S2-B-copilot",
+      "S2-C-copilot",
+      "S2-D-copilot",
+      "S3-A-copilot",
+      "S3-B-copilot",
+      "S3-C-copilot",
+      "S3-D-copilot",
+      "S4-A-copilot",
+      "S4-B-copilot"
+    ],
+    "platformResultCellIds": [
+      "S1-A-claude",
+      "S1-B-claude",
+      "S1-C-claude",
+      "S1-D-claude",
+      "S2-A-claude",
+      "S2-B-claude",
+      "S2-C-claude",
+      "S2-D-claude",
+      "S3-A-claude",
+      "S3-B-claude",
+      "S3-C-claude",
+      "S3-D-claude",
+      "S4-A-claude",
+      "S4-B-claude"
+    ],
+    "harnessLimitedCount": 14,
+    "platformResultCount": 14,
+    "totalCells": 28,
+    "platformReadinessScore": 52,
+    "platformPassRate": 42.9,
+    "platformPassedRuns": 6,
+    "platformTestableRuns": 14,
+    "harnessOperationalPct": 50.0
   },
   "failureCategoryDistribution": {
     "execution_failure": 8,
@@ -161,6 +203,13 @@
         "scenario": 1,
         "strategy": "A",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "product",
+        "whatItTried": "Ran azd ai agent init with environment name",
+        "whyItFailed": "azd returned \"no project exists\" error in loop \u2014 env confusion between new project and existing env",
+        "whatWouldFix": "Fix azd init to handle fresh environments without requiring existing project context",
+        "evidenceQuote": "ERROR: no project exists in environment \"hat-s1a\". Run azd init first."
       }
     },
     {
@@ -173,6 +222,13 @@
         "scenario": 1,
         "strategy": "A",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -197,6 +253,13 @@
         "scenario": 1,
         "strategy": "B",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -209,6 +272,13 @@
         "scenario": 1,
         "strategy": "C",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "product",
+        "whatItTried": "Ran azd provision after successful init",
+        "whyItFailed": "RBAC propagation delay caused model deployment to fail \u2014 role assignment not yet effective",
+        "whatWouldFix": "Add retry logic for RBAC propagation in azd provision, or document the 60s wait requirement",
+        "evidenceQuote": "ERROR: AuthorizationFailed: principal does not have access to resource."
       }
     },
     {
@@ -221,6 +291,13 @@
         "scenario": 1,
         "strategy": "C",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -245,6 +322,13 @@
         "scenario": 1,
         "strategy": "D",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -257,6 +341,13 @@
         "scenario": 2,
         "strategy": "A",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "docs",
+        "whatItTried": "Searched for MAF+Toolbox quickstart docs",
+        "whyItFailed": "No quickstart documentation exists for wiring Toolbox (web_search, code_interpreter, file_search) into MAF agents",
+        "whatWouldFix": "Write quickstart at articles/ai-services/agents/quickstart-toolbox.md covering 3-tool setup",
+        "evidenceQuote": "Agent searched docs.microsoft.com for \"azure ai agent toolbox\" \u2014 0 relevant results"
       }
     },
     {
@@ -269,6 +360,13 @@
         "scenario": 2,
         "strategy": "A",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -281,6 +379,13 @@
         "scenario": 2,
         "strategy": "B",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "docs",
+        "whatItTried": "Followed doc-pointed link but docs had no Toolbox wiring instructions",
+        "whyItFailed": "Linked doc covers basic agent creation but omits Toolbox connection configuration",
+        "whatWouldFix": "Add Toolbox section to existing quickstart-code-first.md with connection_id setup",
+        "evidenceQuote": "Agent completed init but could not find how to wire code_interpreter tool"
       }
     },
     {
@@ -293,6 +398,13 @@
         "scenario": 2,
         "strategy": "B",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -305,6 +417,13 @@
         "scenario": 2,
         "strategy": "C",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "skills",
+        "whatItTried": "Used azure-skills plugin but deleted scaffold then searched for templates",
+        "whyItFailed": "Azure Skills plugin has no skill for Toolbox scenario \u2014 agent fell back to doc search and entered thinking loop",
+        "whatWouldFix": "Add toolbox-quickstart skill to microsoft/azure-skills covering 3-tool MAF setup",
+        "evidenceQuote": "Skills plugin returned 0 results for \"azure hosted agent toolbox setup\""
       }
     },
     {
@@ -317,6 +436,13 @@
         "scenario": 2,
         "strategy": "C",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -329,6 +455,13 @@
         "scenario": 2,
         "strategy": "D",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "skills",
+        "whatItTried": "Attempted MCP plugin query for Toolbox guidance",
+        "whyItFailed": "MCP plugin failed cold-start (connection timeout 30s), then time budget exhausted",
+        "whatWouldFix": "Fix MCP cold-start reliability + add toolbox skill content",
+        "evidenceQuote": "1 MCP server failed \u00b7 /mcp: ECONNREFUSED after 30000ms"
       }
     },
     {
@@ -341,6 +474,13 @@
         "scenario": 2,
         "strategy": "D",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -353,6 +493,13 @@
         "scenario": 3,
         "strategy": "A",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "product",
+        "whatItTried": "Ran azd provision for LangGraph scenario",
+        "whyItFailed": "Azure resource provisioning took >90s and agent hit time budget before completion",
+        "whatWouldFix": "Increase provision timeout in azd or add async provisioning status endpoint",
+        "evidenceQuote": "Provisioning state: InProgress after 87s... [TIMEOUT]"
       }
     },
     {
@@ -365,6 +512,13 @@
         "scenario": 3,
         "strategy": "A",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -389,6 +543,13 @@
         "scenario": 3,
         "strategy": "B",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -413,6 +574,13 @@
         "scenario": 3,
         "strategy": "C",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -437,6 +605,13 @@
         "scenario": 3,
         "strategy": "D",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -449,6 +624,13 @@
         "scenario": 4,
         "strategy": "A",
         "agent": "claude"
+      },
+      "failureInfo": {
+        "bucket": "docs",
+        "whatItTried": "Searched for migration-to-hosted-agents guide",
+        "whyItFailed": "No migration guide exists \u2014 agent found agent.py referencing nonexistent azure-ai-agent package",
+        "whatWouldFix": "Write migration guide: articles/ai-services/agents/migrate-from-sdk-to-hosted.md",
+        "evidenceQuote": "ModuleNotFoundError: No module named \"azure.ai.agent\""
       }
     },
     {
@@ -461,6 +643,13 @@
         "scenario": 4,
         "strategy": "A",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     },
     {
@@ -485,6 +674,13 @@
         "scenario": 4,
         "strategy": "B",
         "agent": "copilot"
+      },
+      "failureInfo": {
+        "bucket": "harness",
+        "whatItTried": "Copilot CLI received prompt but tmux paste mechanism failed to deliver input",
+        "whyItFailed": "Agent sat at idle prompt for 20 minutes (tmux paste injection broken for Copilot input model)",
+        "whatWouldFix": "Fix Copilot input injection in runner (HOL-5501 track)",
+        "evidenceQuote": "timeout_stuck: 1200s elapsed with no agent activity"
       }
     }
   ]

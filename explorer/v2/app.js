@@ -13,7 +13,6 @@ const state = {
   data: null,        // currently active run data
   tab: 'dashboard',
   selectedRunId: null,
-  selectedCell: null, // { scenario, strategy } for cell-details tab
   searchFilter: '',
   outcomeFilter: 'all',
 };
@@ -63,10 +62,6 @@ const els = {
   categoryBars: $('category-bars'),
   rootCauses: $('root-causes'),
   proposedFixes: $('proposed-fixes'),
-  cellDetailEmpty: $('cell-detail-empty'),
-  cellDetailContent: $('cell-detail-content'),
-  cellDetailHeader: $('cell-detail-header'),
-  cellDetailAgents: $('cell-detail-agents'),
 };
 
 // ---------------------------------------------------------------------------
@@ -98,12 +93,243 @@ function gradeLabel(g) {
 }
 
 function filteredGrades() {
+  const cc = state.data?.cellClassification || {};
+  const harnessLimitedSet = new Set(cc.harnessLimitedCellIds || []);
+
   return getGrades().filter(g => {
     const text = [g.runId, gradeLabel(g), g.rootCause, g.failureCategory, g.failureCategoryDetail].join(' ').toLowerCase();
     const searchOk = !state.searchFilter || text.includes(state.searchFilter.toLowerCase());
-    const outcomeOk = state.outcomeFilter === 'all' || g.success === state.outcomeFilter;
+    let outcomeOk;
+    if (state.outcomeFilter === 'all') {
+      outcomeOk = true;
+    } else if (state.outcomeFilter === 'harness') {
+      outcomeOk = harnessLimitedSet.has(g.runId) || getBucketForGrade(g) === 'harness';
+    } else if (state.outcomeFilter === 'platform') {
+      outcomeOk = !harnessLimitedSet.has(g.runId) && g.success !== 'pass' && getBucketForGrade(g) !== 'harness';
+    } else if (state.outcomeFilter.startsWith('bucket:')) {
+      const targetBucket = state.outcomeFilter.slice(7);
+      outcomeOk = getBucketForGrade(g) === targetBucket;
+    } else {
+      outcomeOk = g.success === state.outcomeFilter;
+    }
     return searchOk && outcomeOk;
   });
+}
+
+// ---------------------------------------------------------------------------
+// Harness-limitation banner
+// ---------------------------------------------------------------------------
+
+function renderHarnessBanner() {
+  const cc = state.data?.cellClassification || {};
+  const harnessLimited = cc.harnessLimitedCount ?? 0;
+  const total = cc.totalCells ?? (state.data?.scorecard?.total || 0);
+  const platformTestable = cc.platformTestableRuns ?? total;
+  const banner = $('harness-banner');
+  if (!banner) return;
+
+  if (harnessLimited > 0) {
+    const ids = cc.harnessLimitedCellIds || [];
+    // Determine agent breakdown of harness-limited
+    const grades = getGrades();
+    const limitedByAgent = {};
+    for (const id of ids) {
+      const g = grades.find(g => g.runId === id);
+      if (g) {
+        const agent = g._meta?.agent || 'unknown';
+        limitedByAgent[agent] = (limitedByAgent[agent] || 0) + 1;
+      }
+    }
+    const agentParts = Object.entries(limitedByAgent).map(([a, n]) => `${AGENT_LABELS[a] || a}: ${n}`).join(', ');
+
+    banner.classList.remove('hidden');
+    banner.innerHTML = `
+      <div class="banner-icon">⚠️</div>
+      <div class="banner-content">
+        <strong>Harness Limitation Notice:</strong>
+        ${harnessLimited}/${total} cells are harness-limited (${agentParts}) — platform readiness score based on ${platformTestable} testable cells only.
+        <span class="banner-detail">Harness-limited cells are shown with ⚠ striping in the scorecard matrix.</span>
+      </div>`;
+  } else {
+    banner.classList.add('hidden');
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 4-Bucket failure classification hero
+// ---------------------------------------------------------------------------
+
+const BUCKET_CONFIG = {
+  product: { icon: '🏗️', label: 'Product Issues', desc: 'Needs Azure team fix', color: 'var(--fail)' },
+  docs: { icon: '📄', label: 'Docs Gaps', desc: 'Needs content', color: 'var(--partial)' },
+  skills: { icon: '🔌', label: 'Skills Gaps', desc: 'Needs plugin update', color: '#a78bfa' },
+  harness: { icon: '🔧', label: 'Harness Bugs', desc: 'Our infra, being fixed', color: 'var(--text-dim)' },
+};
+
+function getBucketData() {
+  const grades = getGrades();
+  const buckets = { product: [], docs: [], skills: [], harness: [], pass: [] };
+
+  for (const g of grades) {
+    if (g.success === 'pass') {
+      buckets.pass.push(g);
+      continue;
+    }
+    // Get bucket from failureInfo.bucket or cellClassification fallback
+    const bucket = g.failureInfo?.bucket || inferBucket(g);
+    if (buckets[bucket]) {
+      buckets[bucket].push(g);
+    } else {
+      // Unknown bucket → product as default for non-pass
+      buckets.product.push(g);
+    }
+  }
+  return buckets;
+}
+
+function inferBucket(g) {
+  // Fallback inference from existing data when failureInfo.bucket is not yet available
+  const cc = state.data?.cellClassification || {};
+  const harnessSet = new Set(cc.harnessLimitedCellIds || []);
+
+  if (harnessSet.has(g.runId)) return 'harness';
+
+  // Try to classify from rootCause / failureCategory
+  const rc = (g.rootCause || '').toLowerCase();
+  const fc = (g.failureCategory || '').toLowerCase();
+  const combined = rc + ' ' + fc;
+
+  // Harness patterns
+  if (combined.includes('timeout') && combined.includes('copilot')) return 'harness';
+  if (combined.includes('tmux') || combined.includes('runner') || combined.includes('idle')) return 'harness';
+  if (combined.includes('trust prompt') || combined.includes('prompt injection')) return 'harness';
+  if (combined.includes('mcp') && combined.includes('install')) return 'harness';
+
+  // Product patterns
+  if (combined.includes('rbac') || combined.includes('permission') || combined.includes('quota')) return 'product';
+  if (combined.includes('azure') && (combined.includes('error') || combined.includes('500') || combined.includes('4xx'))) return 'product';
+  if (combined.includes('deploy') && combined.includes('fail')) return 'product';
+  if (combined.includes('provision') && combined.includes('fail')) return 'product';
+
+  // Skills patterns
+  if (combined.includes('skill') && !combined.includes('install')) return 'skills';
+  if (combined.includes('plugin') && combined.includes('gap')) return 'skills';
+
+  // Docs patterns (default for non-pass with no other signal)
+  if (combined.includes('doc') || combined.includes('unclear') || combined.includes('not found')) return 'docs';
+  if (combined.includes('wrong approach') || combined.includes('concept')) return 'docs';
+
+  // Final fallback: check pillar
+  const pillar = (g.readinessPillar || '').toLowerCase();
+  if (pillar === 'docs' || pillar === 'samples') return 'docs';
+  if (pillar === 'tools') return 'product';
+  if (pillar === 'seams') return 'product';
+
+  return 'docs'; // safe default
+}
+
+function renderBucketHero() {
+  const bucketEl = $('bucket-hero');
+  if (!bucketEl) return;
+
+  const grades = getGrades();
+  if (!grades.length) {
+    bucketEl.classList.add('hidden');
+    return;
+  }
+
+  const buckets = getBucketData();
+  const total = grades.length;
+  const passCount = buckets.pass.length;
+
+  // Platform score (excludes harness)
+  const platformTestable = total - buckets.harness.length;
+  const platformPass = passCount;
+  const platformScore = platformTestable > 0 ? Math.round((platformPass / platformTestable) * 100) : 0;
+
+  // Agent breakdown
+  const claudeGrades = grades.filter(g => g._meta?.agent === 'claude');
+  const copilotGrades = grades.filter(g => g._meta?.agent === 'copilot');
+  const claudePass = claudeGrades.filter(g => g.success === 'pass').length;
+  const copilotPass = copilotGrades.filter(g => g.success === 'pass').length;
+  const copilotHarness = copilotGrades.filter(g => {
+    const b = g.failureInfo?.bucket || inferBucket(g);
+    return b === 'harness';
+  }).length;
+  const copilotStatus = copilotHarness > copilotGrades.length * 0.7
+    ? 'pending fix'
+    : `${Math.round((copilotPass / (copilotGrades.length || 1)) * 100)}%`;
+
+  bucketEl.classList.remove('hidden');
+
+  let html = `
+    <div class="bucket-platform-score">
+      <div class="bps-score" style="color:${platformScore >= 70 ? 'var(--pass)' : platformScore >= 40 ? 'var(--partial)' : 'var(--fail)'}">
+        ${platformScore}/100
+      </div>
+      <div class="bps-label">Platform Score <span class="bps-note">(excludes harness bugs)</span></div>
+      <div class="bps-agents">
+        Claude: ${Math.round((claudePass / (claudeGrades.length || 1)) * 100)}% | Copilot: ${copilotStatus}
+      </div>
+    </div>
+    <div class="bucket-cards">`;
+
+  // Render each bucket
+  for (const [key, config] of Object.entries(BUCKET_CONFIG)) {
+    const cells = buckets[key];
+    const count = cells.length;
+    html += `
+      <div class="bucket-card" data-bucket="${key}">
+        <div class="bucket-card-icon">${config.icon}</div>
+        <div class="bucket-card-count" style="color:${config.color}">${count} cells</div>
+        <div class="bucket-card-label">${config.label}</div>
+        <div class="bucket-card-desc">${config.desc}</div>
+      </div>`;
+  }
+
+  // Pass bucket
+  html += `
+      <div class="bucket-card bucket-pass" data-bucket="pass">
+        <div class="bucket-card-icon">✅</div>
+        <div class="bucket-card-count" style="color:var(--pass)">${passCount} cells</div>
+        <div class="bucket-card-label">Passing</div>
+        <div class="bucket-card-desc">End-to-end success</div>
+      </div>`;
+
+  html += '</div>';
+
+  // Ship-today verdict
+  const productCount = buckets.product.length;
+  const docsCount = buckets.docs.length;
+  html += `
+    <div class="bucket-verdict">
+      <strong>Ship-today verdict:</strong>
+      Platform readiness: ${platformScore}/100.
+      ${productCount} product bug${productCount !== 1 ? 's' : ''} + ${docsCount} doc gap${docsCount !== 1 ? 's' : ''} blocking.
+      ${copilotHarness > 0 ? `Copilot ${copilotStatus === 'pending fix' ? 'untested (harness fix deploying)' : copilotStatus + ' pass rate'}.` : ''}
+    </div>`;
+
+  bucketEl.innerHTML = html;
+
+  // Bind click handlers for bucket drill-down
+  bucketEl.querySelectorAll('.bucket-card[data-bucket]').forEach(card => {
+    card.addEventListener('click', () => {
+      const bucket = card.dataset.bucket;
+      showBucketDrillDown(bucket);
+    });
+  });
+}
+
+function showBucketDrillDown(bucket) {
+  // Switch to runs tab with the bucket filter active
+  state.outcomeFilter = `bucket:${bucket}`;
+  els.runOutcomeFilter.value = `bucket:${bucket}`;
+  switchTab('runs');
+}
+
+function getBucketForGrade(g) {
+  if (g.success === 'pass') return 'pass';
+  return g.failureInfo?.bucket || inferBucket(g);
 }
 
 // ---------------------------------------------------------------------------
@@ -114,6 +340,18 @@ function renderHero() {
   const sc = state.data?.scorecard || { total: 0, pass: 0, partial: 0, fail: 0 };
   const rate = sc.total ? Math.round((sc.pass / sc.total) * 100) : 0;
   const passPartialRate = sc.total ? Math.round(((sc.pass + sc.partial) / sc.total) * 100) : 0;
+
+  // If we have grades to do bucket analysis, the bucket hero replaces the old cards
+  const grades = getGrades();
+  if (grades.length > 0) {
+    els.heroCards.classList.add('hidden');
+    renderBucketHero();
+    return;
+  }
+
+  // Legacy hero cards when no grade data available
+  els.heroCards.classList.remove('hidden');
+  $('bucket-hero')?.classList.add('hidden');
   els.heroCards.innerHTML = [
     `<div class="hero-card"><div class="hero-num">${sc.total}</div><div class="hero-label">Total Runs</div></div>`,
     `<div class="hero-card pass"><div class="hero-num">${sc.pass}</div><div class="hero-label">Pass</div></div>`,
@@ -130,6 +368,9 @@ function renderHero() {
 
 function renderScorecard() {
   const grades = getGrades();
+  const cc = state.data?.cellClassification || {};
+  const harnessLimitedSet = new Set(cc.harnessLimitedCellIds || []);
+
   // Discover which strategies & agents exist
   const strategies = [...new Set(grades.map(g => g._meta?.strategy))].sort();
   const agents = [...new Set(grades.map(g => g._meta?.agent))].sort();
@@ -152,8 +393,18 @@ function renderScorecard() {
     for (const c of cols) {
       const g = grades.find(g => g._meta?.scenario === sc && g._meta?.strategy === c.strategy && g._meta?.agent === c.agent);
       if (g) {
-        const cls = `cell-${g.success}`;
-        html += `<td class="${cls} heatmap-cell" data-run-id="${esc(g.runId)}" data-scenario="${sc}" data-strategy="${c.strategy}" title="${esc(g.rootCause || 'Clean pass')}">${g.success.toUpperCase()}</td>`;
+        const isHarnessLimited = harnessLimitedSet.has(g.runId);
+        let cls, label, title;
+        if (isHarnessLimited) {
+          cls = 'cell-harness';
+          label = '⚠ HARNESS';
+          title = 'Harness-limited: agent never received the task (not a platform failure)';
+        } else {
+          cls = `cell-${g.success}`;
+          label = g.success.toUpperCase();
+          title = g.rootCause || 'Clean pass';
+        }
+        html += `<td class="${cls}" data-run-id="${esc(g.runId)}" title="${esc(title)}">${label}</td>`;
       } else {
         html += '<td class="cell-empty">—</td>';
       }
@@ -163,13 +414,12 @@ function renderScorecard() {
   html += '</tbody>';
   els.scorecardTable.innerHTML = html;
 
-  // Click handler — jump to Cell Details drill-down
+  // Click handler
   els.scorecardTable.querySelectorAll('td[data-run-id]').forEach(td => {
     td.addEventListener('click', () => {
-      const scenario = parseInt(td.dataset.scenario, 10);
-      const strategy = td.dataset.strategy;
-      state.selectedCell = { scenario, strategy };
-      switchTab('cell-details');
+      switchTab('runs');
+      state.selectedRunId = td.dataset.runId;
+      renderRunsTab();
     });
   });
 }
@@ -180,15 +430,46 @@ function renderScorecard() {
 
 function renderReadiness() {
   const sc = state.data?.scorecard || {};
+  const cc = state.data?.cellClassification || {};
   const total = sc.total || 1;
-  // Weighted: pass=1, partial=0.5, fail=0
-  const score = Math.round(((sc.pass || 0) + (sc.partial || 0) * 0.5) / total * 100);
-  const color = score >= 70 ? 'var(--pass)' : score >= 40 ? 'var(--partial)' : 'var(--fail)';
 
-  els.readinessGauge.innerHTML = `
-    <div class="gauge-score" style="color:${color}">${score}%</div>
-    <div class="gauge-label">GA Readiness Score</div>
-  `;
+  // Platform readiness score (from cellClassification if available)
+  const platformScore = cc.platformReadinessScore ?? null;
+  const platformTestable = cc.platformTestableRuns ?? total;
+  const platformPassRate = cc.platformPassRate ?? null;
+  const harnessOpPct = cc.harnessOperationalPct ?? 100;
+  const harnessLimited = cc.harnessLimitedCount ?? 0;
+
+  // Fallback combined score
+  const combinedScore = Math.round(((sc.pass || 0) + (sc.partial || 0) * 0.5) / total * 100);
+
+  // If we have platform/harness separation, show dual scores
+  if (platformScore !== null && harnessLimited > 0) {
+    const platformColor = platformScore >= 70 ? 'var(--pass)' : platformScore >= 40 ? 'var(--partial)' : 'var(--fail)';
+    const harnessColor = harnessOpPct >= 80 ? 'var(--pass)' : harnessOpPct >= 50 ? 'var(--partial)' : 'var(--fail)';
+
+    els.readinessGauge.innerHTML = `
+      <div class="dual-readiness">
+        <div class="readiness-block">
+          <div class="gauge-score" style="color:${platformColor}">${platformScore}/100</div>
+          <div class="gauge-label">Platform GA Readiness</div>
+          <div class="gauge-sublabel">${platformPassRate}% pass (${platformTestable} testable cells)</div>
+        </div>
+        <div class="readiness-divider"></div>
+        <div class="readiness-block">
+          <div class="gauge-score harness" style="color:${harnessColor}">${harnessOpPct}%</div>
+          <div class="gauge-label">Harness Operational</div>
+          <div class="gauge-sublabel">${harnessLimited}/${total} cells harness-limited</div>
+        </div>
+      </div>`;
+  } else {
+    // Legacy single score
+    const color = combinedScore >= 70 ? 'var(--pass)' : combinedScore >= 40 ? 'var(--partial)' : 'var(--fail)';
+    els.readinessGauge.innerHTML = `
+      <div class="gauge-score" style="color:${color}">${combinedScore}%</div>
+      <div class="gauge-label">GA Readiness Score</div>
+    `;
+  }
 
   // Pillar bars
   const pillars = state.data?.readinessPillarBreakdown || {};
@@ -344,16 +625,34 @@ function renderTrend() {
 
 function renderSidebar() {
   const grades = filteredGrades();
+  const cc = state.data?.cellClassification || {};
+  const harnessLimitedSet = new Set(cc.harnessLimitedCellIds || []);
+
   els.sidebarList.innerHTML = '';
   if (!grades.length) {
     els.sidebarList.innerHTML = '<p class="subtle" style="padding:0.5rem">No matching runs.</p>';
     return;
   }
   for (const g of grades) {
+    const bucket = getBucketForGrade(g);
     const item = make('div', `sidebar-item ${state.selectedRunId === g.runId ? 'selected' : ''}`);
+    let badgeCls, badgeText;
+    if (g.success === 'pass') {
+      badgeCls = 'pass';
+      badgeText = 'PASS';
+    } else {
+      const conf = BUCKET_CONFIG[bucket];
+      if (conf) {
+        badgeCls = `bucket-${bucket}`;
+        badgeText = `${conf.icon} ${bucket.toUpperCase()}`;
+      } else {
+        badgeCls = g.success;
+        badgeText = g.success.toUpperCase();
+      }
+    }
     item.innerHTML = `
       <span class="sid-name" title="${esc(gradeLabel(g))}">${esc(g.runId)}</span>
-      <span class="sidebar-badge ${g.success}">${g.success.toUpperCase()}</span>`;
+      <span class="sidebar-badge ${badgeCls}">${badgeText}</span>`;
     item.addEventListener('click', () => {
       state.selectedRunId = g.runId;
       renderRunsTab();
@@ -376,6 +675,9 @@ function renderRunDetail() {
   const t = g.transcript || {};
   const ap = g.agentPath || {};
   const sug = g.improvementSuggestions || {};
+  const fi = g.failureInfo || {};
+  const bucket = getBucketForGrade(g);
+  const bucketConf = BUCKET_CONFIG[bucket] || { icon: '✅', label: 'Passing', color: 'var(--pass)' };
 
   let html = `
     <div class="detail-header">
@@ -388,6 +690,36 @@ function renderRunDetail() {
         ${ap.timeoutReached ? '<span style="color:var(--fail)">⏱ Timeout reached</span>' : ''}
       </div>
     </div>`;
+
+  // Bucket classification card (prominent)
+  if (g.success !== 'pass') {
+    html += `
+    <div class="bucket-classification-card" style="border-left-color:${bucketConf.color}">
+      <div class="bcc-header">
+        <span class="bcc-icon">${bucketConf.icon}</span>
+        <span class="bcc-bucket" style="color:${bucketConf.color}">${bucketConf.label}</span>
+      </div>`;
+    if (fi.whatItTried) {
+      html += `<div class="bcc-row"><strong>What it tried:</strong> ${esc(fi.whatItTried)}</div>`;
+    }
+    if (fi.whyItFailed) {
+      html += `<div class="bcc-row"><strong>Why it failed:</strong> ${esc(fi.whyItFailed)}</div>`;
+    }
+    if (fi.whatWouldFix) {
+      html += `<div class="bcc-row"><strong>What would fix it:</strong> ${esc(fi.whatWouldFix)}</div>`;
+    }
+    if (fi.evidenceQuote) {
+      html += `<div class="bcc-evidence"><code>${esc(fi.evidenceQuote)}</code></div>`;
+    }
+    // Fallback evidence from existing fields
+    if (!fi.whyItFailed && g.rootCause) {
+      html += `<div class="bcc-row"><strong>Root cause:</strong> ${esc(g.rootCause)}</div>`;
+    }
+    if (!fi.whatItTried && g.failureCategory) {
+      html += `<div class="bcc-row"><strong>Category:</strong> ${esc(g.failureCategory)}</div>`;
+    }
+    html += '</div>';
+  }
 
   // Meta cards
   html += '<div class="meta-grid">';
@@ -560,122 +892,6 @@ function renderTaxonomy() {
 // Tab switching
 // ---------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
-// Cell Details tab
-// ---------------------------------------------------------------------------
-
-function renderCellDetails() {
-  const cell = state.selectedCell;
-  if (!cell) {
-    els.cellDetailEmpty.classList.remove('hidden');
-    els.cellDetailContent.classList.add('hidden');
-    return;
-  }
-  els.cellDetailEmpty.classList.add('hidden');
-  els.cellDetailContent.classList.remove('hidden');
-
-  const grades = getGrades();
-  const cellGrades = grades.filter(g => g._meta?.scenario === cell.scenario && g._meta?.strategy === cell.strategy);
-
-  // Header
-  const scenarioLabel = SCENARIO_LABELS[cell.scenario] || `S${cell.scenario}`;
-  const strategyLabel = STRATEGY_LABELS[cell.strategy] || cell.strategy;
-  els.cellDetailHeader.innerHTML = `
-    <h2>${esc(scenarioLabel)} · ${esc(strategyLabel)}</h2>
-    <p class="subtle">Showing all agents for this cell. Click another heatmap cell to change.</p>
-  `;
-
-  // One card per agent
-  els.cellDetailAgents.innerHTML = '';
-  if (!cellGrades.length) {
-    els.cellDetailAgents.innerHTML = '<p class="subtle">No data for this cell.</p>';
-    return;
-  }
-
-  for (const g of cellGrades) {
-    const m = g._meta || {};
-    const t = g.transcript || {};
-    const ap = g.agentPath || {};
-    const sug = g.improvementSuggestions || {};
-
-    let html = `<div class="cell-agent-card">`;
-    html += `<div class="cell-agent-header">`;
-    html += `<h3>${esc(AGENT_LABELS[m.agent] || m.agent)} <span class="detail-badge ${g.success}">${g.success.toUpperCase()}</span></h3>`;
-    html += `<div class="cell-agent-meta">`;
-    html += `<span>Duration: <strong>${t.durationSeconds ? Math.round(t.durationSeconds / 60) + 'min' : '—'}</strong></span>`;
-    html += `<span>Iterations: <strong>${ap.iterationCount ?? '—'}</strong></span>`;
-    if (ap.timeoutReached) html += '<span style="color:var(--fail)">⏱ Timeout</span>';
-    html += `</div></div>`;
-
-    // Failure info
-    if (g.success !== 'pass') {
-      html += '<div class="cell-failure-info">';
-      html += `<div class="cell-info-row"><strong>Category:</strong> ${esc(g.failureCategory || 'Unknown')}</div>`;
-      html += `<div class="cell-info-row"><strong>Pillar:</strong> ${esc(g.readinessPillar || '—')}</div>`;
-      html += `<div class="cell-info-row"><strong>Root Cause:</strong> ${esc(g.rootCause || 'Unknown')}</div>`;
-      if (g.failureCategoryDetail) html += `<div class="cell-info-row"><strong>Detail:</strong> ${esc(g.failureCategoryDetail)}</div>`;
-      html += '</div>';
-    }
-
-    // Stuck points
-    if (ap.stuckPoints?.length) {
-      html += '<div class="cell-section"><h4>Stuck Points</h4><ul>';
-      for (const sp of ap.stuckPoints) html += `<li>${esc(sp)}</li>`;
-      html += '</ul></div>';
-    }
-
-    // Commands (compact — first 10)
-    if (t.commands?.length) {
-      const maxCmds = 10;
-      html += `<div class="cell-section"><h4>Commands (${t.commands.length} total)</h4><div class="timeline-list">`;
-      for (const c of t.commands.slice(0, maxCmds)) {
-        const exitColor = c.exitCode === 0 ? 'var(--pass)' : 'var(--fail)';
-        html += `<div class="timeline-entry cmd">
-          <div class="tl-type cmd">$ ${esc(c.cmd)} <span style="color:${exitColor};font-size:0.7rem">[exit ${c.exitCode}]</span></div>
-          <div class="tl-text">${esc((c.output || '').slice(0, 300))}${(c.output || '').length > 300 ? '…' : ''}</div>
-        </div>`;
-      }
-      if (t.commands.length > maxCmds) {
-        html += `<p class="subtle">+ ${t.commands.length - maxCmds} more commands. See Run Details for full transcript.</p>`;
-      }
-      html += '</div></div>';
-    }
-
-    // Errors
-    if (t.errors?.length) {
-      html += `<div class="cell-section"><h4>Errors</h4><div class="timeline-list">`;
-      for (const e of t.errors.slice(0, 5)) {
-        html += `<div class="timeline-entry error"><div class="tl-type error">ERROR</div><div class="tl-text">${esc(e)}</div></div>`;
-      }
-      if (t.errors.length > 5) html += `<p class="subtle">+ ${t.errors.length - 5} more errors.</p>`;
-      html += '</div></div>';
-    }
-
-    // Improvement suggestions
-    if (sug.docContent || sug.errorMessage || sug.sampleCode) {
-      html += '<div class="cell-section"><h4>Suggestions</h4>';
-      if (sug.docContent) html += `<div class="suggestion-card"><h4>📄 Documentation</h4><p>${esc(sug.docContent)}</p></div>`;
-      if (sug.errorMessage) html += `<div class="suggestion-card"><h4>💬 Error Message</h4><p>${esc(sug.errorMessage)}</p></div>`;
-      if (sug.sampleCode) html += `<div class="suggestion-card"><h4>💻 Sample Code</h4><p>${esc(sug.sampleCode)}</p></div>`;
-      html += '</div>';
-    }
-
-    // Link to full run detail
-    html += `<div class="cell-section"><button class="cell-view-full" data-run-id="${esc(g.runId)}" type="button">View full transcript →</button></div>`;
-
-    html += '</div>'; // end cell-agent-card
-    els.cellDetailAgents.innerHTML += html;
-  }
-
-  // Bind "View full transcript" buttons
-  els.cellDetailAgents.querySelectorAll('.cell-view-full').forEach(btn => {
-    btn.addEventListener('click', () => {
-      state.selectedRunId = btn.dataset.runId;
-      switchTab('runs');
-    });
-  });
-}
-
 function switchTab(tabName) {
   state.tab = tabName;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
@@ -683,7 +899,6 @@ function switchTab(tabName) {
     p.classList.toggle('active', p.id === `tab-${tabName}`);
     p.classList.toggle('hidden', p.id !== `tab-${tabName}`);
   });
-  if (tabName === 'cell-details') renderCellDetails();
   if (tabName === 'runs') renderRunsTab();
   if (tabName === 'taxonomy') renderTaxonomy();
 }
@@ -694,6 +909,7 @@ function switchTab(tabName) {
 
 function render() {
   els.runMeta.textContent = `${state.data.date} · ${state.data.scorecard.total} runs · ${state.data.scorecard.pass} pass, ${state.data.scorecard.partial} partial, ${state.data.scorecard.fail} fail`;
+  renderHarnessBanner();
   renderHero();
   renderScorecard();
   renderReadiness();
@@ -701,7 +917,6 @@ function render() {
   renderTrend();
   if (state.tab === 'runs') renderRunsTab();
   if (state.tab === 'taxonomy') renderTaxonomy();
-  if (state.tab === 'cell-details') renderCellDetails();
 }
 
 // ---------------------------------------------------------------------------
