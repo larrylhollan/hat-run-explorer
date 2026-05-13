@@ -48,6 +48,7 @@
     <!-- Tabs -->
     <nav class="tabs">
       <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="cell-details">Cell Details</button>
       <button class="tab" data-tab="runs">Run Details</button>
       <button class="tab" data-tab="taxonomy">Failure Taxonomy</button>
     </nav>
@@ -97,6 +98,18 @@
           <canvas id="trend-canvas" height="200"></canvas>
           <p id="trend-no-data" class="subtle hidden">Only one run loaded — trend requires multiple runs.</p>
         </section>
+      </div>
+    </section>
+
+    <!-- Cell Details Tab -->
+    <section id="tab-cell-details" class="tab-panel hidden">
+      <div id="cell-detail-empty" class="detail-empty">
+        <h2>Click a heatmap cell</h2>
+        <p>Select any cell in the scorecard matrix to see why it passed, failed, or timed out.</p>
+      </div>
+      <div id="cell-detail-content" class="hidden">
+        <div id="cell-detail-header" class="cell-detail-header"></div>
+        <div id="cell-detail-agents" class="cell-detail-agents"></div>
       </div>
     </section>
 

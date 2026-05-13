@@ -357,8 +357,118 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
   .runs-layout { grid-template-columns: 1fr; }
   .run-list-sidebar { max-height: 300px; }
   .meta-grid { grid-template-columns: 1fr; }
+  .cell-detail-agents { grid-template-columns: 1fr; }
 }
 @media (max-width: 600px) {
   .topbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
   .hero-cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==========================================================================
+   Cell Details Tab
+   ========================================================================== */
+
+.cell-detail-header {
+  margin-bottom: 1.25rem;
+}
+.cell-detail-header h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.25rem;
+}
+
+.cell-detail-agents {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: 1rem;
+}
+
+.cell-agent-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 240px);
+}
+
+.cell-agent-header {
+  margin-bottom: 1rem;
+}
+.cell-agent-header h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+.cell-agent-meta {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.cell-failure-info {
+  background: var(--fail-bg);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+.cell-info-row {
+  font-size: 0.82rem;
+  margin-bottom: 0.25rem;
+}
+.cell-info-row:last-child {
+  margin-bottom: 0;
+}
+
+.cell-section {
+  margin-bottom: 1rem;
+}
+.cell-section h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.cell-section ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+.cell-section ul li {
+  margin-bottom: 0.2rem;
+}
+
+.cell-view-full {
+  display: inline-block;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.cell-view-full:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Heatmap cell clickable affordance */
+.scorecard-table td.heatmap-cell {
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+  position: relative;
+}
+.scorecard-table td.heatmap-cell:hover {
+  box-shadow: inset 0 0 0 2px var(--accent);
+  transform: scale(1.05);
+  z-index: 2;
 }

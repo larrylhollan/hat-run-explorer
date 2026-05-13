@@ -13,6 +13,7 @@ const state = {
   data: null,        // currently active run data
   tab: 'dashboard',
   selectedRunId: null,
+  selectedCell: null, // { scenario, strategy } for cell-details tab
   searchFilter: '',
   outcomeFilter: 'all',
 };
@@ -62,6 +63,10 @@ const els = {
   categoryBars: $('category-bars'),
   rootCauses: $('root-causes'),
   proposedFixes: $('proposed-fixes'),
+  cellDetailEmpty: $('cell-detail-empty'),
+  cellDetailContent: $('cell-detail-content'),
+  cellDetailHeader: $('cell-detail-header'),
+  cellDetailAgents: $('cell-detail-agents'),
 };
 
 // ---------------------------------------------------------------------------
@@ -148,7 +153,7 @@ function renderScorecard() {
       const g = grades.find(g => g._meta?.scenario === sc && g._meta?.strategy === c.strategy && g._meta?.agent === c.agent);
       if (g) {
         const cls = `cell-${g.success}`;
-        html += `<td class="${cls}" data-run-id="${esc(g.runId)}" title="${esc(g.rootCause || 'Clean pass')}">${g.success.toUpperCase()}</td>`;
+        html += `<td class="${cls} heatmap-cell" data-run-id="${esc(g.runId)}" data-scenario="${sc}" data-strategy="${c.strategy}" title="${esc(g.rootCause || 'Clean pass')}">${g.success.toUpperCase()}</td>`;
       } else {
         html += '<td class="cell-empty">—</td>';
       }
@@ -158,12 +163,13 @@ function renderScorecard() {
   html += '</tbody>';
   els.scorecardTable.innerHTML = html;
 
-  // Click handler
+  // Click handler — jump to Cell Details drill-down
   els.scorecardTable.querySelectorAll('td[data-run-id]').forEach(td => {
     td.addEventListener('click', () => {
-      switchTab('runs');
-      state.selectedRunId = td.dataset.runId;
-      renderRunsTab();
+      const scenario = parseInt(td.dataset.scenario, 10);
+      const strategy = td.dataset.strategy;
+      state.selectedCell = { scenario, strategy };
+      switchTab('cell-details');
     });
   });
 }
@@ -554,6 +560,122 @@ function renderTaxonomy() {
 // Tab switching
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Cell Details tab
+// ---------------------------------------------------------------------------
+
+function renderCellDetails() {
+  const cell = state.selectedCell;
+  if (!cell) {
+    els.cellDetailEmpty.classList.remove('hidden');
+    els.cellDetailContent.classList.add('hidden');
+    return;
+  }
+  els.cellDetailEmpty.classList.add('hidden');
+  els.cellDetailContent.classList.remove('hidden');
+
+  const grades = getGrades();
+  const cellGrades = grades.filter(g => g._meta?.scenario === cell.scenario && g._meta?.strategy === cell.strategy);
+
+  // Header
+  const scenarioLabel = SCENARIO_LABELS[cell.scenario] || `S${cell.scenario}`;
+  const strategyLabel = STRATEGY_LABELS[cell.strategy] || cell.strategy;
+  els.cellDetailHeader.innerHTML = `
+    <h2>${esc(scenarioLabel)} · ${esc(strategyLabel)}</h2>
+    <p class="subtle">Showing all agents for this cell. Click another heatmap cell to change.</p>
+  `;
+
+  // One card per agent
+  els.cellDetailAgents.innerHTML = '';
+  if (!cellGrades.length) {
+    els.cellDetailAgents.innerHTML = '<p class="subtle">No data for this cell.</p>';
+    return;
+  }
+
+  for (const g of cellGrades) {
+    const m = g._meta || {};
+    const t = g.transcript || {};
+    const ap = g.agentPath || {};
+    const sug = g.improvementSuggestions || {};
+
+    let html = `<div class="cell-agent-card">`;
+    html += `<div class="cell-agent-header">`;
+    html += `<h3>${esc(AGENT_LABELS[m.agent] || m.agent)} <span class="detail-badge ${g.success}">${g.success.toUpperCase()}</span></h3>`;
+    html += `<div class="cell-agent-meta">`;
+    html += `<span>Duration: <strong>${t.durationSeconds ? Math.round(t.durationSeconds / 60) + 'min' : '—'}</strong></span>`;
+    html += `<span>Iterations: <strong>${ap.iterationCount ?? '—'}</strong></span>`;
+    if (ap.timeoutReached) html += '<span style="color:var(--fail)">⏱ Timeout</span>';
+    html += `</div></div>`;
+
+    // Failure info
+    if (g.success !== 'pass') {
+      html += '<div class="cell-failure-info">';
+      html += `<div class="cell-info-row"><strong>Category:</strong> ${esc(g.failureCategory || 'Unknown')}</div>`;
+      html += `<div class="cell-info-row"><strong>Pillar:</strong> ${esc(g.readinessPillar || '—')}</div>`;
+      html += `<div class="cell-info-row"><strong>Root Cause:</strong> ${esc(g.rootCause || 'Unknown')}</div>`;
+      if (g.failureCategoryDetail) html += `<div class="cell-info-row"><strong>Detail:</strong> ${esc(g.failureCategoryDetail)}</div>`;
+      html += '</div>';
+    }
+
+    // Stuck points
+    if (ap.stuckPoints?.length) {
+      html += '<div class="cell-section"><h4>Stuck Points</h4><ul>';
+      for (const sp of ap.stuckPoints) html += `<li>${esc(sp)}</li>`;
+      html += '</ul></div>';
+    }
+
+    // Commands (compact — first 10)
+    if (t.commands?.length) {
+      const maxCmds = 10;
+      html += `<div class="cell-section"><h4>Commands (${t.commands.length} total)</h4><div class="timeline-list">`;
+      for (const c of t.commands.slice(0, maxCmds)) {
+        const exitColor = c.exitCode === 0 ? 'var(--pass)' : 'var(--fail)';
+        html += `<div class="timeline-entry cmd">
+          <div class="tl-type cmd">$ ${esc(c.cmd)} <span style="color:${exitColor};font-size:0.7rem">[exit ${c.exitCode}]</span></div>
+          <div class="tl-text">${esc((c.output || '').slice(0, 300))}${(c.output || '').length > 300 ? '…' : ''}</div>
+        </div>`;
+      }
+      if (t.commands.length > maxCmds) {
+        html += `<p class="subtle">+ ${t.commands.length - maxCmds} more commands. See Run Details for full transcript.</p>`;
+      }
+      html += '</div></div>';
+    }
+
+    // Errors
+    if (t.errors?.length) {
+      html += `<div class="cell-section"><h4>Errors</h4><div class="timeline-list">`;
+      for (const e of t.errors.slice(0, 5)) {
+        html += `<div class="timeline-entry error"><div class="tl-type error">ERROR</div><div class="tl-text">${esc(e)}</div></div>`;
+      }
+      if (t.errors.length > 5) html += `<p class="subtle">+ ${t.errors.length - 5} more errors.</p>`;
+      html += '</div></div>';
+    }
+
+    // Improvement suggestions
+    if (sug.docContent || sug.errorMessage || sug.sampleCode) {
+      html += '<div class="cell-section"><h4>Suggestions</h4>';
+      if (sug.docContent) html += `<div class="suggestion-card"><h4>📄 Documentation</h4><p>${esc(sug.docContent)}</p></div>`;
+      if (sug.errorMessage) html += `<div class="suggestion-card"><h4>💬 Error Message</h4><p>${esc(sug.errorMessage)}</p></div>`;
+      if (sug.sampleCode) html += `<div class="suggestion-card"><h4>💻 Sample Code</h4><p>${esc(sug.sampleCode)}</p></div>`;
+      html += '</div>';
+    }
+
+    // Link to full run detail
+    html += `<div class="cell-section"><button class="cell-view-full" data-run-id="${esc(g.runId)}" type="button">View full transcript →</button></div>`;
+
+    html += '</div>'; // end cell-agent-card
+    els.cellDetailAgents.innerHTML += html;
+  }
+
+  // Bind "View full transcript" buttons
+  els.cellDetailAgents.querySelectorAll('.cell-view-full').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.selectedRunId = btn.dataset.runId;
+      switchTab('runs');
+    });
+  });
+}
+
 function switchTab(tabName) {
   state.tab = tabName;
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tabName));
@@ -561,6 +683,7 @@ function switchTab(tabName) {
     p.classList.toggle('active', p.id === `tab-${tabName}`);
     p.classList.toggle('hidden', p.id !== `tab-${tabName}`);
   });
+  if (tabName === 'cell-details') renderCellDetails();
   if (tabName === 'runs') renderRunsTab();
   if (tabName === 'taxonomy') renderTaxonomy();
 }
@@ -578,6 +701,7 @@ function render() {
   renderTrend();
   if (state.tab === 'runs') renderRunsTab();
   if (state.tab === 'taxonomy') renderTaxonomy();
+  if (state.tab === 'cell-details') renderCellDetails();
 }
 
 // ---------------------------------------------------------------------------
