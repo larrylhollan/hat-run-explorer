@@ -1,5 +1,16 @@
 [
   {
+    "date": "2026-05-13",
+    "label": "2026-05-13 (atlas-rerun)",
+    "file": "runs/2026-05-13-atlas-rerun.json",
+    "scorecard": {
+      "total": 28,
+      "pass": 6,
+      "partial": 0,
+      "fail": 22
+    }
+  },
+  {
     "date": "2026-05-11",
     "label": "2026-05-11 (Mock)",
     "file": "runs/2026-05-11-mock.json",

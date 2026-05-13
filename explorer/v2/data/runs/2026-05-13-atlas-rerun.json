@@ -1,0 +1,491 @@
+{
+  "version": "2.0",
+  "date": "2026-05-13",
+  "generatedAt": "2026-05-13T17:13:27.414656+00:00",
+  "graderModel": "gpt-5.4",
+  "scorecard": {
+    "total": 28,
+    "pass": 6,
+    "partial": 0,
+    "fail": 22,
+    "passRate": 0.214,
+    "passPartialRate": 0.214
+  },
+  "failureCategoryDistribution": {
+    "execution_failure": 8,
+    "timeout": 14,
+    "pass": 6
+  },
+  "readinessPillarBreakdown": {
+    "Quality": {
+      "total": 6,
+      "pass": 6,
+      "partial": 0,
+      "fail": 0
+    },
+    "Tools": {
+      "total": 14,
+      "pass": 0,
+      "partial": 0,
+      "fail": 14
+    },
+    "Docs": {
+      "total": 8,
+      "pass": 0,
+      "partial": 0,
+      "fail": 8
+    },
+    "Samples": {
+      "total": 0,
+      "pass": 0,
+      "partial": 0,
+      "fail": 0
+    },
+    "Seams": {
+      "total": 0,
+      "pass": 0,
+      "partial": 0,
+      "fail": 0
+    }
+  },
+  "scenarioBreakdown": {
+    "S1": {
+      "name": "Greenfield MAF Agent",
+      "total": 8,
+      "pass": 2,
+      "partial": 0,
+      "fail": 6
+    },
+    "S2": {
+      "name": "MAF + Toolbox + Tools",
+      "total": 8,
+      "pass": 0,
+      "partial": 0,
+      "fail": 8
+    },
+    "S3": {
+      "name": "LangGraph Agent",
+      "total": 8,
+      "pass": 3,
+      "partial": 0,
+      "fail": 5
+    },
+    "S4": {
+      "name": "Migration (Existing \u2192 Hosted)",
+      "total": 4,
+      "pass": 1,
+      "partial": 0,
+      "fail": 3
+    }
+  },
+  "strategyBreakdown": {
+    "A": {
+      "name": "Open-Ended",
+      "total": 8,
+      "pass": 0,
+      "partial": 0,
+      "fail": 8
+    },
+    "B": {
+      "name": "Doc-Pointed",
+      "total": 8,
+      "pass": 3,
+      "partial": 0,
+      "fail": 5
+    },
+    "C": {
+      "name": "Open-Ended + Azure Skills",
+      "total": 6,
+      "pass": 1,
+      "partial": 0,
+      "fail": 5
+    },
+    "D": {
+      "name": "Doc-Pointed + Azure Skills",
+      "total": 6,
+      "pass": 2,
+      "partial": 0,
+      "fail": 4
+    }
+  },
+  "agentBreakdown": {
+    "claude": {
+      "total": 14,
+      "pass": 6,
+      "partial": 0,
+      "fail": 8
+    },
+    "copilot": {
+      "total": 14,
+      "pass": 0,
+      "partial": 0,
+      "fail": 14
+    }
+  },
+  "skillsDeltaSummary": {
+    "applicable": true,
+    "totalSkillsRuns": 12,
+    "skillInvokedCount": 0,
+    "skillInvokedRate": 0.0,
+    "successWithSkillCount": 0,
+    "deadEndWithSkillCount": 0,
+    "subSkillUsage": {
+      "create": 0,
+      "deploy": 0,
+      "invoke": 0,
+      "troubleshoot": 0,
+      "observe": 0
+    },
+    "topMissingFromSkill": [],
+    "topAccuracyIssues": []
+  },
+  "topRootCauses": [
+    {
+      "cause": "timeout_stuck",
+      "count": 14
+    },
+    {
+      "cause": "agent_error",
+      "count": 8
+    }
+  ],
+  "cliInteractiveIssues": {},
+  "grades": [
+    {
+      "runId": "S1-A-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "A",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S1-A-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "A",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S1-B-claude",
+      "success": "pass",
+      "failureCategory": "pass",
+      "rootCause": "",
+      "readinessPillar": "Quality",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "B",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S1-B-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "B",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S1-C-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "C",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S1-C-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "C",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S1-D-claude",
+      "success": "pass",
+      "failureCategory": "pass",
+      "rootCause": "",
+      "readinessPillar": "Quality",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "D",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S1-D-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 1,
+        "strategy": "D",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S2-A-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "A",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S2-A-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "A",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S2-B-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "B",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S2-B-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "B",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S2-C-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "C",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S2-C-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "C",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S2-D-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "D",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S2-D-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 2,
+        "strategy": "D",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S3-A-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "A",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S3-A-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "A",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S3-B-claude",
+      "success": "pass",
+      "failureCategory": "pass",
+      "rootCause": "",
+      "readinessPillar": "Quality",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "B",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S3-B-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "B",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S3-C-claude",
+      "success": "pass",
+      "failureCategory": "pass",
+      "rootCause": "",
+      "readinessPillar": "Quality",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "C",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S3-C-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "C",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S3-D-claude",
+      "success": "pass",
+      "failureCategory": "pass",
+      "rootCause": "",
+      "readinessPillar": "Quality",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "D",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S3-D-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 3,
+        "strategy": "D",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S4-A-claude",
+      "success": "fail",
+      "failureCategory": "execution_failure",
+      "rootCause": "agent_error",
+      "readinessPillar": "Docs",
+      "_meta": {
+        "scenario": 4,
+        "strategy": "A",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S4-A-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 4,
+        "strategy": "A",
+        "agent": "copilot"
+      }
+    },
+    {
+      "runId": "S4-B-claude",
+      "success": "pass",
+      "failureCategory": "pass",
+      "rootCause": "",
+      "readinessPillar": "Quality",
+      "_meta": {
+        "scenario": 4,
+        "strategy": "B",
+        "agent": "claude"
+      }
+    },
+    {
+      "runId": "S4-B-copilot",
+      "success": "fail",
+      "failureCategory": "timeout",
+      "rootCause": "timeout_stuck",
+      "readinessPillar": "Tools",
+      "_meta": {
+        "scenario": 4,
+        "strategy": "B",
+        "agent": "copilot"
+      }
+    }
+  ]
+}
