@@ -2,6 +2,6 @@
   {
     "date": "2026-05-13",
     "file": "analysis-2026-05-13.json",
-    "headline": "8/40 passed (20.0%) \u2014 Claude 40.0% \u2014 Copilot 0.0% (all timeout)"
+    "headline": "7/32 passed (21.9%) \u2014 Claude 43.8%, Copilot 0% \u2014 Doc-pointed strategies dominate (cellDetails v3)"
   }
 ]
