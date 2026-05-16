@@ -1,0 +1,468 @@
+{
+  "version": "2.1",
+  "date": "2026-05-15",
+  "generatedAt": "2026-05-16T02:52:44.045802Z",
+  "graderModel": "runner-auto (no AI grading)",
+  "scorecard": {
+    "total": 32,
+    "pass": 2,
+    "partial": 0,
+    "fail": 30,
+    "passRate": 0.062,
+    "passPartialRate": 0.062
+  },
+  "cellClassification": {
+    "pass": [
+      "S1-C-claude",
+      "S2-A-claude"
+    ],
+    "partial": [],
+    "fail": [
+      "S1-A-claude",
+      "S1-A-copilot",
+      "S1-B-claude",
+      "S1-B-copilot",
+      "S1-C-copilot",
+      "S1-D-claude",
+      "S1-D-copilot",
+      "S2-A-copilot",
+      "S2-B-claude",
+      "S2-B-copilot",
+      "S2-C-claude",
+      "S2-C-copilot",
+      "S2-D-claude",
+      "S2-D-copilot",
+      "S3-A-claude",
+      "S3-A-copilot",
+      "S3-B-claude",
+      "S3-B-copilot",
+      "S3-C-claude",
+      "S3-C-copilot",
+      "S3-D-claude",
+      "S3-D-copilot",
+      "S4-A-claude",
+      "S4-A-copilot",
+      "S4-B-claude",
+      "S4-B-copilot",
+      "S4-C-claude",
+      "S4-C-copilot",
+      "S4-D-claude",
+      "S4-D-copilot"
+    ]
+  },
+  "failureCategoryDistribution": {
+    "timeout_stuck": 30
+  },
+  "readinessPillarBreakdown": {},
+  "scenarioBreakdown": {},
+  "strategyBreakdown": {
+    "A": {
+      "total": 8,
+      "pass": 1
+    },
+    "B": {
+      "total": 8,
+      "pass": 0
+    },
+    "C": {
+      "total": 8,
+      "pass": 1
+    },
+    "D": {
+      "total": 8,
+      "pass": 0
+    }
+  },
+  "agentBreakdown": {
+    "claude": {
+      "total": 16,
+      "pass": 2
+    },
+    "copilot": {
+      "total": 16,
+      "pass": 0
+    }
+  },
+  "cells": [
+    {
+      "runId": "S1-A-claude",
+      "scenario": 1,
+      "strategy": "A",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2412938,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S1-A-copilot",
+      "scenario": 1,
+      "strategy": "A",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2413525,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S1-B-claude",
+      "scenario": 1,
+      "strategy": "B",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2412267,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S1-B-copilot",
+      "scenario": 1,
+      "strategy": "B",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2007189,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S1-C-claude",
+      "scenario": 1,
+      "strategy": "C",
+      "agent": "claude",
+      "grade": "pass",
+      "timedOut": false,
+      "durationMs": 1838207,
+      "failureCategories": []
+    },
+    {
+      "runId": "S1-C-copilot",
+      "scenario": 1,
+      "strategy": "C",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1696822,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S1-D-claude",
+      "scenario": 1,
+      "strategy": "D",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2412020,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S1-D-copilot",
+      "scenario": 1,
+      "strategy": "D",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1788563,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-A-claude",
+      "scenario": 2,
+      "strategy": "A",
+      "agent": "claude",
+      "grade": "pass",
+      "timedOut": false,
+      "durationMs": 1399496,
+      "failureCategories": []
+    },
+    {
+      "runId": "S2-A-copilot",
+      "scenario": 2,
+      "strategy": "A",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2415534,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-B-claude",
+      "scenario": 2,
+      "strategy": "B",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2415769,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-B-copilot",
+      "scenario": 2,
+      "strategy": "B",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2414252,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-C-claude",
+      "scenario": 2,
+      "strategy": "C",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 430263,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-C-copilot",
+      "scenario": 2,
+      "strategy": "C",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1690237,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-D-claude",
+      "scenario": 2,
+      "strategy": "D",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 442413,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S2-D-copilot",
+      "scenario": 2,
+      "strategy": "D",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2412453,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-A-claude",
+      "scenario": 3,
+      "strategy": "A",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 653765,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-A-copilot",
+      "scenario": 3,
+      "strategy": "A",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2415670,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-B-claude",
+      "scenario": 3,
+      "strategy": "B",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 490261,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-B-copilot",
+      "scenario": 3,
+      "strategy": "B",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1271937,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-C-claude",
+      "scenario": 3,
+      "strategy": "C",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 495022,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-C-copilot",
+      "scenario": 3,
+      "strategy": "C",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2412411,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-D-claude",
+      "scenario": 3,
+      "strategy": "D",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 560010,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S3-D-copilot",
+      "scenario": 3,
+      "strategy": "D",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1156421,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-A-claude",
+      "scenario": 4,
+      "strategy": "A",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 540022,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-A-copilot",
+      "scenario": 4,
+      "strategy": "A",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1316586,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-B-claude",
+      "scenario": 4,
+      "strategy": "B",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 2411454,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-B-copilot",
+      "scenario": 4,
+      "strategy": "B",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 736167,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-C-claude",
+      "scenario": 4,
+      "strategy": "C",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 485015,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-C-copilot",
+      "scenario": 4,
+      "strategy": "C",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1566813,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-D-claude",
+      "scenario": 4,
+      "strategy": "D",
+      "agent": "claude",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 485000,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    },
+    {
+      "runId": "S4-D-copilot",
+      "scenario": 4,
+      "strategy": "D",
+      "agent": "copilot",
+      "grade": "fail",
+      "timedOut": true,
+      "durationMs": 1101381,
+      "failureCategories": [
+        "timeout_stuck"
+      ]
+    }
+  ]
+}
