@@ -1,0 +1,124 @@
+{
+  "date": "2026-05-17",
+  "runId": "2026-05-17-020055",
+  "runStatus": "partial",
+  "completionRate": "22/32 (69%)",
+  "runnerCrashes": 2,
+  "executiveSummary": "Partial run (22/32 cells) due to 2 runner crashes. 8 passes from 22 completed cells (36%). Claude at 58% (7/12), Copilot at 10% (1/10). Notable: first Copilot pass in 2+ days (S2-C-copilot with Azure Skills). All D-strategy cells missing due to crashes.",
+  "gaReadiness": "Not ready. Copilot still timing out on 9/10 cells. Only Strategy C with Skills produces a Copilot pass. Claude is solid on LangGraph (S3) and Migration (S4) but still struggles with Greenfield MAF (S1) A/C strategies.",
+  "scorecard": {
+    "totalCells": 32,
+    "cellsCompleted": 22,
+    "cellsMissing": 10,
+    "passed": 8,
+    "failed": 1,
+    "timedOut": 13,
+    "passRate": "36% (of completed)",
+    "claudePass": "7/12 (58%)",
+    "copilotPass": "1/10 (10%)"
+  },
+  "agentComparison": {
+    "claude": {
+      "completed": 12,
+      "passed": 7,
+      "passRate": "58%",
+      "timedOut": 5,
+      "avgDurationPass": "444s",
+      "trend": "Slight improvement from May 16 (50%)"
+    },
+    "copilot": {
+      "completed": 10,
+      "passed": 1,
+      "passRate": "10%",
+      "timedOut": 9,
+      "avgDuration": "906s",
+      "trend": "Massive regression from May 16 (44%) \u2014 timeout-dominated"
+    }
+  },
+  "rootCauses": [
+    {
+      "id": "RC-1",
+      "title": "Copilot timeout regression",
+      "lens": "Tools",
+      "affectedCells": [
+        "S1-A-copilot",
+        "S1-B-copilot",
+        "S1-C-copilot",
+        "S2-A-copilot",
+        "S3-A-copilot",
+        "S3-B-copilot",
+        "S4-A-copilot",
+        "S4-B-copilot",
+        "S2-B-copilot"
+      ],
+      "description": "9/10 Copilot cells timeout or fail. Copilot's --yolo mode gets killed after 14-27 minutes. Duration range: 443-1654s. Consistent with prior nights but worse than May 16.",
+      "proposedFix": "Investigate Copilot CLI startup overhead, folder trust prompts, and MCP server init. Consider increasing timeout or pre-warming."
+    },
+    {
+      "id": "RC-2",
+      "title": "Claude timeout on A/C strategies for S1/S2",
+      "lens": "Quality",
+      "affectedCells": [
+        "S1-A-claude",
+        "S1-C-claude",
+        "S2-A-claude",
+        "S2-B-claude",
+        "S4-C-claude"
+      ],
+      "description": "Claude hits timeout on open-ended strategies. Gets stuck in azd provision spinner loops or repetitive init retries. Agent reasoning shows good intent but execution gets bogged down.",
+      "proposedFix": "Add explicit timeout handling in prompts. Consider shorter provision timeout with retry logic."
+    },
+    {
+      "id": "RC-3",
+      "title": "Runner process instability",
+      "lens": "Seams",
+      "affectedCells": [
+        "S3-C-copilot",
+        "S4-C-copilot",
+        "S1-D-claude",
+        "S1-D-copilot",
+        "S2-D-claude",
+        "S2-D-copilot",
+        "S3-D-claude",
+        "S3-D-copilot",
+        "S4-D-claude",
+        "S4-D-copilot"
+      ],
+      "description": "Runner crashed twice in one night (after 20 cells, then after 22). 10 cells never ran. No OOM evidence in dmesg. Likely resource exhaustion from 4 concurrent Copilot sessions.",
+      "proposedFix": "Reduce worker concurrency from 4 to 2 for Copilot-heavy batches. Add memory watchdog. Hal should investigate."
+    }
+  ],
+  "highlights": [
+    {
+      "type": "positive",
+      "title": "Copilot S2-C-copilot breakthrough",
+      "detail": "First Copilot pass in 2+ days. Strategy C (Azure Skills) enabled the agent to discover Foundry-Features header, manually create toolbox via REST API, and build Dockerfile from scratch when azd scaffolding failed. Proves Skills + Copilot CAN work."
+    },
+    {
+      "type": "positive",
+      "title": "Claude S3 (LangGraph) perfect",
+      "detail": "S3-A, S3-B, S3-C all pass for Claude. LangGraph scenario is most mature."
+    },
+    {
+      "type": "negative",
+      "title": "Copilot regression from 44% to 10%",
+      "detail": "May 16 had 7/16 Copilot passes. May 17 has 1/10. All failures are timeouts. Something changed in Copilot's execution environment or the MCP server setup."
+    }
+  ],
+  "skillsDelta": {
+    "available": false,
+    "note": "D-strategy cells (doc-pointed + Skills) never ran due to runner crashes. Only partial C-strategy data available. S2-C-copilot pass vs S2-A-copilot/S2-B-copilot timeout suggests Skills help significantly for Copilot on scenario 2."
+  },
+  "comparisonToYesterday": {
+    "may16PassRate": "47% (15/32)",
+    "may17PassRate": "36% (8/22, partial)",
+    "claudeTrend": "58% vs 50% \u2014 improving",
+    "copilotTrend": "10% vs 44% \u2014 severe regression",
+    "newPasses": [
+      "S2-C-copilot (NEW \u2014 first Copilot pass with Skills)"
+    ],
+    "newFailures": [
+      "Copilot timeout regression across all scenarios"
+    ]
+  }
+}
