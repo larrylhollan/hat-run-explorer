@@ -1,5 +1,20 @@
 [
   {
+    "date": "2026-05-17",
+    "label": "nightly",
+    "file": "2026-05-17-nightly.json",
+    "scorecard": {
+      "total": 32,
+      "completed": 24,
+      "pass": 8,
+      "partial": 0,
+      "fail": 16,
+      "incomplete": 8,
+      "passRate": 0.333
+    },
+    "publishedAt": "2026-05-17T18:45:00.000Z"
+  },
+  {
     "date": "2026-05-16",
     "label": "nightly",
     "file": "2026-05-16-nightly.json",
