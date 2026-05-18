@@ -1,0 +1,485 @@
+{
+  "meta": {
+    "label": "nightly",
+    "date": "2026-05-18",
+    "runDir": "runner/runs/2026-05-17-020055",
+    "generatedAt": "2026-05-18T14:08:58.348881Z",
+    "graderMode": "structural"
+  },
+  "summary": {
+    "total": 32,
+    "passed": 11,
+    "failed": 1,
+    "timedOut": 20,
+    "passRate": 34.4,
+    "byAgent": {
+      "claude": {
+        "total": 16,
+        "passed": 9,
+        "passRate": 56.2
+      },
+      "copilot": {
+        "total": 16,
+        "passed": 2,
+        "passRate": 12.5
+      }
+    },
+    "skillsDelta": {
+      "withoutSkills": {
+        "total": 16,
+        "passed": 5,
+        "passRate": 31.2
+      },
+      "withSkills": {
+        "total": 16,
+        "passed": 6,
+        "passRate": 37.5
+      }
+    },
+    "failureCategories": {
+      "timeout_stuck": 20,
+      "missing_tool": 11,
+      "azure_error": 1
+    }
+  },
+  "analysis": {
+    "executiveSummary": "May 18 nightly: 11/32 passed (34%). Claude dominates at 9/16 (56%) vs Copilot 2/16 (12.5%). 20 cells timed out \u2014 overwhelmingly Copilot (14/16 timed out). Skills boost is marginal: 37.5% with skills vs 31.3% without. S3 (LangGraph) is Claude's strongest scenario (4/4 strategies passed). Copilot's 2 passes both required Skills (S1-D, S2-C). Root cause: Copilot lacks folder trust bypass (`--trust` flag) and gets stuck in interactive prompts.",
+    "gaReadiness": "NOT READY \u2014 34% overall pass rate, Copilot nearly non-functional without Skills plugin. Timeout-dominant failures suggest agent interactivity handling remains the #1 blocker.",
+    "rootCauses": [
+      {
+        "category": "timeout_stuck",
+        "count": 20,
+        "description": "Agents stuck in retry loops or waiting on interactive prompts (azd/folder trust)",
+        "lens": "Tools"
+      },
+      {
+        "category": "missing_tool",
+        "count": 14,
+        "description": "Copilot lacking workspace trust bypass or MCP server connectivity",
+        "lens": "Tools"
+      },
+      {
+        "category": "azure_error",
+        "count": 1,
+        "description": "Azure platform error during S4-C-claude deployment",
+        "lens": "Seams"
+      }
+    ],
+    "keyFindings": [
+      "Claude S3 (LangGraph) is 100% pass rate \u2014 this scenario is GA-ready for Claude users",
+      "Copilot folder trust prompt remains the #1 blocker (no --trust flag exists)",
+      "S1-D-copilot passed \u2014 first Copilot pass on Greenfield MAF with Skills+Docs",
+      "S2-C-copilot passed \u2014 Skills plugin enabling Toolbox scenario for Copilot",
+      "Skills delta is +6.2pp (31.3% \u2192 37.5%) \u2014 modest but real improvement"
+    ],
+    "comparison": {
+      "vsMay17": "Pass rate improved from 33% (8/24) to 34% (11/32) with full matrix completion. Claude stable at 56% (was 50%). Copilot recovered to 12.5% (was 10%). Key improvement: all 32 cells completed vs 24/32 yesterday."
+    }
+  },
+  "cells": [
+    {
+      "runId": "S1-A-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 450779,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "open-ended",
+      "agent": "claude"
+    },
+    {
+      "runId": "S1-A-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 894938,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "open-ended",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S1-B-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 443973,
+      "failureCategories": [],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "doc-pointed",
+      "agent": "claude"
+    },
+    {
+      "runId": "S1-B-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 1654959,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "doc-pointed",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S1-C-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 433066,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "open-ended-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S1-C-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 894867,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "open-ended-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S1-D-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 482761,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S1-D-copilot",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 1841967,
+      "failureCategories": [],
+      "scenario": "Greenfield MAF Agent",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S2-A-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 451540,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "open-ended",
+      "agent": "claude"
+    },
+    {
+      "runId": "S2-A-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 882015,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "open-ended",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S2-B-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 448921,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "doc-pointed",
+      "agent": "claude"
+    },
+    {
+      "runId": "S2-B-copilot",
+      "success": false,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 443977,
+      "failureCategories": [],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "doc-pointed",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S2-C-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 447867,
+      "failureCategories": [],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "open-ended-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S2-C-copilot",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 474978,
+      "failureCategories": [],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "open-ended-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S2-D-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 465056,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S2-D-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 2460804,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "MAF + Toolbox + Tools",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S3-A-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 446287,
+      "failureCategories": [],
+      "scenario": "LangGraph Agent",
+      "strategy": "open-ended",
+      "agent": "claude"
+    },
+    {
+      "runId": "S3-A-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 876274,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "LangGraph Agent",
+      "strategy": "open-ended",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S3-B-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 443155,
+      "failureCategories": [],
+      "scenario": "LangGraph Agent",
+      "strategy": "doc-pointed",
+      "agent": "claude"
+    },
+    {
+      "runId": "S3-B-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 894457,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "LangGraph Agent",
+      "strategy": "doc-pointed",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S3-C-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 439420,
+      "failureCategories": [],
+      "scenario": "LangGraph Agent",
+      "strategy": "open-ended-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S3-C-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 2411216,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "LangGraph Agent",
+      "strategy": "open-ended-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S3-D-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 305925,
+      "failureCategories": [],
+      "scenario": "LangGraph Agent",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S3-D-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 707121,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "LangGraph Agent",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S4-A-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 444738,
+      "failureCategories": [],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "open-ended",
+      "agent": "claude"
+    },
+    {
+      "runId": "S4-A-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 883205,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "open-ended",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S4-B-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 443570,
+      "failureCategories": [],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "doc-pointed",
+      "agent": "claude"
+    },
+    {
+      "runId": "S4-B-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 881818,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "doc-pointed",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S4-C-claude",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 464075,
+      "failureCategories": [
+        "timeout_stuck",
+        "azure_error"
+      ],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "open-ended-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S4-C-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 1806998,
+      "failureCategories": [
+        "timeout_stuck"
+      ],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "open-ended-with-skills",
+      "agent": "copilot"
+    },
+    {
+      "runId": "S4-D-claude",
+      "success": true,
+      "timedOut": false,
+      "exitCode": 0,
+      "durationMs": 308083,
+      "failureCategories": [],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "claude"
+    },
+    {
+      "runId": "S4-D-copilot",
+      "success": false,
+      "timedOut": true,
+      "exitCode": -1,
+      "durationMs": 535516,
+      "failureCategories": [
+        "timeout_stuck",
+        "missing_tool"
+      ],
+      "scenario": "Migration (Existing Agent to Hosted)",
+      "strategy": "doc-pointed-with-skills",
+      "agent": "copilot"
+    }
+  ]
+}
